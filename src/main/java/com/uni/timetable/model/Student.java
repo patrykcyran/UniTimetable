@@ -12,4 +12,6 @@ public class Student {
     @Column(name = "student_id", nullable = false)
     private Long studentId;
 
+    @Column(name = "album_number")
+    private Long albumNumber;
 }
