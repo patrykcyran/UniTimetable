@@ -16,8 +16,8 @@ public class Classes {
     private Long classesId;
 
     @ManyToOne
-    @JoinColumn(name = "group_id")
-    private Group group;
+    @JoinColumn(name = "major_group_id")
+    private MajorGroup majorGroup;
 
     @ManyToOne
     @JoinColumn(name = "subject_id")
@@ -25,7 +25,7 @@ public class Classes {
 
     @ManyToOne
     @JoinColumn(name = "lecturer_id")
-    private Lecturer lecturer_id;
+    private Lecturer lecturerId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "day_of_week")
@@ -36,4 +36,12 @@ public class Classes {
 
     @Column(name = "end_time")
     private LocalTime endTime;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "classes_type")
+    private ClassesType classesType;
+
+    @ManyToOne
+    @JoinColumn(name = "department_classroom_id")
+    private DepartmentClassroom departmentClassroom;
 }

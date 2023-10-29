@@ -12,6 +12,6 @@ public class Subject {
     @Column(name = "subject_id", nullable = false)
     private Long subjectId;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "subject_name", nullable = false)
+    private String subjectName;
 }

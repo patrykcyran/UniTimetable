@@ -12,6 +12,14 @@ public class Major {
     @Column(name = "major_id", nullable = false)
     private Long majorID;
 
-    @Column(name = "name", nullable = false)
+    @Column(name = "major_name", nullable = false)
     private String majorName;
+
+    @ManyToOne
+    @JoinColumn(name = "department_id")
+    private Department department;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "study_type")
+    private StudyType studyType;
 }

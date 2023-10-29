@@ -15,7 +15,7 @@ public class Semester {
     private Long semesterId;
 
     @Column(name = "academic_year")
-    private Integer academicYear;
+    private String academicYear;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "semester_type")

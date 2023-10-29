@@ -10,12 +10,12 @@ public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "group_id", nullable = false)
-    private Long groupID;
+    private Long groupId;
 
-    @ManyToOne
-    @JoinColumn(name = "major_id")
-    private Major major;
-
-    @Column(name = "name")
+    @Column(name = "group_name")
     private String groupName;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "semester_number")
+    private SemesterNumber semesterNumber;
 }

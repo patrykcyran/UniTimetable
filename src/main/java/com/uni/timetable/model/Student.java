@@ -14,4 +14,8 @@ public class Student {
 
     @Column(name = "album_number")
     private Long albumNumber;
+
+    @ManyToOne
+    @JoinColumn(name = "major_group_id")
+    private MajorGroup majorGroup;
 }
