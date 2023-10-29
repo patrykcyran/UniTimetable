@@ -26,9 +26,17 @@ public class ClassesController {
     }
 
     @PostMapping("/byGroupAndSemester")
-    public ResponseEntity<List<Classes>> findByGroup(@RequestParam("semesterNumber") String semesterNumber, @RequestParam("groupName") String groupName) {
-        List<Classes> allClasses = classesService.findAll();
+    public ResponseEntity<List<Classes>> findByGroup(@RequestParam("groupName") String groupName, @RequestParam("semesterNumber") String semesterNumber) {
+       return new ResponseEntity<>(classesService.findByGroupAndSemesterNumber(groupName, semesterNumber), HttpStatus.OK);
+    }
 
-       return new ResponseEntity<>(classesService.findAll(), HttpStatus.OK);
+    @PostMapping("/byLecturerId")
+    public ResponseEntity<List<Classes>> findByLecturer(@RequestParam("lecturerId") Long lecturerId) {
+        return new ResponseEntity<>(classesService.findByLecturerId(lecturerId), HttpStatus.OK);
+    }
+
+    @PostMapping("/byClassroom")
+    public ResponseEntity<List<Classes>> findByClassroom(@RequestParam("classroom") String classroomName, @RequestParam("department") String departmentName) {
+        return new ResponseEntity<>(classesService.findByClassroom(classroomName, departmentName), HttpStatus.OK);
     }
 }
