@@ -15,9 +15,6 @@ public class Lecturer {
     @Column
     private String name;
 
-    @Column
-    private String surname;
-
     @Column(name = "academic_title")
     private AcademicTitle academicTitle;
 }
