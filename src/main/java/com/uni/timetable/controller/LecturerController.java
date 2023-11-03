@@ -1,5 +1,6 @@
 package com.uni.timetable.controller;
 
+import com.uni.timetable.model.CalendarClassesDto;
 import com.uni.timetable.model.Lecturer;
 import com.uni.timetable.model.SemesterClasses;
 import com.uni.timetable.service.LecturerService;

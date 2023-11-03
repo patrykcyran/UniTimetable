@@ -34,12 +34,12 @@ public class FrontController {
         return "students";
     }
 
-    @RequestMapping(value = "/lecturers", method = RequestMethod.GET)
+/*    @RequestMapping(value = "/lecturers", method = RequestMethod.GET)
     public String lecturers(Model model) {
         // Tutaj możesz umieścić kod do pobierania planu zajęć z bazy danych
         System.out.println("FDS");
         return "lecturers";
-    }
+    }*/
 
     @RequestMapping(value = "/classrooms", method = RequestMethod.GET)
     public String classrooms(Model model) {
@@ -48,7 +48,7 @@ public class FrontController {
         return "classrooms";
     }
 
-    @GetMapping("/selectedLecturerClasses")
+    @GetMapping("/lecturers")
     public String selectedLecturerClasses(@RequestParam(required = false) String lecturerName, Model model) {
         if (lecturerName == null || lecturerName.isEmpty()) {
             lecturerName = "Patryk Cyran"; // Set the default value
