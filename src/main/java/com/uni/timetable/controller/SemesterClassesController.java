@@ -10,9 +10,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,16 +37,17 @@ public class SemesterClassesController {
     }
 
     @GetMapping("/all/{lecturerName}")
-    public ResponseEntity<List<CalendarClassesDto>> findClassesByLecturerName(String lecturerName) {
+    @ResponseBody
+    public List<CalendarClassesDto> findClassesByLecturerName(@PathVariable String lecturerName) {
         List<CalendarClassesDto> calendarClassesDto = new ArrayList<>();
-        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.of(2023, Month.OCTOBER, 30, 12, 20, 00);
         CalendarClassesDto dto1 = new CalendarClassesDto(now, now.plusHours(3), "T1");
-        CalendarClassesDto dto2 = new CalendarClassesDto(now.plusDays(1), now.plusHours(3), "T2");
-        CalendarClassesDto dto3 = new CalendarClassesDto(now.plusDays(2), now.plusHours(3), "T3");
-        CalendarClassesDto dto4 = new CalendarClassesDto(now.plusDays(3), now.plusHours(3), "T4");
-        CalendarClassesDto dto5 = new CalendarClassesDto(now.plusDays(4), now.plusHours(3), "T5");
-        CalendarClassesDto dto6 = new CalendarClassesDto(now.plusDays(5), now.plusHours(3), "T6");
-        CalendarClassesDto dto7 = new CalendarClassesDto(now.plusDays(6), now.plusHours(3), "T7");
+        CalendarClassesDto dto2 = new CalendarClassesDto(now.plusDays(1), now.plusDays(1).plusHours(3), "T2");
+        CalendarClassesDto dto3 = new CalendarClassesDto(now.plusDays(3), now.plusDays(3).plusHours(3), "T3");
+        CalendarClassesDto dto4 = new CalendarClassesDto(now.plusDays(5), now.plusDays(5).plusHours(3), "T4");
+        CalendarClassesDto dto5 = new CalendarClassesDto(now.plusDays(7), now.plusDays(7).plusHours(3), "T5");
+        CalendarClassesDto dto6 = new CalendarClassesDto(now.plusDays(9), now.plusDays(9).plusHours(3), "T6");
+        CalendarClassesDto dto7 = new CalendarClassesDto(now.plusDays(11), now.plusDays(11).plusHours(3), "T7");
         calendarClassesDto.add(dto1);
         calendarClassesDto.add(dto2);
         calendarClassesDto.add(dto3);
@@ -54,6 +58,6 @@ public class SemesterClassesController {
             calendarClassesDto.add(dto6);
             calendarClassesDto.add(dto7);
         }
-        return new ResponseEntity<>(calendarClassesDto, HttpStatus.OK);
+        return calendarClassesDto;
     }
 }
