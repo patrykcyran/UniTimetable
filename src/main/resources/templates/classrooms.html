@@ -47,13 +47,13 @@
             }
 
             $(document).ready(async function () {
-                let url = '/appointment/';
+                let url = '/classes/';
                 let patient_pesel = '[[${pesel}]]';
                 if (patient_pesel !== "") {
                     url = '/appointment/patient/';
                 }else
                     patient_pesel = 'all';
-                url = url.concat(patient_pesel);
+                url = "/calendarClasses/all";
                 console.log(patient_pesel);
                 console.log(url);
                 $('#calendar').fullCalendar({
@@ -66,12 +66,12 @@
                     defaultDate: moment().format("YYYY-MM-DD"),
                     editable: false,
                     eventLimit: true,
-                    /*events: {
+                    events: {
                         url: url,
                         error: function () {
                             alert('there was an error while fetching events!');
                         }
-                    },*/
+                    },
                     selectable: false,
                     selectHelper: true,
                     loading: function (bool) {
