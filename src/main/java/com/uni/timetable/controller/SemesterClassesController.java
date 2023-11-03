@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.Objects.nonNull;
+
 @Controller
 @RequestMapping("/semesterClasses")
 public class SemesterClassesController {
@@ -47,7 +49,7 @@ public class SemesterClassesController {
         calendarClassesDto.add(dto3);
         calendarClassesDto.add(dto4);
 
-        if (lecturerName.equals("Patryk Cyran")) {
+        if (nonNull(lecturerName) && lecturerName.equals("Patryk Cyran")) {
             calendarClassesDto.add(dto5);
             calendarClassesDto.add(dto6);
             calendarClassesDto.add(dto7);
