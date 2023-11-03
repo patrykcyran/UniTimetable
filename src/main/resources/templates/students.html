@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <div th:replace="~{fragment/general.html :: headerFragment}" th:remove="tag"></div>
-    <title>Calendar</title>
+    <div th:replace="fragment/general.html :: headerFragment" th:remove="tag"></div>
+    <title>Students</title>
     <link href="http://cdn.jsdelivr.net/webjars/fullcalendar/2.2.5/fullcalendar.css"
           th:href="@{/webjars/fullcalendar/2.2.5/fullcalendar.css}"
           rel="stylesheet"></link>
@@ -30,7 +30,7 @@
 </head>
 <body>
 <div class="container">
-    <div th:replace="~{fragment/general.html :: navigation-bar}" id="navigation"></div>
+    <div th:replace="fragment/general.html :: navigation-bar" id="navigation"></div>
 
     <div id="user-info">
         <h1><b>Kalendarz Wizyt</b></h1>
@@ -66,7 +66,7 @@
                     defaultDate: moment().format("YYYY-MM-DD"),
                     editable: false,
                     eventLimit: true,
-        /*            events: {
+                    /*events: {
                         url: url,
                         error: function () {
                             alert('there was an error while fetching events!');

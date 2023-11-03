@@ -1,0 +1,1 @@
+Potrzebujemy osobnego DTO na wyswietlenie zajec

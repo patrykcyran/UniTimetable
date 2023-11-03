@@ -1,0 +1,58 @@
+body {
+    font-family: "Lucida Grande", Helvetica, Arial, Verdana, sans-serif;
+    font-size: 14px;
+}
+
+#calendar {
+    max-width: 1000px;
+    margin: 40px auto;
+    padding: 0 10px;
+}
+
+.fc-event{
+    background-color: #0099FF;
+    cursor: pointer;
+    border-color: #0099FF;
+    border-radius: 4px;
+    color: black;
+}
+.fc-unthemed th,
+.fc-unthemed td,
+.fc-unthemed hr,
+.fc-unthemed thead,
+.fc-unthemed tbody,
+.fc-unthemed .fc-row,
+.fc-unthemed .fc-popover {
+    border-color: rgb(20, 20, 20);
+}
+
+.fc-unthemed .fc-popover {
+    border-width: 1px;
+    border-style: solid;
+    background-color: #00B2FF;
+    border-radius: 8px;
+}
+
+.fc-popover {
+    position: absolute;
+    box-shadow: 0 4px 8px rgba(0,0,0,.15);
+}
+
+.fc-unthemed .fc-popover .fc-header{
+    font-size: 15px;
+    margin-top: 4px;
+    background-color: #00B2FF;
+}
+
+
+.fc-unthemed .fc-today {
+    background:  rgb(111, 173, 247);
+}
+
+#user-info{
+    text-align: center;
+    margin: 10% 10%;
+    background-color: #00B2FF;
+    border-radius: 16px;
+    padding: 1%;
+}

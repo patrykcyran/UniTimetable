@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <div th:replace="~{fragment/general.html :: headerFragment}" th:remove="tag"></div>
-    <title>Calendar</title>
+    <div th:replace="fragment/general.html :: headerFragment" th:remove="tag"></div>
+    <title>Classrooms</title>
     <link href="http://cdn.jsdelivr.net/webjars/fullcalendar/2.2.5/fullcalendar.css"
           th:href="@{/webjars/fullcalendar/2.2.5/fullcalendar.css}"
           rel="stylesheet"></link>
@@ -30,7 +30,7 @@
 </head>
 <body>
 <div class="container">
-    <div th:replace="~{fragment/general.html :: navigation-bar}" id="navigation"></div>
+    <div th:replace="fragment/general.html :: navigation-bar" id="navigation"></div>
 
     <div id="user-info">
         <h1><b>Kalendarz Wizyt</b></h1>
@@ -47,13 +47,13 @@
             }
 
             $(document).ready(async function () {
-                let url = '/appointment/';
+                let url = '/classes/';
                 let patient_pesel = '[[${pesel}]]';
                 if (patient_pesel !== "") {
                     url = '/appointment/patient/';
                 }else
                     patient_pesel = 'all';
-                url = url.concat(patient_pesel);
+                url = "/calendarClasses/all";
                 console.log(patient_pesel);
                 console.log(url);
                 $('#calendar').fullCalendar({
@@ -61,18 +61,18 @@
                     header: {
                         left: 'prev,next today',
                         center: 'title',
-                        right: 'month,agendaWeek,agendaDay'
+                        right: 'agendaWeek'
                     },
                     defaultDate: moment().format("YYYY-MM-DD"),
                     editable: false,
                     eventLimit: true,
-        /*            events: {
+                    events: {
                         url: url,
                         error: function () {
                             alert('there was an error while fetching events!');
                         }
-                    },*/
-                    selectable: true,
+                    },
+                    selectable: false,
                     selectHelper: true,
                     loading: function (bool) {
                         $('#loading').toggle(bool);
