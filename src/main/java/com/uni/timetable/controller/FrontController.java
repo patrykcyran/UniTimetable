@@ -10,9 +10,30 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class FrontController {
 
     @RequestMapping(method = RequestMethod.GET)
-    public String students(Model model) {
+    public String general(Model model) {
         // Tutaj możesz umieścić kod do pobierania planu zajęć z bazy danych
         System.out.println("FDS");
         return "index";
+    }
+
+    @RequestMapping(value = "/students", method = RequestMethod.GET)
+    public String students(Model model) {
+        // Tutaj możesz umieścić kod do pobierania planu zajęć z bazy danych
+        System.out.println("FDS");
+        return "students";
+    }
+
+    @RequestMapping(value = "/lecturers", method = RequestMethod.GET)
+    public String lecturers(Model model) {
+        // Tutaj możesz umieścić kod do pobierania planu zajęć z bazy danych
+        System.out.println("FDS");
+        return "lecturers";
+    }
+
+    @RequestMapping(value = "/classrooms", method = RequestMethod.GET)
+    public String classrooms(Model model) {
+        // Tutaj możesz umieścić kod do pobierania planu zajęć z bazy danych
+        System.out.println("FDS");
+        return "classrooms";
     }
 }
