@@ -46,4 +46,11 @@ public class ClassesService {
         log.debug("Classes found" + classesFound);
         return classesFound;
     }
+
+    public List<Classes> findByLecturerName(String lecturerName) {
+        log.debug("Finding classes by lecturer name " + lecturerName);
+        List<Classes> classesFound = classesRepository.findByLecturerId_Name(lecturerName);
+        log.debug("Classes found" + classesFound);
+        return classesFound;
+    }
 }

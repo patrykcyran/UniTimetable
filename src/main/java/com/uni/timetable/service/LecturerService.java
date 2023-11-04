@@ -27,7 +27,7 @@ public class LecturerService {
 
     public List<String> findAllNames() {
         log.debug("Finding all lecturers");
-        List<String> lecturers = lecturerRepository.findAll().stream().map(Lecturer::getName).toList();
+        List<String> lecturers = lecturerRepository.findAll().stream().map(Lecturer::getName).distinct().toList();
         log.debug("Lecturers found" + lecturers);
         return lecturers;
     }

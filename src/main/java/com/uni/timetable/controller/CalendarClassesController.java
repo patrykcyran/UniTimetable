@@ -26,7 +26,7 @@ public class CalendarClassesController {
     public ResponseEntity<List<CalendarEvent>> findAll() {
         List<SemesterClasses> semesterClasses = semesterClassesService.findAll();
         List<CalendarEvent> calendarEvent = new ArrayList<>();
-        calendarEvent.add(new CalendarEvent(LocalDateTime.now(), LocalDateTime.now().plusHours(3), "Test"));
+        //calendarEvent.add(new CalendarEvent(LocalDateTime.now(), LocalDateTime.now().plusHours(3), "Test"));
         return new ResponseEntity<>(calendarEvent, HttpStatus.OK);
     }
 }
