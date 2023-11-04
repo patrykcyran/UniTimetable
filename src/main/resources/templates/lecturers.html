@@ -46,7 +46,7 @@
     </div>
 
     <div id="user-info">
-        <h1><b>Kalendarz Wizyt</b></h1>
+        <h1><b>Plan zajęć</b></h1>
         <div id='calendar'></div>
     </div>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -58,8 +58,8 @@
         function displayinfo(event, elements) {
             var name = event.title;
             console.log(name);
-            var appointmentStart = moment(event.start).format("YYYY-MM-DD HH:mm:ss")
-            alert(name + "  " + appointmentStart)
+            var eventStart = moment(event.start).format("YYYY-MM-DD HH:mm:ss")
+            alert(name + "  " + eventStart)
         }
 
         let lecturerName = '[[${prevLecturer}]]'; // Initial value
@@ -87,6 +87,7 @@
                     right: 'month,agendaWeek,agendaDay'
                 },
                 defaultDate: moment().format("YYYY-MM-DD"),
+                defaultView: 'agendaWeek',
                 editable: false,
                 eventLimit: true,
                 events: {
@@ -95,7 +96,7 @@
                         alert('there was an error while fetching events!');
                     }
                 },
-                selectable: true,
+                selectable: false,
                 selectHelper: true,
                 loading: function (bool) {
                     $('#loading').toggle(bool);

@@ -1,10 +1,7 @@
 package com.uni.timetable.controller;
 
-import com.uni.timetable.model.CalendarClassesDto;
 import com.uni.timetable.model.Lecturer;
-import com.uni.timetable.model.SemesterClasses;
 import com.uni.timetable.service.LecturerService;
-import com.uni.timetable.service.SemesterClassesService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

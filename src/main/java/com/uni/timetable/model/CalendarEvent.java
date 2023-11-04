@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class CalendarClassesDto {
+public class CalendarEvent {
     private LocalDateTime start;
     private LocalDateTime end;
     private String title;
