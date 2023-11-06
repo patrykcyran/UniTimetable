@@ -45,13 +45,27 @@ public class SemesterClassesToCalendarEventMapper {
     }
 
     private static CalendarEventDescription mapClassToEventDescription(Classes classes) {
+        String group = classes.getMajorGroup().getGroup().getGroupName();
+        String major = classes.getMajorGroup().getMajor().getMajorName();
+        String type = classes.getClassesType().description;
+        String lecturerName = classes.getLecturerId().getName();
+        String department = classes.getDepartmentClassroom().getDepartment().getDepartmentName();
+        String classroom = classes.getDepartmentClassroom().getClassroom().getClassroomName();
+
+        String descriptionText = "Grupa = " + group +
+                "\nKierunek = " + major +
+                "\nTyp = " + type +
+                "\nProwadzący = " + lecturerName +
+                "\nWydział = " + department +
+                "\nSala = " + classroom;
         return CalendarEventDescription.builder()
-                .group(classes.getMajorGroup().getGroup().getGroupName())
-                .major(classes.getMajorGroup().getMajor().getMajorName())
-                .type(classes.getClassesType().name())
-                .lecturerName(classes.getLecturerId().getName())
-                .department(classes.getDepartmentClassroom().getDepartment().getDepartmentName())
-                .classroom(classes.getDepartmentClassroom().getClassroom().getClassroomName())
+                .group(group)
+                .major(major)
+                .type(type)
+                .lecturerName(lecturerName)
+                .department(department)
+                .classroom(classroom)
+                .descriptionText(descriptionText)
                 .build();
     }
 }

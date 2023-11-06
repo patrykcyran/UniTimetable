@@ -68,8 +68,13 @@
 
         function displayinfo(event, elements) {
             var name = event.title;
-            var eventStart = moment(event.start).format("YYYY-MM-DD HH:mm:ss")
-            alert(name + "  " + eventStart)
+            var eventStart = moment(event.start).format("YYYY-MM-DD HH:mm")
+            var eventEnd = moment(event.end).format("YYYY-MM-DD HH:mm")
+            var description = event.description.descriptionText;
+            alert(name + "\n" +
+                eventStart + "\n" +
+                eventEnd + "\n" +
+                description)
         }
 
         let lecturerName = '[[${prevLecturer}]]'; // Initial value
