@@ -37,18 +37,18 @@
 <div class="container">
 
     <div class="d-flex justify-content-center text-center">
-        <form method="get" th:action="@{/lecturers}" action="#">
-            <select id="lecturerName" class="selectpicker" data-live-search="true" th:value="${LecturersNames}" name="lecturerName"
+        <form method="get" th:action="@{/students}" action="#">
+            <select id="majorName" class="selectpicker" th:value="${MajorNames}" name="majorName"
                     onchange='if(this.value !== 0) {this.form.submit(); }'>
-                <option th:each="lecturer: ${LecturersNames}" th:value="${lecturer}" th:text="${lecturer}" th:selected="${lecturer} == ${prevLecturer}">SELECT</option>
+                <option th:each="major: ${MajorNames}" th:value="${major}" th:text="${major}" th:selected="${major} == ${prevMajor}">SELECT</option>
             </select>
 
-            <select id="academicYear" class="selectpicker" data-live-search="true" th:value="${AcademicYears}" name="academicYear"
+            <select id="academicYear" class="selectpicker"  th:value="${AcademicYears}" name="academicYear"
                     onchange='if(this.value !== 0) {this.form.submit(); }'>
                 <option th:each="year: ${AcademicYears}" th:value="${year}" th:text="${year}" th:selected="${year} == ${prevAcademicYear}">SELECT</option>
             </select>
 
-            <select id="semesterType" class="selectpicker" data-live-search="true" th:value="${SemesterTypes}" name="semesterType"
+            <select id="semesterType" class="selectpicker" th:value="${SemesterTypes}" name="semesterType"
                     onchange='if(this.value !== 0) {this.form.submit(); }'>
                 <option th:each="semesterType: ${SemesterTypes}" th:value="${semesterType}" th:text="${semesterType}" th:selected="${semesterType} == ${prevSemesterType}">SELECT</option>
             </select>
@@ -77,8 +77,8 @@
                 description)
         }
 
-        let lecturerName = '[[${prevLecturer}]]'; // Initial value
-        const lecturerSelect = $('#lecturerName'); // Select picker element
+        let majorName = '[[${prevMajor}]]'; // Initial value
+        const majorSelect = $('#majorName'); // Select picker element
 
         let academicYear = '[[${prevAcademicYear}]]';
         const academicYearSelect = $('#academicYear');
@@ -86,21 +86,21 @@
         let semesterType = '[[${prevSemesterType}]]';
         const semesterTypeSelect = $('#semesterType');
 
-        lecturerSelect.on('change', function () {
-            patient_pesel = lecturerSelect.val(); // Update the patient_pesel variable with the selected value
+        majorSelect.on('change', function () {
+            patient_pesel = majorSelect.val(); // Update the patient_pesel variable with the selected value
             // Rest of your code...
         });
 
         $(document).ready(async function () {
             let url = '/semesterClasses/';
-            if (lecturerName !== "") {
-                url = '/semesterClasses/all/';
+            if (majorName !== "") {
+                url = '/semesterClasses/full-time-major/';
             }else
-                lecturerName = 'all';
-            url = url.concat(lecturerName);
+                majorName = 'all';
+            url = url.concat(majorName);
             url = url.concat('/' + academicYear)
             url = url.concat('/' + semesterType)
-            console.log(lecturerName);
+            console.log(majorName);
             console.log(academicYear);
             console.log(semesterType);
             console.log(url);

@@ -34,13 +34,24 @@ public class SemesterClassesController {
         return new ResponseEntity<>(semesterClassesService.findAll(), HttpStatus.OK);
     }
 
-    @GetMapping("/all/{lecturerName}/{academicYear}/{semesterType}")
+    @GetMapping("/lecturer/{lecturerName}/{academicYear}/{semesterType}")
     @ResponseBody
     public List<CalendarEvent> findClassesByLecturerName(@PathVariable String lecturerName,
                                                          @PathVariable String academicYear,
                                                          @PathVariable String semesterType) {
-        List<SemesterClasses> classesByLecturer = semesterClassesService.findSemesterClassesByLecturerAndSemester(academicYear, SemesterType.valueOf(semesterType), lecturerName);
+        List<SemesterClasses> classesByLecturer = semesterClassesService.findSemesterClassesByLecturerAndSemester(lecturerName, academicYear, SemesterType.valueOf(semesterType));
         List<CalendarEvent> calendarEvent = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByLecturer);
+
+        return calendarEvent;
+    }
+
+    @GetMapping("/full-time-major/{majorName}/{academicYear}/{semesterType}")
+    @ResponseBody
+    public List<CalendarEvent> findClassesByFullTimeMajor(@PathVariable String majorName,
+                                                         @PathVariable String academicYear,
+                                                         @PathVariable String semesterType) {
+        List<SemesterClasses> classesByFillTimeMajor = semesterClassesService.findSemesterClassesByFullTimeMajorAndSemester(majorName, academicYear, SemesterType.valueOf(semesterType));
+        List<CalendarEvent> calendarEvent = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByFillTimeMajor);
 
         return calendarEvent;
     }

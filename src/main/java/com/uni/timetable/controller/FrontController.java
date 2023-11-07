@@ -2,6 +2,7 @@ package com.uni.timetable.controller;
 
 import com.uni.timetable.model.SemesterType;
 import com.uni.timetable.service.LecturerService;
+import com.uni.timetable.service.MajorService;
 import com.uni.timetable.service.SemesterService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,11 +17,14 @@ import static java.util.Objects.isNull;
 public class FrontController {
     LecturerService lecturerService;
     SemesterService semesterService;
+    MajorService majorService;
 
     public FrontController(LecturerService lecturerService,
-                           SemesterService semesterService) {
+                           SemesterService semesterService,
+                           MajorService majorService) {
         this.lecturerService = lecturerService;
         this.semesterService = semesterService;
+        this.majorService = majorService;
     }
 
     @RequestMapping(method = RequestMethod.GET)
@@ -31,9 +35,16 @@ public class FrontController {
     }
 
     @RequestMapping(value = "/students", method = RequestMethod.GET)
-    public String students(Model model) {
-        // Tutaj możesz umieścić kod do pobierania planu zajęć z bazy danych
-        System.out.println("FDS");
+    public String students(@RequestParam(required = false) String majorName,
+                           @RequestParam(required = false) String academicYear,
+                           @RequestParam(required = false) String semesterType,
+                           Model model) {
+        model.addAttribute("prevMajor", majorName);
+        model.addAttribute("prevAcademicYear", academicYear);
+        model.addAttribute("prevSemesterType", semesterType);
+        model.addAttribute("MajorNames", majorService.findAllFullTimeMajorNames());
+        model.addAttribute("AcademicYears", semesterService.findAllAcademicYears());
+        model.addAttribute("SemesterTypes", SemesterType.values());
         return "students";
     }
 
@@ -63,7 +74,6 @@ public class FrontController {
                                           @RequestParam(required = false) String academicYear,
                                           @RequestParam(required = false) String semesterType,
                                           Model model) {
-
         model.addAttribute("prevLecturer", lecturerName);
         model.addAttribute("prevAcademicYear", academicYear);
         model.addAttribute("prevSemesterType", semesterType);
