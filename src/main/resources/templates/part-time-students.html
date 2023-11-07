@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="fragment/general.html :: headerFragment" th:remove="tag"></div>
-    <title>Sale</title>
+    <title>Studenci Zaoczni</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="http://cdn.jsdelivr.net/webjars/fullcalendar/2.2.5/fullcalendar.css">
@@ -57,7 +57,7 @@
     </div>
 
     <div id="user-info">
-        <h1><b>Sale</b></h1>
+        <h1><b>Studenci Zaoczni</b></h1>
         <div id='calendar'></div>
     </div>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -113,7 +113,9 @@
                 },
                 defaultDate: moment().format("YYYY-MM-DD"),
                 defaultView: 'agendaWeek',
-                weekends: false,
+                //TODO pokazywanie samego weekendu
+                weekends: true,
+                hiddenDays: [1, 2, 3, 4, 5],
                 firstDay: 1,
                 editable: false,
                 eventLimit: true,

@@ -37,6 +37,13 @@ public class FrontController {
         return "students";
     }
 
+    @RequestMapping(value = "/part-time-students", method = RequestMethod.GET)
+    public String partTimeStudents(Model model) {
+        // Tutaj możesz umieścić kod do pobierania planu zajęć z bazy danych
+        System.out.println("FDS");
+        return "part-time-students";
+    }
+
 /*    @RequestMapping(value = "/lecturers", method = RequestMethod.GET)
     public String lecturers(Model model) {
         // Tutaj możesz umieścić kod do pobierania planu zajęć z bazy danych

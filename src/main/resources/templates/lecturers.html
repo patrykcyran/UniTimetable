@@ -57,7 +57,7 @@
     </div>
 
     <div id="user-info">
-        <h1><b>Plan zajęć</b></h1>
+        <h1><b>Prowadzący</b></h1>
         <div id='calendar'></div>
     </div>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -113,18 +113,16 @@
                 },
                 defaultDate: moment().format("YYYY-MM-DD"),
                 defaultView: 'agendaWeek',
-                //TODO pokazywanie samego weekendu
-                weekends: true,
-                hiddenDays: [1, 2, 3, 4, 5],
+                weekends: false,
                 firstDay: 1,
                 editable: false,
                 eventLimit: true,
                 events: {
                     url: url,
                     //TODO remove this error later on
-                    error: function () {
+                    /*error: function () {
                         alert('there was an error while fetching events!');
-                    }
+                    }*/
                 },
                 selectable: false,
                 selectHelper: true,
