@@ -35,10 +35,11 @@ public class FrontController {
     }
 
     @RequestMapping(value = "/students", method = RequestMethod.GET)
-    public String students(@RequestParam(required = false) String majorName,
-                           @RequestParam(required = false) String academicYear,
-                           @RequestParam(required = false) String semesterType,
+    public String students(@RequestParam(required = false, defaultValue = "Informatyka w Inżynierii Komputerowej") String majorName,
+                           @RequestParam(required = false, defaultValue = "23-24") String academicYear,
+                           @RequestParam(required = false, defaultValue = "WINTER") String semesterType,
                            Model model) {
+
         model.addAttribute("prevMajor", majorName);
         model.addAttribute("prevAcademicYear", academicYear);
         model.addAttribute("prevSemesterType", semesterType);
@@ -70,9 +71,9 @@ public class FrontController {
     }
 
     @GetMapping("/lecturers")
-    public String selectedLecturerClasses(@RequestParam(required = false) String lecturerName,
-                                          @RequestParam(required = false) String academicYear,
-                                          @RequestParam(required = false) String semesterType,
+    public String selectedLecturerClasses(@RequestParam(required = false, defaultValue = "Krzysztof Czajkowski") String lecturerName,
+                                          @RequestParam(required = false, defaultValue = "23-24") String academicYear,
+                                          @RequestParam(required = false, defaultValue = "WINTER") String semesterType,
                                           Model model) {
         model.addAttribute("prevLecturer", lecturerName);
         model.addAttribute("prevAcademicYear", academicYear);
