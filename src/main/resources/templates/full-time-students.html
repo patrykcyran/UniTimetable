@@ -38,20 +38,26 @@
 
     <div class="d-flex justify-content-center text-center">
         <form method="get" th:action="@{/full-time-students}" action="#">
-            <select id="majorName" class="selectpicker" th:value="${MajorNames}" name="majorName"
+            <label>Kierunek:
+                <select id="majorName" class="selectpicker" th:value="${MajorNames}" name="majorName"
                     onchange='if(this.value !== 0) {this.form.submit(); }'>
                 <option th:each="major: ${MajorNames}" th:value="${major}" th:text="${major}" th:selected="${major} == ${prevMajor}">SELECT</option>
             </select>
+            </label>
 
-            <select id="studyYear" class="selectpicker"  th:value="${StudyYears}" name="studyYear"
+            <label>Rok studiów:
+                <select id="studyYear" class="selectpicker"  th:value="${StudyYears}" name="studyYear"
                     onchange='if(this.value !== 0) {this.form.submit(); }'>
                 <option th:each="year: ${StudyYears}" th:value="${year}" th:text="${year}" th:selected="${year} == ${prevStudyYear}">SELECT</option>
             </select>
+            </label>
 
-            <select id="semesterType" class="selectpicker" th:value="${SemesterTypes}" name="semesterType"
+            <label>Semestr:
+                <select id="semesterType" class="selectpicker" th:value="${SemesterTypes}" name="semesterType"
                     onchange='if(this.value !== 0) {this.form.submit(); }'>
                 <option th:each="semesterType: ${SemesterTypes}" th:value="${semesterType}" th:text="${semesterType}" th:selected="${semesterType} == ${prevSemesterType}">SELECT</option>
             </select>
+            </label>
         </form>
     </div>
 
