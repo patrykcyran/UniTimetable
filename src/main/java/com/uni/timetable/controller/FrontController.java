@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Objects.isNull;
@@ -39,7 +40,7 @@ public class FrontController {
     @RequestMapping(value = "/full-time-students", method = RequestMethod.GET)
     public String students(@RequestParam(required = false, defaultValue = "Informatyka w Inżynierii Komputerowej") String majorName,
                            @RequestParam(required = false, defaultValue = "4") String studyYear,
-                           @RequestParam(required = false, defaultValue = "WINTER") String semesterType,
+                           @RequestParam(required = false, defaultValue = "Zimowy") String semesterType,
                            Model model) {
 
         model.addAttribute("prevMajor", majorName);
@@ -47,22 +48,22 @@ public class FrontController {
         model.addAttribute("prevSemesterType", semesterType);
         model.addAttribute("MajorNames", majorService.findAllFullTimeMajorNames());
         model.addAttribute("StudyYears", List.of(1,2,3,4,5));
-        model.addAttribute("SemesterTypes", SemesterType.values());
+        model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(type -> type.description));
         return "full-time-students";
     }
 
     @RequestMapping(value = "/part-time-students", method = RequestMethod.GET)
     public String partTimeStudents(@RequestParam(required = false, defaultValue = "Informatyka w Inżynierii Komputerowej") String majorName,
                            @RequestParam(required = false, defaultValue = "4") String studyYear,
-                           @RequestParam(required = false, defaultValue = "WINTER") String semesterType,
+                           @RequestParam(required = false, defaultValue = "Zimowy") String semesterType,
                            Model model) {
 
         model.addAttribute("prevMajor", majorName);
         model.addAttribute("prevStudyYear", studyYear);
         model.addAttribute("prevSemesterType", semesterType);
         model.addAttribute("MajorNames", majorService.findAllPartTimeMajorNames());
-        model.addAttribute("AcademicYears", List.of(1,2,3,4,5));
-        model.addAttribute("SemesterTypes", SemesterType.values());
+        model.addAttribute("StudyYears", List.of(1,2,3,4,5));
+        model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(type -> type.description));
         return "part-time-students";
     }
 
@@ -83,14 +84,14 @@ public class FrontController {
     @GetMapping("/lecturers")
     public String selectedLecturerClasses(@RequestParam(required = false, defaultValue = "Krzysztof Czajkowski") String lecturerName,
                                           @RequestParam(required = false, defaultValue = "23-24") String academicYear,
-                                          @RequestParam(required = false, defaultValue = "WINTER") String semesterType,
+                                          @RequestParam(required = false, defaultValue = "Zimowy") String semesterType,
                                           Model model) {
         model.addAttribute("prevLecturer", lecturerName);
         model.addAttribute("prevAcademicYear", academicYear);
         model.addAttribute("prevSemesterType", semesterType);
         model.addAttribute("LecturersNames", lecturerService.findAllNames());
         model.addAttribute("AcademicYears", semesterService.findAllAcademicYears());
-        model.addAttribute("SemesterTypes", SemesterType.values());
+        model.addAttribute("SemesterTypes", SemesterType.normalSemesters().stream().map(type -> type.description).toList());
         return "lecturers";
     }
 }

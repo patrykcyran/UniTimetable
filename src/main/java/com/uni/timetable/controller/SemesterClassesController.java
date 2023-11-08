@@ -39,7 +39,7 @@ public class SemesterClassesController {
     public List<CalendarEvent> findClassesByLecturerName(@PathVariable String lecturerName,
                                                          @PathVariable String academicYear,
                                                          @PathVariable String semesterType) {
-        List<SemesterClasses> classesByLecturer = semesterClassesService.findSemesterClassesByLecturerAndSemester(lecturerName, academicYear, SemesterType.valueOf(semesterType));
+        List<SemesterClasses> classesByLecturer = semesterClassesService.findSemesterClassesByLecturerAndSemester(lecturerName, academicYear, SemesterType.fromDescription(semesterType));
         List<CalendarEvent> calendarEvent = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByLecturer);
 
         return calendarEvent;
@@ -50,7 +50,7 @@ public class SemesterClassesController {
     public List<CalendarEvent> findClassesByFullTimeMajor(@PathVariable String majorName,
                                                          @PathVariable String academicYear,
                                                          @PathVariable String semesterType) {
-        List<SemesterClasses> classesByFillTimeMajor = semesterClassesService.findSemesterClassesByFullTimeMajorAndSemester(majorName, academicYear, SemesterType.valueOf(semesterType));
+        List<SemesterClasses> classesByFillTimeMajor = semesterClassesService.findSemesterClassesByFullTimeMajorAndSemester(majorName, academicYear, SemesterType.fromDescription(semesterType));
         List<CalendarEvent> calendarEvent = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByFillTimeMajor);
 
         return calendarEvent;
@@ -61,7 +61,7 @@ public class SemesterClassesController {
     public List<CalendarEvent> findClassesByPartTimeMajor(@PathVariable String majorName,
                                                           @PathVariable String academicYear,
                                                           @PathVariable String semesterType) {
-        List<SemesterClasses> classesByFillTimeMajor = semesterClassesService.findSemesterClassesByPartTimeMajorAndSemester(majorName, academicYear, SemesterType.valueOf(semesterType));
+        List<SemesterClasses> classesByFillTimeMajor = semesterClassesService.findSemesterClassesByPartTimeMajorAndSemester(majorName, academicYear, SemesterType.fromDescription(semesterType));
         List<CalendarEvent> calendarEvent = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByFillTimeMajor);
 
         return calendarEvent;
