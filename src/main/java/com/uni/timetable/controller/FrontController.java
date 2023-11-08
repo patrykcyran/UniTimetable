@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.List;
+
 import static java.util.Objects.isNull;
 
 @Controller
@@ -34,25 +36,33 @@ public class FrontController {
         return "index";
     }
 
-    @RequestMapping(value = "/students", method = RequestMethod.GET)
+    @RequestMapping(value = "/full-time-students", method = RequestMethod.GET)
     public String students(@RequestParam(required = false, defaultValue = "Informatyka w Inżynierii Komputerowej") String majorName,
-                           @RequestParam(required = false, defaultValue = "23-24") String academicYear,
+                           @RequestParam(required = false, defaultValue = "4") String studyYear,
                            @RequestParam(required = false, defaultValue = "WINTER") String semesterType,
                            Model model) {
 
         model.addAttribute("prevMajor", majorName);
-        model.addAttribute("prevAcademicYear", academicYear);
+        model.addAttribute("prevStudyYear", studyYear);
         model.addAttribute("prevSemesterType", semesterType);
         model.addAttribute("MajorNames", majorService.findAllFullTimeMajorNames());
-        model.addAttribute("AcademicYears", semesterService.findAllAcademicYears());
+        model.addAttribute("StudyYears", List.of(1,2,3,4,5));
         model.addAttribute("SemesterTypes", SemesterType.values());
-        return "students";
+        return "full-time-students";
     }
 
     @RequestMapping(value = "/part-time-students", method = RequestMethod.GET)
-    public String partTimeStudents(Model model) {
-        // Tutaj możesz umieścić kod do pobierania planu zajęć z bazy danych
-        System.out.println("FDS");
+    public String partTimeStudents(@RequestParam(required = false, defaultValue = "Informatyka w Inżynierii Komputerowej") String majorName,
+                           @RequestParam(required = false, defaultValue = "4") String studyYear,
+                           @RequestParam(required = false, defaultValue = "WINTER") String semesterType,
+                           Model model) {
+
+        model.addAttribute("prevMajor", majorName);
+        model.addAttribute("prevStudyYear", studyYear);
+        model.addAttribute("prevSemesterType", semesterType);
+        model.addAttribute("MajorNames", majorService.findAllPartTimeMajorNames());
+        model.addAttribute("AcademicYears", List.of(1,2,3,4,5));
+        model.addAttribute("SemesterTypes", SemesterType.values());
         return "part-time-students";
     }
 

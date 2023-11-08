@@ -35,12 +35,20 @@ public class SemesterClassesService {
         return semesterClasses;
     }
 
-    public List<SemesterClasses> findSemesterClassesByFullTimeMajorAndSemester(String majorName, String academicYear, SemesterType semesterType) {
-        log.debug("Finding classes by major name, semester type and academic year " + majorName + ", " + semesterType + ", " + majorName);
-        List<SemesterClasses> semesterClasses = semesterClassesRepository.findBySemester_AcademicYearAndSemester_SemesterType(academicYear, semesterType);
+    public List<SemesterClasses> findSemesterClassesByFullTimeMajorAndSemester(String majorName, String studyYear, SemesterType semesterType) {
+        return findSemesterClassesByMajorSemesterAndStudyType(majorName, studyYear, semesterType, StudyType.FULL_TIME);
+    }
+
+    public List<SemesterClasses> findSemesterClassesByPartTimeMajorAndSemester(String majorName, String studyYear, SemesterType semesterType) {
+        return findSemesterClassesByMajorSemesterAndStudyType(majorName, studyYear, semesterType, StudyType.PART_TIME);
+    }
+
+    private List<SemesterClasses> findSemesterClassesByMajorSemesterAndStudyType(String majorName, String studyYear, SemesterType semesterType, StudyType studyType) {
+        log.debug("Finding classes by major name, semester type, study year and study type " + majorName + ", " + semesterType + ", " + studyYear + ", " + studyType);
+        List<SemesterClasses> semesterClasses = semesterClassesRepository.findByClasses_MajorGroup_StudyYearAndSemester_SemesterType(Integer.valueOf(studyYear), semesterType);
         semesterClasses = semesterClasses.stream().filter(classes ->
                 classes.getClasses().getMajorGroup().getMajor().getMajorName().equals(majorName) &&
-                        classes.getClasses().getMajorGroup().getMajor().getStudyType().equals(StudyType.FULL_TIME)).toList();
+                        classes.getClasses().getMajorGroup().getMajor().getStudyType().equals(studyType)).toList();
         log.debug("Classes found " + semesterClasses);
         return semesterClasses;
     }

@@ -17,6 +17,8 @@ public interface SemesterClassesRepository extends JpaRepository<SemesterClasses
 
     List<SemesterClasses> findBySemester_AcademicYearAndSemester_SemesterType(String academicYear, SemesterType semesterType);
 
+    List<SemesterClasses> findByClasses_MajorGroup_StudyYearAndSemester_SemesterType(Integer studyYear, SemesterType semesterType);
+
 
 
     @Query("SELECT sc.classes FROM SemesterClasses sc " +

@@ -37,15 +37,15 @@
 <div class="container">
 
     <div class="d-flex justify-content-center text-center">
-        <form method="get" th:action="@{/students}" action="#">
+        <form method="get" th:action="@{/full-time-students}" action="#">
             <select id="majorName" class="selectpicker" th:value="${MajorNames}" name="majorName"
                     onchange='if(this.value !== 0) {this.form.submit(); }'>
                 <option th:each="major: ${MajorNames}" th:value="${major}" th:text="${major}" th:selected="${major} == ${prevMajor}">SELECT</option>
             </select>
 
-            <select id="academicYear" class="selectpicker"  th:value="${AcademicYears}" name="academicYear"
+            <select id="studyYear" class="selectpicker"  th:value="${StudyYears}" name="studyYear"
                     onchange='if(this.value !== 0) {this.form.submit(); }'>
-                <option th:each="year: ${AcademicYears}" th:value="${year}" th:text="${year}" th:selected="${year} == ${prevAcademicYear}">SELECT</option>
+                <option th:each="year: ${StudyYears}" th:value="${year}" th:text="${year}" th:selected="${year} == ${prevStudyYear}">SELECT</option>
             </select>
 
             <select id="semesterType" class="selectpicker" th:value="${SemesterTypes}" name="semesterType"
@@ -79,7 +79,7 @@
         let majorName = '[[${prevMajor}]]'; // Initial value
         const majorSelect = $('#majorName'); // Select picker element
 
-        let academicYear = '[[${prevAcademicYear}]]';
+        let studyYear = '[[${prevStudyYear}]]';
         const academicYearSelect = $('#academicYear');
 
         let semesterType = '[[${prevSemesterType}]]';
@@ -97,10 +97,10 @@
             }else
                 majorName = 'all';
             url = url.concat(majorName);
-            url = url.concat('/' + academicYear)
+            url = url.concat('/' + studyYear)
             url = url.concat('/' + semesterType)
             console.log(majorName);
-            console.log(academicYear);
+            console.log(studyYear);
             console.log(semesterType);
             console.log(url);
             $('#calendar').fullCalendar({
