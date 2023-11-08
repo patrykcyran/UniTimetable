@@ -40,9 +40,8 @@ public class SemesterClassesController {
                                                          @PathVariable String academicYear,
                                                          @PathVariable String semesterType) {
         List<SemesterClasses> classesByLecturer = semesterClassesService.findSemesterClassesByLecturerAndSemester(lecturerName, academicYear, SemesterType.fromDescription(semesterType));
-        List<CalendarEvent> calendarEvent = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByLecturer);
 
-        return calendarEvent;
+        return SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByLecturer);
     }
 
     @GetMapping("/full-time-major/{majorName}/{academicYear}/{semesterType}")
@@ -51,9 +50,8 @@ public class SemesterClassesController {
                                                          @PathVariable String academicYear,
                                                          @PathVariable String semesterType) {
         List<SemesterClasses> classesByFillTimeMajor = semesterClassesService.findSemesterClassesByFullTimeMajorAndSemester(majorName, academicYear, SemesterType.fromDescription(semesterType));
-        List<CalendarEvent> calendarEvent = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByFillTimeMajor);
 
-        return calendarEvent;
+        return SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByFillTimeMajor);
     }
 
     @GetMapping("/part-time-major/{majorName}/{academicYear}/{semesterType}")
@@ -62,8 +60,7 @@ public class SemesterClassesController {
                                                           @PathVariable String academicYear,
                                                           @PathVariable String semesterType) {
         List<SemesterClasses> classesByFillTimeMajor = semesterClassesService.findSemesterClassesByPartTimeMajorAndSemester(majorName, academicYear, SemesterType.fromDescription(semesterType));
-        List<CalendarEvent> calendarEvent = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByFillTimeMajor);
 
-        return calendarEvent;
+        return SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByFillTimeMajor);
     }
 }

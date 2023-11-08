@@ -22,4 +22,8 @@ public class Major {
     @Enumerated(EnumType.STRING)
     @Column(name = "study_type")
     private StudyType studyType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "major_type")
+    private MajorType majorType;
 }
