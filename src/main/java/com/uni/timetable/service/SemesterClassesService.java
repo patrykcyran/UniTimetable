@@ -52,4 +52,8 @@ public class SemesterClassesService {
         log.debug("Classes found " + semesterClasses);
         return semesterClasses;
     }
+
+    public List<SemesterClasses> findSemesterClassesByDepartmentAndClassroom(String departmentName, String classroomName) {
+        return semesterClassesRepository.findByClasses_DepartmentClassroom_Department_DepartmentNameAndClasses_DepartmentClassroom_Classroom_ClassroomName(departmentName, classroomName);
+    }
 }

@@ -1,9 +1,7 @@
 package com.uni.timetable.controller;
 
 import com.uni.timetable.model.SemesterType;
-import com.uni.timetable.service.LecturerService;
-import com.uni.timetable.service.MajorService;
-import com.uni.timetable.service.SemesterService;
+import com.uni.timetable.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,13 +17,19 @@ public class FrontController {
     LecturerService lecturerService;
     SemesterService semesterService;
     MajorService majorService;
+    DepartmentService departmentService;
+    DepartmentClassroomService departmentClassroomService;
 
     public FrontController(LecturerService lecturerService,
                            SemesterService semesterService,
-                           MajorService majorService) {
+                           MajorService majorService,
+                           DepartmentService departmentService,
+                           DepartmentClassroomService departmentClassroomService) {
         this.lecturerService = lecturerService;
         this.semesterService = semesterService;
         this.majorService = majorService;
+        this.departmentService = departmentService;
+        this.departmentClassroomService = departmentClassroomService;
     }
 
     @GetMapping()
@@ -43,28 +47,35 @@ public class FrontController {
         model.addAttribute("prevStudyYear", studyYear);
         model.addAttribute("prevSemesterType", semesterType);
         model.addAttribute("MajorNames", majorService.findAllFullTimeMajorNames());
-        model.addAttribute("StudyYears", List.of(1,2,3,4,5));
+        model.addAttribute("StudyYears", List.of(1, 2, 3, 4, 5));
         model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
         return "full-time-students";
     }
 
     @GetMapping("/part-time-students")
     public String partTimeStudents(@RequestParam(required = false, defaultValue = "Informatyka w Inżynierii Komputerowej") String majorName,
-                           @RequestParam(required = false, defaultValue = "4") String studyYear,
-                           @RequestParam(required = false, defaultValue = "Zimowy") String semesterType,
-                           Model model) {
+                                   @RequestParam(required = false, defaultValue = "4") String studyYear,
+                                   @RequestParam(required = false, defaultValue = "Zimowy") String semesterType,
+                                   Model model) {
 
         model.addAttribute("prevMajor", majorName);
         model.addAttribute("prevStudyYear", studyYear);
         model.addAttribute("prevSemesterType", semesterType);
         model.addAttribute("MajorNames", majorService.findAllPartTimeMajorNames());
-        model.addAttribute("StudyYears", List.of(1,2,3,4,5));
+        model.addAttribute("StudyYears", List.of(1, 2, 3, 4, 5));
         model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
         return "part-time-students";
     }
 
     @GetMapping("/classrooms")
-    public String classrooms(Model model) {
+    public String classrooms(@RequestParam(required = false, defaultValue = "Wydział Inżynierii Elektrycznej i Komputerowej") String departmentName,
+                             @RequestParam(required = false, defaultValue = "A1") String classroomName,
+                             Model model) {
+
+        model.addAttribute("prevDepartment", departmentName);
+        model.addAttribute("prevClassroom", classroomName);
+        model.addAttribute("DepartmentNames", departmentService.findAllDepartmentNames());
+        model.addAttribute("Classrooms", departmentClassroomService.findAllClassroomsForDepartment(departmentName));
         return "classrooms";
     }
 
