@@ -30,7 +30,9 @@
             src="http://code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css"
             th:src="@{/webjars/jquery-u i/1.12.1/jquery-ui.js}"
             type="text/javascript"></script>
-    <script src="js/pl.js"></script>
+
+    <!--Polska paczka językowa-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/locale/pl.js"></script>
 </head>
 <body>
 <div th:replace="fragment/general.html :: navigation-bar" id="navigation"></div>
@@ -138,15 +140,6 @@
                     displayinfo(event, element);
                 },
             });
-            $('.fc-day-grid').hide();
-            $('.fc-agendaWeek-button').text('Tydzień');
-            $('.fc-sun').text('Niedziela');
-            $('.fc-mon').text('Poniedziałek');
-            $('.fc-tue').text('Wtorek');
-            $('.fc-wed').text('Środa');
-            $('.fc-thu').text('Czwartek');
-            $('.fc-fri').text('Piątek');
-            $('.fc-sat').text('Sobota');
         });
     });
 </script>
