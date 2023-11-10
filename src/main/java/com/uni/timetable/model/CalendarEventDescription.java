@@ -12,4 +12,5 @@ public class CalendarEventDescription {
     String lecturerName;
     String department;
     String classroom;
+    String descriptionText;
 }

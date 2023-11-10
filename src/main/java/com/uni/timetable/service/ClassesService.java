@@ -35,9 +35,9 @@ public class ClassesService {
 
     public List<Classes> findByLecturerId(Long lecturerId) {
         log.debug("Finding classes by lecturer id " + lecturerId);
-        List<Classes> classesFound = classesRepository.findByLecturerId_LecturerId(lecturerId);
-        log.debug("Classes found" + classesFound);
-        return classesFound;
+        //List<Classes> classesFound = classesRepository.findByLecturerId_LecturerId(lecturerId);
+        //log.debug("Classes found" + classesFound);
+        return null;
     }
 
     public List<Classes> findByClassroom(String classroomName, String departmentName) {
@@ -49,8 +49,8 @@ public class ClassesService {
 
     public List<Classes> findByLecturerName(String lecturerName) {
         log.debug("Finding classes by lecturer name " + lecturerName);
-        List<Classes> classesFound = classesRepository.findByLecturerId_Name(lecturerName);
-        log.debug("Classes found" + classesFound);
-        return classesFound;
+/*        List<Classes> classesFound = classesRepository.findByLecturerId_Name(lecturerName);
+        log.debug("Classes found" + classesFound);*/
+        return null;
     }
 }

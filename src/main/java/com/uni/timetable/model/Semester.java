@@ -26,4 +26,7 @@ public class Semester {
 
     @Column(name = "end_date")
     private LocalDate endDate;
+
+    @Column(name = "is_diploma")
+    private Boolean isDiploma;
 }

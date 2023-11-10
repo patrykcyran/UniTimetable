@@ -2,7 +2,7 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <div th:replace="fragment/general.html :: headerFragment" th:remove="tag"></div>
-    <title>Sale</title>
+    <title>Studenci Zaoczni</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="http://cdn.jsdelivr.net/webjars/fullcalendar/2.2.5/fullcalendar.css">
@@ -38,25 +38,32 @@
 <div class="container">
 
     <div class="d-flex justify-content-center text-center">
-        <form method="get" th:action="@{/classrooms}" action="#">
-            <label>Wydział:
-            <select id="departmentName" class="selectpicker" data-live-search="true" th:value="${DepartmentNames}" name="departmentName"
+        <form method="get" th:action="@{/part-time-students}" action="#">
+            <label>Kierunek:
+            <select id="majorName" class="selectpicker" th:value="${MajorNames}" name="majorName"
                     onchange='if(this.value !== 0) {this.form.submit(); }'>
-                <option th:each="department: ${DepartmentNames}" th:value="${department}" th:text="${department}" th:selected="${department} == ${prevDepartment}">SELECT</option>
+                <option th:each="major: ${MajorNames}" th:value="${major}" th:text="${major}" th:selected="${major} == ${prevMajor}">SELECT</option>
             </select>
             </label>
 
-            <label>Sala:
-            <select id="classroomName" class="selectpicker" data-live-search="true" th:value="${Classrooms}" name="classroomName"
+            <label>Rok studiów:
+            <select id="studyYear" class="selectpicker" th:value="${StudyYears}" name="studyYear"
                     onchange='if(this.value !== 0) {this.form.submit(); }'>
-                <option th:each="classroom: ${Classrooms}" th:value="${classroom}" th:text="${classroom}" th:selected="${classroom} == ${prevClassroom}">SELECT</option>
+                <option th:each="year: ${StudyYears}" th:value="${year}" th:text="${year}" th:selected="${year} == ${prevStudyYear}">SELECT</option>
+            </select>
+            </label>
+
+            <label>Semestr:
+            <select id="semesterType" class="selectpicker" th:value="${SemesterTypes}" name="semesterType"
+                    onchange='if(this.value !== 0) {this.form.submit(); }'>
+                <option th:each="semesterType: ${SemesterTypes}" th:value="${semesterType}" th:text="${semesterType}" th:selected="${semesterType} == ${prevSemesterType}">SELECT</option>
             </select>
             </label>
         </form>
     </div>
 
     <div id="user-info">
-        <h1><b>Sale</b></h1>
+        <h1><b>Studenci Zaoczni</b></h1>
         <div id='calendar'></div>
     </div>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
@@ -76,27 +83,32 @@
                 description)
         }
 
-        let department = '[[${prevDepartment}]]'; // Initial value
-        const departmentSelect = $('#department'); // Select picker element
+        let majorName = '[[${prevMajor}]]'; // Initial value
+        const majorSelect = $('#majorName'); // Select picker element
 
-        let classroom = '[[${prevClassroom}]]';
-        const academicYearSelect = $('#classroom');
+        let studyYear = '[[${prevStudyYear}]]';
+        const academicYearSelect = $('#academicYear');
 
-        departmentSelect.on('change', function () {
-            patient_pesel = departmentSelect.val(); // Update the patient_pesel variable with the selected value
+        let semesterType = '[[${prevSemesterType}]]';
+        const semesterTypeSelect = $('#semesterType');
+
+        majorSelect.on('change', function () {
+            patient_pesel = majorSelect.val(); // Update the patient_pesel variable with the selected value
             // Rest of your code...
         });
 
         $(document).ready(async function () {
             let url = '/semesterClasses/';
-            if (department !== "") {
-                url = '/semesterClasses/department-classroom/';
+            if (majorName !== "") {
+                url = '/semesterClasses/part-time-major/';
             }else
-                department = 'all';
-            url = url.concat(department);
-            url = url.concat('/' + classroom)
-            console.log(department);
-            console.log(classroom);
+                majorName = 'all';
+            url = url.concat(majorName);
+            url = url.concat('/' + studyYear)
+            url = url.concat('/' + semesterType)
+            console.log(majorName);
+            console.log(studyYear);
+            console.log(semesterType);
             console.log(url);
             $('#calendar').fullCalendar({
                 lang: 'pl',
@@ -118,7 +130,9 @@
                 },
                 defaultDate: moment().format("YYYY-MM-DD"),
                 defaultView: 'agendaWeek',
-                weekends: false,
+                //TODO pokazywanie samego weekendu
+                weekends: true,
+                hiddenDays: [1, 2, 3, 4],
                 firstDay: 1,
                 editable: false,
                 eventLimit: true,

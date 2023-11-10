@@ -1,9 +1,6 @@
 package com.uni.timetable.service;
 
-import com.uni.timetable.model.Classes;
-import com.uni.timetable.model.SemesterClasses;
-import com.uni.timetable.model.SemesterType;
-import com.uni.timetable.repository.ClassesRepository;
+import com.uni.timetable.model.*;
 import com.uni.timetable.repository.SemesterClassesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -27,10 +24,33 @@ public class SemesterClassesService {
         return semesterClasses;
     }
 
-    public List<SemesterClasses> findSemesterClassesByLecturerAndSemester(String academicYear, SemesterType semesterType, String lecturerName) {
-        log.debug("Finding classes by academic year, semester type and lecturer name " + academicYear + ", " + semesterType + ", " + lecturerName);
-        List<SemesterClasses> semesterClasses = semesterClassesRepository.findBySemester_AcademicYearAndSemester_SemesterTypeAndClasses_LecturerId_Name(academicYear, semesterType, lecturerName);
+    public List<SemesterClasses> findSemesterClassesBySemester(String academicYear, SemesterType semesterType) {
+        log.debug("Finding classes by semester type and academic year " + semesterType + ", " + academicYear);
+        List<SemesterClasses> semesterClasses = semesterClassesRepository.findBySemester_AcademicYearAndSemester_SemesterType(academicYear, semesterType);
         log.debug("Classes found " + semesterClasses);
         return semesterClasses;
+    }
+
+    public List<SemesterClasses> findSemesterClassesByFullTimeMajorAndSemester(String majorName, String studyYear, SemesterType semesterType) {
+        return semesterClassesRepository.findByClasses_MajorGroup_Major_MajorNameAndClasses_MajorGroup_StudyYearAndSemester_SemesterTypeAndClasses_MajorGroup_Major_StudyType(majorName, Integer.valueOf(studyYear), semesterType, StudyType.FULL_TIME);
+    }
+
+    public List<SemesterClasses> findSemesterClassesByPartTimeMajorAndSemester(String majorName, String studyYear, SemesterType semesterType) {
+        return findSemesterClassesByMajorSemesterAndStudyType(majorName, studyYear, semesterType, StudyType.PART_TIME);
+    }
+
+    private List<SemesterClasses> findSemesterClassesByMajorSemesterAndStudyType(String majorName, String studyYear, SemesterType semesterType, StudyType studyType) {
+        log.debug("Finding classes by major name, semester type, study year and study type " + majorName + ", " + semesterType + ", " + studyYear + ", " + studyType);
+        List<SemesterClasses> semesterClasses = semesterClassesRepository.findByClasses_MajorGroup_StudyYearAndSemester_SemesterType(Integer.valueOf(studyYear), semesterType);
+        semesterClasses = semesterClasses.stream().filter(classes ->
+                classes.getClasses().getMajorGroup().getMajor().getMajorName().equals(majorName) &&
+                        classes.getClasses().getMajorGroup().getMajor().getStudyType().equals(studyType)).toList();
+        log.debug("Classes found " + semesterClasses);
+
+        return semesterClasses;
+    }
+
+    public List<SemesterClasses> findSemesterClassesByDepartmentAndClassroom(String departmentName, String classroomName) {
+        return semesterClassesRepository.findByClasses_DepartmentClassroom_Department_DepartmentNameAndClasses_DepartmentClassroom_Classroom_ClassroomName(departmentName, classroomName);
     }
 }

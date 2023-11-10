@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 @Data
@@ -22,10 +23,6 @@ public class Classes {
     @ManyToOne
     @JoinColumn(name = "subject_id")
     private Subject subject;
-
-    @ManyToOne
-    @JoinColumn(name = "lecturer_id")
-    private Lecturer lecturerId;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "day_of_week")

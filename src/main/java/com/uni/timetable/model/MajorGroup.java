@@ -19,4 +19,7 @@ public class MajorGroup {
     @ManyToOne
     @JoinColumn(name = "group_id")
     private Group group;
+
+    @Column(name = "study_year")
+    private Integer studyYear;
 }
