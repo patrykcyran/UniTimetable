@@ -39,8 +39,8 @@ public class SemesterClassesToCalendarEventMapper {
 
         Classes classes = semesterClasses.getClasses();
         String title = semesterClasses.getClasses().getSubject().getSubjectName() + "\n" +
-                classes.getLecturerId().getAcademicTitle() + " " +
-                classes.getLecturerId().getName() + "\n" +
+                /*classes.getLecturerId().getAcademicTitle() + " " +
+                classes.getLecturerId().getName() + "\n" +*/
                 classes.getDepartmentClassroom().getClassroom().getClassroomName();
 
         return CalendarEvent.builder()
@@ -58,8 +58,8 @@ public class SemesterClassesToCalendarEventMapper {
 
         Classes classes = partTimeSemesterClasses.getClasses();
         String title = partTimeSemesterClasses.getClasses().getSubject().getSubjectName() + "\n" +
-                classes.getLecturerId().getAcademicTitle() + " " +
-                classes.getLecturerId().getName() + "\n" +
+                /*classes.getLecturerId().getAcademicTitle() + " " +
+                classes.getLecturerId().getName() + "\n" +*/
                 classes.getDepartmentClassroom().getClassroom().getClassroomName();
         return CalendarEvent.builder()
                 .title(title)
@@ -73,21 +73,21 @@ public class SemesterClassesToCalendarEventMapper {
         String group = classes.getMajorGroup().getGroup().getGroupName();
         String major = classes.getMajorGroup().getMajor().getMajorName();
         String type = classes.getClassesType().description;
-        String lecturerName = classes.getLecturerId().getName();
+        //String lecturerName = classes.getLecturerId().getName();
         String department = classes.getDepartmentClassroom().getDepartment().getDepartmentName();
         String classroom = classes.getDepartmentClassroom().getClassroom().getClassroomName();
 
         String descriptionText = "Grupa = " + group +
                 "\nKierunek = " + major +
                 "\nTyp = " + type +
-                "\nProwadzący = " + lecturerName +
+                //"\nProwadzący = " + lecturerName +
                 "\nWydział = " + department +
                 "\nSala = " + classroom;
         return CalendarEventDescription.builder()
                 .group(group)
                 .major(major)
                 .type(type)
-                .lecturerName(lecturerName)
+                //.lecturerName(lecturerName)
                 .department(department)
                 .classroom(classroom)
                 .descriptionText(descriptionText)

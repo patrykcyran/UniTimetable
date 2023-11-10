@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface SemesterClassesRepository extends JpaRepository<SemesterClasses, Long> {
-    List<SemesterClasses> findBySemester_AcademicYearAndSemester_SemesterTypeAndClasses_LecturerId_Name(String academicYear, SemesterType semesterType, String name);
+    //List<SemesterClasses> findBySemester_AcademicYearAndSemester_SemesterTypeAndClasses_LecturerId_Name(String academicYear, SemesterType semesterType, String name);
 
     List<SemesterClasses> findBySemester_AcademicYearAndSemester_SemesterType(String academicYear, SemesterType semesterType);
 
@@ -20,13 +20,4 @@ public interface SemesterClassesRepository extends JpaRepository<SemesterClasses
 
     List<SemesterClasses> findByClasses_DepartmentClassroom_Department_DepartmentNameAndClasses_DepartmentClassroom_Classroom_ClassroomName(String departmentName, String classroomName);
 
-
-
-    @Query("SELECT sc.classes FROM SemesterClasses sc " +
-            "WHERE sc.semester.academicYear = :academicYear " +
-            "AND sc.semester.semesterType = :semesterType " +
-            "AND sc.classes.lecturerId.name = :name")
-    List<Classes> findClassesByAcademicYearSemesterTypeAndLecturerName(@Param("academicYear") String academicYear,
-                                        @Param("semesterType") SemesterType semesterType,
-                                        @Param("name") String name);
 }

@@ -32,4 +32,11 @@ public class PartTimeSemesterClassesService {
         log.debug("Classes found {}", partTimeSemesterClasses);
         return partTimeSemesterClasses;
     }
+
+    public List<PartTimeSemesterClasses> findPartTimeSemesterClassesBySemester(String studyYear, SemesterType semesterType) {
+        log.debug("Finding part time classes by semester type and study year " + semesterType + ", " + studyYear);
+        List<PartTimeSemesterClasses> partTimeSemesterClasses = partTimeSemesterClassesRepository.findBySemester_AcademicYearAndSemester_SemesterType(studyYear, semesterType);
+        log.debug("Classes found {}", partTimeSemesterClasses);
+        return partTimeSemesterClasses;
+    }
 }

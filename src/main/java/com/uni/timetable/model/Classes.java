@@ -24,10 +24,6 @@ public class Classes {
     @JoinColumn(name = "subject_id")
     private Subject subject;
 
-    @ManyToOne
-    @JoinColumn(name = "lecturer_id")
-    private Lecturer lecturerId;
-
     @Enumerated(EnumType.STRING)
     @Column(name = "day_of_week")
     private DayOfWeek dayOfWeek;
