@@ -16,5 +16,5 @@ public class Lecturer {
     private String name;
 
     @Column(name = "academic_title")
-    private AcademicTitle academicTitle;
+    private String academicTitle;
 }

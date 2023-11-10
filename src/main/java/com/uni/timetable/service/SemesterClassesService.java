@@ -1,9 +1,6 @@
 package com.uni.timetable.service;
 
-import com.uni.timetable.model.Classes;
-import com.uni.timetable.model.SemesterClasses;
-import com.uni.timetable.model.SemesterType;
-import com.uni.timetable.model.StudyType;
+import com.uni.timetable.model.*;
 import com.uni.timetable.repository.ClassesRepository;
 import com.uni.timetable.repository.SemesterClassesRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +33,7 @@ public class SemesterClassesService {
     }
 
     public List<SemesterClasses> findSemesterClassesByFullTimeMajorAndSemester(String majorName, String studyYear, SemesterType semesterType) {
-        return findSemesterClassesByMajorSemesterAndStudyType(majorName, studyYear, semesterType, StudyType.FULL_TIME);
+        return semesterClassesRepository.findByClasses_MajorGroup_Major_MajorNameAndClasses_MajorGroup_StudyYearAndSemester_SemesterTypeAndClasses_MajorGroup_Major_StudyType(majorName, Integer.valueOf(studyYear), semesterType, StudyType.FULL_TIME);
     }
 
     public List<SemesterClasses> findSemesterClassesByPartTimeMajorAndSemester(String majorName, String studyYear, SemesterType semesterType) {
@@ -50,6 +47,7 @@ public class SemesterClassesService {
                 classes.getClasses().getMajorGroup().getMajor().getMajorName().equals(majorName) &&
                         classes.getClasses().getMajorGroup().getMajor().getStudyType().equals(studyType)).toList();
         log.debug("Classes found " + semesterClasses);
+
         return semesterClasses;
     }
 

@@ -1,9 +1,11 @@
 package com.uni.timetable.controller;
 
 import com.uni.timetable.model.CalendarEvent;
+import com.uni.timetable.model.PartTimeSemesterClasses;
 import com.uni.timetable.model.SemesterClasses;
 import com.uni.timetable.model.SemesterType;
 import com.uni.timetable.service.ClassesService;
+import com.uni.timetable.service.PartTimeSemesterClassesService;
 import com.uni.timetable.service.SemesterClassesService;
 import com.uni.timetable.utils.SemesterClassesToCalendarEventMapper;
 import org.springframework.http.HttpStatus;
@@ -21,11 +23,14 @@ import java.util.List;
 public class SemesterClassesController {
 
     private final SemesterClassesService semesterClassesService;
+    private final PartTimeSemesterClassesService partTimeSemesterClassesService;
     private final ClassesService classesService;
 
     public SemesterClassesController(SemesterClassesService semesterClassesService,
+                                     PartTimeSemesterClassesService partTimeSemesterClassesService,
                                      ClassesService classesService) {
         this.semesterClassesService = semesterClassesService;
+        this.partTimeSemesterClassesService = partTimeSemesterClassesService;
         this.classesService = classesService;
     }
 
@@ -49,9 +54,9 @@ public class SemesterClassesController {
     public List<CalendarEvent> findClassesByFullTimeMajor(@PathVariable String majorName,
                                                          @PathVariable String academicYear,
                                                          @PathVariable String semesterType) {
-        List<SemesterClasses> classesByFillTimeMajor = semesterClassesService.findSemesterClassesByFullTimeMajorAndSemester(majorName, academicYear, SemesterType.fromDescription(semesterType));
+        List<SemesterClasses> classesByFullTimeMajor = semesterClassesService.findSemesterClassesByFullTimeMajorAndSemester(majorName, academicYear, SemesterType.fromDescription(semesterType));
 
-        return SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByFillTimeMajor);
+        return SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByFullTimeMajor);
     }
 
     @GetMapping("/part-time-major/{majorName}/{academicYear}/{semesterType}")
@@ -59,9 +64,8 @@ public class SemesterClassesController {
     public List<CalendarEvent> findClassesByPartTimeMajor(@PathVariable String majorName,
                                                           @PathVariable String academicYear,
                                                           @PathVariable String semesterType) {
-        List<SemesterClasses> classesByFullTimeMajor = semesterClassesService.findSemesterClassesByPartTimeMajorAndSemester(majorName, academicYear, SemesterType.fromDescription(semesterType));
-
-        return SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByFullTimeMajor);
+        List<PartTimeSemesterClasses> partTimeSemesterClasses = partTimeSemesterClassesService.findPartTimeSemesterClassesByMajorAndSemester(majorName, academicYear, SemesterType.fromDescription(semesterType));
+        return SemesterClassesToCalendarEventMapper.mapPartTimeClassesToCalendarEvent(partTimeSemesterClasses);
     }
 
     @GetMapping("/department-classroom/{departmentName}/{classroomName}")

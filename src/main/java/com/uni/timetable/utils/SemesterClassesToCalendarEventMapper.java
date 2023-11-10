@@ -36,11 +36,36 @@ public class SemesterClassesToCalendarEventMapper {
     private static CalendarEvent mapClassToEvent(SemesterClasses semesterClasses, LocalDate classesDay) {
         LocalDateTime classesStart = semesterClasses.getClasses().getStartTime().atDate(classesDay);
         LocalDateTime classesEnd = semesterClasses.getClasses().getEndTime().atDate(classesDay);
+
+        Classes classes = semesterClasses.getClasses();
+        String title = semesterClasses.getClasses().getSubject().getSubjectName() + "\n" +
+                classes.getLecturerId().getAcademicTitle() + " " +
+                classes.getLecturerId().getName() + "\n" +
+                classes.getDepartmentClassroom().getClassroom().getClassroomName();
+
         return CalendarEvent.builder()
-                .title(semesterClasses.getClasses().getSubject().getSubjectName())
+                .title(title)
                 .start(classesStart)
                 .end(classesEnd)
                 .description(mapClassToEventDescription(semesterClasses.getClasses()))
+                .build();
+    }
+
+    private static CalendarEvent mapPartTimeClassToEvent(PartTimeSemesterClasses partTimeSemesterClasses) {
+        LocalDate classesDay = partTimeSemesterClasses.getClassesDate();
+        LocalDateTime classesStart = partTimeSemesterClasses.getClasses().getStartTime().atDate(classesDay);
+        LocalDateTime classesEnd = partTimeSemesterClasses.getClasses().getEndTime().atDate(classesDay);
+
+        Classes classes = partTimeSemesterClasses.getClasses();
+        String title = partTimeSemesterClasses.getClasses().getSubject().getSubjectName() + "\n" +
+                classes.getLecturerId().getAcademicTitle() + " " +
+                classes.getLecturerId().getName() + "\n" +
+                classes.getDepartmentClassroom().getClassroom().getClassroomName();
+        return CalendarEvent.builder()
+                .title(title)
+                .start(classesStart)
+                .end(classesEnd)
+                .description(mapClassToEventDescription(partTimeSemesterClasses.getClasses()))
                 .build();
     }
 
@@ -67,5 +92,15 @@ public class SemesterClassesToCalendarEventMapper {
                 .classroom(classroom)
                 .descriptionText(descriptionText)
                 .build();
+    }
+
+    public static List<CalendarEvent> mapPartTimeClassesToCalendarEvent(List<PartTimeSemesterClasses> partTimeSemesterClasses) {
+        List<CalendarEvent> calendarEvents = new ArrayList<>();
+
+        for (PartTimeSemesterClasses semesterClasses : partTimeSemesterClasses) {
+            calendarEvents.add(mapPartTimeClassToEvent(semesterClasses));
+        }
+
+        return calendarEvents;
     }
 }

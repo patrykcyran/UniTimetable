@@ -54,7 +54,7 @@ public class FrontController {
 
     @GetMapping("/part-time-students")
     public String partTimeStudents(@RequestParam(required = false, defaultValue = "Informatyka w Inżynierii Komputerowej") String majorName,
-                                   @RequestParam(required = false, defaultValue = "4") String studyYear,
+                                   @RequestParam(required = false, defaultValue = "3") String studyYear,
                                    @RequestParam(required = false, defaultValue = "Zimowy") String semesterType,
                                    Model model) {
 
