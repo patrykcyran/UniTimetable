@@ -64,6 +64,7 @@
                 <div class="form-group">
                     <label for="dayOfWeek">Dzień tygodnia:</label>
                     <select type="text" class="form-control" id="dayOfWeek" name="dayOfWeek">
+                        <option th:each="weekday: ${Weekdays}" th:value="${weekday}" th:text="${weekday}"></option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -77,26 +78,31 @@
                 <div class="form-group">
                     <label for="department">Wydział:</label>
                     <select type="text" class="form-control" id="department" name="department">
+                        <option th:each="department: ${Departments}" th:value="${department}" th:text="${department}"></option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="classroom">Sala:</label>
                     <select type="text" class="form-control" id="classroom" name="classroom">
+                        <option th:each="classroom: ${Classrooms}" th:value="${classroom}" th:text="${classroom}"></option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="major">Kierunek:</label>
                     <select type="text" class="form-control" id="major" name="major">
+                        <option th:each="major: ${Majors}" th:value="${major}" th:text="${major}"></option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="group">Grupa:</label>
                     <select type="text" class="form-control" id="group" name="group">
+                        <option th:each="group: ${Groups}" th:value="${group}" th:text="${group}"></option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="subject">Przedmiot:</label>
                     <select type="text" class="form-control" id="subject" name="subject">
+                        <option th:each="subject: ${Subjects}" th:value="${subject}" th:text="${subject}"></option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Dodaj</button>

@@ -24,15 +24,22 @@ public class MajorService {
         return majors;
     }
 
-    public List<String> findAllFullTimeMajorNames() {
+    public List<String> findAllMajorNames() {
         log.debug("Finding all academic years");
+        List<String> majorNames = majorRepository.findAll().stream().map(Major::getMajorName).distinct().toList();
+        log.debug("Major names found" + majorNames);
+        return majorNames;
+    }
+
+    public List<String> findAllFullTimeMajorNames() {
+        log.debug("Finding all full time major names");
         List<String> majorNames = majorRepository.findAll().stream().filter(major -> major.getStudyType().equals(StudyType.FULL_TIME)).map(Major::getMajorName).distinct().toList();
         log.debug("Major names found" + majorNames);
         return majorNames;
     }
 
     public List<String> findAllPartTimeMajorNames() {
-        log.debug("Finding all academic years");
+        log.debug("Finding all part time major names");
         List<String> majorNames = majorRepository.findAll().stream().filter(major -> major.getStudyType().equals(StudyType.PART_TIME)).map(Major::getMajorName).distinct().toList();
         log.debug("Major names found" + majorNames);
         return majorNames;

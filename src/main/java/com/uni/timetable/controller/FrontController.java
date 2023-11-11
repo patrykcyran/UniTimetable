@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -20,19 +22,28 @@ public class FrontController {
     LecturerService lecturerService;
     SemesterService semesterService;
     MajorService majorService;
+    GroupService groupService;
     DepartmentService departmentService;
+    ClassroomService classroomService;
     DepartmentClassroomService departmentClassroomService;
+    SubjectService subjectService;
 
     public FrontController(LecturerService lecturerService,
                            SemesterService semesterService,
                            MajorService majorService,
+                           GroupService groupService,
                            DepartmentService departmentService,
-                           DepartmentClassroomService departmentClassroomService) {
+                           ClassroomService classroomService,
+                           DepartmentClassroomService departmentClassroomService,
+                           SubjectService subjectService) {
         this.lecturerService = lecturerService;
         this.semesterService = semesterService;
         this.majorService = majorService;
+        this.groupService = groupService;
         this.departmentService = departmentService;
+        this.classroomService = classroomService;
         this.departmentClassroomService = departmentClassroomService;
+        this.subjectService = subjectService;
     }
 
     @GetMapping()
@@ -122,17 +133,43 @@ public class FrontController {
         return "admin";
     }
 
+    //TODO dodac przesylanie aktualnie wybranego wydzialy i filtrowac po salach tylko z niego albo po prostu dodawac taka sale jak nie ma jej na wydziale
     @GetMapping("/add-classes")
     public String addClassesView(Model model) {
         model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
         model.addAttribute("ClassesTypes", Arrays.stream(ClassesType.values()).map(classesType -> classesType.description));
+        model.addAttribute("Weekdays", List.of(
+                "Poniedziałek",
+                "Wtorek",
+                "Środa",
+                "Czwartek",
+                "Piątek",
+                "Sobota",
+                "Niedziela"
+        ));
+        model.addAttribute("Departments", departmentService.findAllDepartmentNames());
+        model.addAttribute("Classrooms", classroomService.findAllClassroomsNames());
+        model.addAttribute("Majors", majorService.findAllMajorNames());
+        List<String> groupNames = new ArrayList<>(groupService.findAllGroupsNames());
+        groupNames.add("Cały kierunek");
+        model.addAttribute("Groups", groupNames);
+        model.addAttribute("Subjects", subjectService.findAllSubjectNames());
+
         return "add-classes";
     }
 
     @PostMapping("/add-classes")
-    public String addClasses(Model model) {
+    public String addClasses(@RequestParam("classesType") String classesType,
+                             @RequestParam("dayOfWeek") String dayOfWeek,
+                             @RequestParam("startTime") String startTime,
+                             @RequestParam("endTime") String endTime,
+                             @RequestParam("department") String department,
+                             @RequestParam("classroom") String classroom,
+                             @RequestParam("major") String major,
+                             @RequestParam("group") String group,
+                             @RequestParam("subject") String subject,
+                             Model model) {
         model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
-        model.addAttribute("ClassesTypes", Arrays.stream(ClassesType.values()).map(classesType -> classesType.description));
         return "add-classes";
     }
 }
