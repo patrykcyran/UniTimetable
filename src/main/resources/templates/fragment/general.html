@@ -36,11 +36,18 @@
                 <li class="nav-item p-3">
                     <a th:href="@{/lecturers}" class="nav-link">Prowadzący</a>
                 </li>
+                <li th:if="${isAdminLogged}" class="nav-item p-3">
+                    <a th:href="@{/addClasses}" class="nav-link">Dodaj zajęcia</a>
+                </li>
             </ul>
         </div>
 
-        <div class="navbar-nav ml-auto">
+        <div th:unless="${isAdminLogged}" class="navbar-nav ml-auto">
             <a th:href="@{/admin}" class="nav-link btn btn-primary">Zarządzanie</a>
+        </div>
+
+        <div th:if="${isAdminLogged}" class="navbar-nav ml-auto">
+            <a th:href="@{/logout}" class="nav-link btn btn-primary">Wyloguj</a>
         </div>
     </nav>
 </div>

@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Arrays;
@@ -50,6 +51,7 @@ public class FrontController {
         model.addAttribute("MajorNames", majorService.findAllFullTimeMajorNames());
         model.addAttribute("StudyYears", List.of(1, 2, 3, 4, 5));
         model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
         return "full-time-students";
     }
 
@@ -65,6 +67,7 @@ public class FrontController {
         model.addAttribute("MajorNames", majorService.findAllPartTimeMajorNames());
         model.addAttribute("StudyYears", List.of(1, 2, 3, 4, 5));
         model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
         return "part-time-students";
     }
 
@@ -77,6 +80,7 @@ public class FrontController {
         model.addAttribute("prevClassroom", classroomName);
         model.addAttribute("DepartmentNames", departmentService.findAllDepartmentNames());
         model.addAttribute("Classrooms", departmentClassroomService.findAllClassroomsForDepartment(departmentName));
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
         return "classrooms";
     }
 
@@ -91,12 +95,28 @@ public class FrontController {
         model.addAttribute("LecturersNames", lecturerService.findAllNames());
         model.addAttribute("AcademicYears", semesterService.findAllAcademicYears());
         model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
         return "lecturers";
     }
 
     @GetMapping("/admin")
-    public String admin(Model model) {
+    public String adminView(Model model) {
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        return "admin";
+    }
 
+    @PostMapping("/login")
+    public String login(@RequestParam String username,
+                        @RequestParam String password,
+                        Model model) {
+        SecurityUtils.verifyAdminLogin("admin", "admin");
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        return "admin";
+    }
+
+    @GetMapping("/logout")
+    public String logout(Model model) {
+        SecurityUtils.logOut();
         model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
         return "admin";
     }

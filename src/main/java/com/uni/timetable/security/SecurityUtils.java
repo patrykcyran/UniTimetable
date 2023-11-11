@@ -20,6 +20,6 @@ public class SecurityUtils {
 
     public static void logOut() {
         isAdminLogged = false;
-        log.info("User log out as admin");
+        log.info("User logged out");
     }
 }
