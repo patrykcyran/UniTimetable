@@ -14,4 +14,5 @@ public class CalendarEvent {
     private LocalDateTime end;
     private String title;
     private CalendarEventDescription description;
+    private String color;
 }

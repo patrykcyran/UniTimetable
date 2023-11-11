@@ -53,7 +53,31 @@ public class SemesterClassesToCalendarEventMapper {
                 .start(classesStart)
                 .end(classesEnd)
                 .description(mapClassToEventDescription(semesterClasses.getClasses(), List.of()))
+                .color(resolveEventColor(semesterClasses.getClasses().getClassesType()))
                 .build();
+    }
+
+    private static String resolveEventColor(ClassesType classesType) {
+        switch (classesType) {
+            case LECTURE -> {
+                return "#2596be";
+            }
+            case LABORATORIES -> {
+                return "#8231F6";
+            }
+            case PC_LABORATORIES -> {
+                return "#31ABF6";
+            }
+            case PROJECTS -> {
+                return "#D5F631";
+            }
+            case SEMINAR -> {
+                return "#F69C31";
+            }
+            default -> {
+                return "#31A8F6";
+            }
+        }
     }
 
     private static CalendarEvent mapPartTimeClassToEvent(PartTimeSemesterClasses partTimeSemesterClasses, List<Lecturer> lecturers) {
