@@ -1,7 +1,7 @@
 package com.uni.timetable.model;
 
 public enum ClassesType {
-    LECTURE("Wykład"),
+    LECTURE("Wyklad"),
     LABORATORIES("Laboratoria"),
     PC_LABORATORIES("Laboratoria Komputerowe"),
     PROJECTS("Projekty"),
