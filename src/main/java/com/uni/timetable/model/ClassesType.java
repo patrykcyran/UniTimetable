@@ -12,4 +12,14 @@ public enum ClassesType {
     ClassesType(String description) {
         this.description = description;
     }
+
+    public static ClassesType fromDescription(String description) {
+        for (ClassesType type : ClassesType.values()) {
+            if (type.description.equalsIgnoreCase(description)) {
+                return type;
+            }
+        }
+        // Rzucić wyjątek lub zwrócić domyślną wartość, jeśli nie znaleziono pasującej instancji
+        throw new IllegalArgumentException("No matching ClassesType for description: " + description);
+    }
 }

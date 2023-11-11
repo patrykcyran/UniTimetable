@@ -30,4 +30,10 @@ public class DepartmentClassroomService {
         log.debug("Departments classrooms found" + classrooms);
         return classrooms;
     }
+
+    public DepartmentClassroom findByDepartmentAndClassroomName(String departmentName, String classroomName) {
+        DepartmentClassroom departmentClassroom = departmentClassroomRepository.findByDepartment_DepartmentNameAndClassroom_ClassroomName(departmentName, classroomName);
+        log.debug("Department classroom found {} ", departmentClassroom);
+        return departmentClassroom;
+    }
 }

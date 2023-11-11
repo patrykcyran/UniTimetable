@@ -10,4 +10,7 @@ import java.util.List;
 public interface DepartmentClassroomRepository extends JpaRepository<DepartmentClassroom, Long> {
     List<DepartmentClassroom> findByDepartment_DepartmentName(String departmentName);
 
+    DepartmentClassroom findByDepartment_DepartmentNameAndClassroom_ClassroomName(String departmentName, String classroomName);
+
+
 }

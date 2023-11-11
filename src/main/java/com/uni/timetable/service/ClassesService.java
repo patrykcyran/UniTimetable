@@ -1,11 +1,12 @@
 package com.uni.timetable.service;
 
-import com.uni.timetable.model.Classes;
-import com.uni.timetable.model.SemesterNumber;
+import com.uni.timetable.model.*;
 import com.uni.timetable.repository.ClassesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -53,4 +54,27 @@ public class ClassesService {
         log.debug("Classes found" + classesFound);*/
         return null;
     }
+
+    public void saveClasses(MajorGroup majorGroup,
+                            Subject subject,
+                            DayOfWeek dayOfWeek,
+                            LocalTime startTime,
+                            LocalTime endTime,
+                            ClassesType classesType,
+                            DepartmentClassroom departmentClassroom) {
+        Classes classes = Classes.builder()
+                .majorGroup(majorGroup)
+                .subject(subject)
+                .dayOfWeek(dayOfWeek)
+                .startTime(startTime)
+                .endTime(endTime)
+                .classesType(classesType)
+                .departmentClassroom(departmentClassroom)
+                .build();
+
+        log.debug("Classes to save {} ", classes);
+        classesRepository.save(classes);
+    }
+
+
 }

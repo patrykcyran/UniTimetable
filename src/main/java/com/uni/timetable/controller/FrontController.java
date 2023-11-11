@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.time.DayOfWeek;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -27,6 +26,7 @@ public class FrontController {
     ClassroomService classroomService;
     DepartmentClassroomService departmentClassroomService;
     SubjectService subjectService;
+    ClassesController classesController;
 
     public FrontController(LecturerService lecturerService,
                            SemesterService semesterService,
@@ -35,7 +35,8 @@ public class FrontController {
                            DepartmentService departmentService,
                            ClassroomService classroomService,
                            DepartmentClassroomService departmentClassroomService,
-                           SubjectService subjectService) {
+                           SubjectService subjectService,
+                           ClassesController classesController) {
         this.lecturerService = lecturerService;
         this.semesterService = semesterService;
         this.majorService = majorService;
@@ -44,6 +45,7 @@ public class FrontController {
         this.classroomService = classroomService;
         this.departmentClassroomService = departmentClassroomService;
         this.subjectService = subjectService;
+        this.classesController = classesController;
     }
 
     @GetMapping()
@@ -170,6 +172,8 @@ public class FrontController {
                              @RequestParam("subject") String subject,
                              Model model) {
         model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        classesController.saveClasses(classesType, dayOfWeek, startTime, endTime, department, classroom, major, group, subject);
+        //TODO teraz mozna by stowrzyc z tego obiekt Classes, przejsc do widoku dodawania zajęć dla studiów stacjonranych albo niestacjonarnych w zaleznosci od wybranego dnia tygodnia
         return "add-classes";
     }
 }

@@ -32,4 +32,10 @@ public class SubjectService {
         log.debug("Subject names found" + departmentNames);
         return departmentNames;
     }
+
+    public Subject findSubjectByName(String subjectName) {
+        Subject subject = subjectRepository.findBySubjectName(subjectName);
+        log.debug("Subject found by name {} ", subject);
+        return subject;
+    }
 }
