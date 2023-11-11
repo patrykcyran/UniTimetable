@@ -1,6 +1,5 @@
 package com.uni.timetable.service;
 
-import com.uni.timetable.model.Department;
 import com.uni.timetable.model.DepartmentClassroom;
 import com.uni.timetable.repository.DepartmentClassroomRepository;
 import lombok.extern.slf4j.Slf4j;

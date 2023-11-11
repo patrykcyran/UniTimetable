@@ -1,10 +1,8 @@
 package com.uni.timetable.service;
 
 import com.uni.timetable.model.Major;
-import com.uni.timetable.model.Semester;
 import com.uni.timetable.model.StudyType;
 import com.uni.timetable.repository.MajorRepository;
-import com.uni.timetable.repository.SemesterRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

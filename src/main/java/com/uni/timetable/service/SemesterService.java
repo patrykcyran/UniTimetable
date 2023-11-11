@@ -1,9 +1,6 @@
 package com.uni.timetable.service;
 
-import com.uni.timetable.model.Lecturer;
 import com.uni.timetable.model.Semester;
-import com.uni.timetable.model.SemesterClasses;
-import com.uni.timetable.repository.SemesterClassesRepository;
 import com.uni.timetable.repository.SemesterRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

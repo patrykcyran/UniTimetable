@@ -1,7 +1,6 @@
 package com.uni.timetable.repository;
 
 import com.uni.timetable.model.Classes;
-import com.uni.timetable.model.Lecturer;
 import com.uni.timetable.model.SemesterNumber;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;

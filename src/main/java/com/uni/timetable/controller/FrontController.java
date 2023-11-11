@@ -1,6 +1,7 @@
 package com.uni.timetable.controller;
 
 import com.uni.timetable.model.SemesterType;
+import com.uni.timetable.security.SecurityUtils;
 import com.uni.timetable.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -91,5 +92,12 @@ public class FrontController {
         model.addAttribute("AcademicYears", semesterService.findAllAcademicYears());
         model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
         return "lecturers";
+    }
+
+    @GetMapping("/admin")
+    public String admin(Model model) {
+
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        return "admin";
     }
 }

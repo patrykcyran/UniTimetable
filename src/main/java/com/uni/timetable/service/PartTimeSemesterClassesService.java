@@ -1,7 +1,6 @@
 package com.uni.timetable.service;
 
 import com.uni.timetable.model.PartTimeSemesterClasses;
-import com.uni.timetable.model.SemesterClasses;
 import com.uni.timetable.model.SemesterType;
 import com.uni.timetable.repository.PartTimeSemesterClassesRepository;
 import lombok.extern.slf4j.Slf4j;
