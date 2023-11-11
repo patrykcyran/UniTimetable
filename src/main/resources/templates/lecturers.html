@@ -149,6 +149,28 @@
                 eventClick: function (event, element) {
                     displayinfo(event, element);
                 },
+
+                //Display event title on hover
+                eventMouseover: function (event, jsEvent, view) {
+                    // Display the full title when hovering over the event
+                    var formattedTitle = event.title.replace(/\n/g, '<br>');
+                    var tooltip = '<div class="tooltipevent" style="width:auto;height:auto;background:#f8f8f8;position:absolute;z-index:10001;padding:10px;border:1px solid #d8d8d8;box-shadow:0 2px 10px rgba(0, 0, 0, 0.1);">' + formattedTitle + '</div>';
+                    $("body").append(tooltip);
+                    $(this).mouseover(function (e) {
+                        $(this).css('z-index', 10000);
+                        $('.tooltipevent').fadeIn('500');
+                        $('.tooltipevent').fadeTo('10', 1.9);
+                    }).mousemove(function (e) {
+                        $('.tooltipevent').css('top', e.pageY + 10);
+                        $('.tooltipevent').css('left', e.pageX + 20);
+                    });
+                },
+
+                eventMouseout: function (event, jsEvent, view) {
+                    // Remove the tooltip when the mouse leaves the event
+                    $(this).css('z-index', 8);
+                    $('.tooltipevent').remove();
+                },
             });
         });
     });
