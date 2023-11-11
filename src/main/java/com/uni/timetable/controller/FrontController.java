@@ -1,5 +1,6 @@
 package com.uni.timetable.controller;
 
+import com.uni.timetable.model.ClassesType;
 import com.uni.timetable.model.SemesterType;
 import com.uni.timetable.security.SecurityUtils;
 import com.uni.timetable.service.*;
@@ -119,5 +120,19 @@ public class FrontController {
         SecurityUtils.logOut();
         model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
         return "admin";
+    }
+
+    @GetMapping("/add-classes")
+    public String addClassesView(Model model) {
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        model.addAttribute("ClassesTypes", Arrays.stream(ClassesType.values()).map(classesType -> classesType.description));
+        return "add-classes";
+    }
+
+    @PostMapping("/add-classes")
+    public String addClasses(Model model) {
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        model.addAttribute("ClassesTypes", Arrays.stream(ClassesType.values()).map(classesType -> classesType.description));
+        return "add-classes";
     }
 }

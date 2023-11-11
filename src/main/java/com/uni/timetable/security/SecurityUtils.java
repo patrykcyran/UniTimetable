@@ -7,7 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class SecurityUtils {
 
-    public static boolean isAdminLogged;
+    public static boolean isAdminLogged = true;
 
     public static void verifyAdminLogin(String username, String password) {
         if (!isAdminLogged) {
