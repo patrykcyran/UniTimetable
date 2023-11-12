@@ -120,46 +120,9 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="major">Kierunek:</label>
-                    <select type="text" class="form-control" id="major" name="major">
-                        <option th:each="major: ${Majors}" th:value="${major}" th:text="${major}" th:selected="${major == selectedMajor}"></option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="studyYear">Rok studiów:</label>
-                    <select type="text" class="form-control" id="studyYear" name="studyYear">
-                        <option th:each="studyYear: ${StudyYears}" th:value="${studyYear}" th:text="${studyYear}" th:selected="${studyYear == selectedStudyYear}"></option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="group">Grupa:</label>
-                    <select type="text" class="form-control" id="group" name="group">
-                        <option th:each="group: ${Groups}" th:value="${group}" th:text="${group}" th:selected="${group == selectedGroup}"></option>
-                    </select>
-                </div>
-                <div class="form-group">
                     <label for="subject">Przedmiot:</label>
                     <select type="text" class="form-control" id="subject" name="subject">
                         <option th:each="subject: ${Subjects}" th:value="${subject}" th:text="${subject}" th:selected="${subject == selectedSubject}"></option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="semesterType">Semestr:</label>
-                    <select type="text" class="form-control" id="semesterType" name="semesterType">
-                        <option th:each="semesterType: ${SemesterTypes}" th:value="${semesterType}" th:text="${semesterType}" th:selected="${semesterType == selectedSemesterType}"></option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label for="isDiploma">Semestr dyplomowy:</label>
-                    <div>
-                        <label><input type="radio" name="isDiploma" value="Nie" checked> Nie</label>
-                        <label><input type="radio" id="isDiploma" name="isDiploma" value="Tak" > Tak</label>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="academicYear">Rok akademicki:</label>
-                    <select type="text" class="form-control" id="academicYear" name="academicYear">
-                        <option th:each="academicYear: ${AcademicYears}" th:value="${academicYear}" th:text="${academicYear}" th:selected="${academicYear == selectedAcademicYear}"></option>
                     </select>
                 </div>
                 <div class="form-group">

@@ -77,6 +77,7 @@ public class SemesterClassesService {
     }
 
     public void update(SemesterClasses semesterClasses) {
+        log.debug("Updating semester classes {}", semesterClasses);
         semesterClassesRepository.updateSemesterAndClassesAndFrequencyBySemesterClassesId(semesterClasses.getSemester(), semesterClasses.getClasses(), semesterClasses.getFrequency(), semesterClasses.getSemesterClassesId());
     }
 }

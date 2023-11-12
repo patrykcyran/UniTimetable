@@ -3,6 +3,7 @@ package com.uni.timetable.controller;
 import com.uni.timetable.exception.TimetableException;
 import com.uni.timetable.model.*;
 import com.uni.timetable.service.*;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -14,7 +15,6 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.uni.timetable.controller.FrontController.mapWeekdayToPolish;
 
 @Controller
 @RequestMapping("/classes")
@@ -28,6 +28,7 @@ public class ClassesController {
     private final SemesterService semesterService;
     private final ClassesLecturersService classesLecturersService;
     private final LecturerService lecturerService;
+    private final DepartmentService departmentService;
 
     public ClassesController(ClassesService classesService,
                              MajorGroupService majorGroupService,
@@ -36,7 +37,8 @@ public class ClassesController {
                              SemesterClassesService semesterClassesService,
                              SemesterService semesterService,
                              ClassesLecturersService classesLecturersService,
-                             LecturerService lecturerService) {
+                             LecturerService lecturerService,
+                             DepartmentService departmentService) {
         this.classesService = classesService;
         this.majorGroupService = majorGroupService;
         this.departmentClassroomService = departmentClassroomService;
@@ -45,6 +47,7 @@ public class ClassesController {
         this.semesterService = semesterService;
         this.classesLecturersService = classesLecturersService;
         this.lecturerService = lecturerService;
+        this.departmentService = departmentService;
     }
 
     @GetMapping("/all")
@@ -130,45 +133,54 @@ public class ClassesController {
                               String dayOfWeekString,
                               String startTimeString,
                               String endTimeString,
-                              String department,
+                              String departmentName,
                               String classroom,
-                              String major,
-                              String studyYear,
-                              String group,
                               String subjectName,
-                              String semesterType,
-                              String isDiplomaString,
-                              String academicYear,
                               String frequencyString,
                               String lecturersList,
                               Long semesterClassesId) {
-
         SemesterClasses semesterClasses = semesterClassesService.findById(semesterClassesId);
+        Classes classes = semesterClasses.getClasses();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime startTime = LocalTime.parse(startTimeString, formatter);
+        LocalTime endTime = LocalTime.parse(endTimeString, formatter);
+        DepartmentClassroom departmentClassroom = departmentClassroomService.findByDepartmentAndClassroomName(departmentName, classroom);
+        Subject subject = subjectService.findSubjectByName(subjectName);
 
-        //TODO przeleciec wszystko co sie moze tutaj zmienic, i potem robimy zmiany w calej bazie
-        if (!classesTypeString.equals(semesterClasses.getClasses().getClassesType().description)) {
-
+        if (startTime.isAfter(endTime)) {
+            throw new TimetableException("Czas rozpoczęcia zajęć nie może być po ich zakończeniu");
         }
 
-/*        String classesTypeString = semesterClasses.getClasses().getClassesType().description;
-        String weekday = mapWeekdayToPolish(semesterClasses.getClasses().getDayOfWeek());
-        String startTime = semesterClasses.getClasses().getStartTime().toString();
-        String endTime = semesterClasses.getClasses().getEndTime().toString();
-        String department = semesterClasses.getClasses().getDepartmentClassroom().getDepartment().getDepartmentName();
-        String classroom = semesterClasses.getClasses().getDepartmentClassroom().getClassroom().getClassroomName();
-        String major = semesterClasses.getClasses().getMajorGroup().getMajor().getMajorName();
-        String studyYear = semesterClasses.getClasses().getMajorGroup().getStudyYear().toString();
-        String group = semesterClasses.getClasses().getMajorGroup().getGroup().getGroupName();
-        String subject = semesterClasses.getClasses().getSubject().getSubjectName();
-        String semesterType = semesterClasses.getSemester().getSemesterType().getDescription();
-        String academicYear = semesterClasses.getSemester().getAcademicYear();
-        String frequency = semesterClasses.getFrequency().getDescription();*/
+        semesterClasses.getClasses().setClassesType(ClassesType.fromDescription(classesTypeString));
+        semesterClasses.getClasses().setDayOfWeek(resolveDayOfWeek(dayOfWeekString));
+        semesterClasses.getClasses().setStartTime(startTime);
+        semesterClasses.getClasses().setEndTime(endTime);
+        semesterClasses.getClasses().setDepartmentClassroom(departmentClassroom);
+        semesterClasses.getClasses().setSubject(subject);
+        semesterClasses.setFrequency(Frequency.fromDescription(frequencyString));
 
-        semesterClasses.getSemester().setAcademicYear("24-25");
         semesterClassesService.update(semesterClasses);
+        List<String> lecturerNames = List.of(lecturersList.split(","));
+
+        List<ClassesLecturers> classesLecturers = classesLecturersService.findAllClassesLecturersByClasses(semesterClasses.getClasses().getClassesId());
 
 
+        //Delete all lecturers that are no longer part of the classes
+        for (ClassesLecturers cl : classesLecturers) {
+            if (!lecturerNames.contains(cl.getLecturer().getName())) {
+                classesLecturersService.deleteClassesLecturers(cl.getClassesLecturersId());
+            }
+        }
 
+        //Add all new lecturers that were not part of the classes until not
+        for (String lecturerName : lecturerNames) {
+            if (classesLecturers.stream().noneMatch(cl -> cl.getLecturer().getName().equals(lecturerName))) {
+                Lecturer lecturer = lecturerService.findLecturerByName(lecturerName);
+                classesLecturersService.saveClassesLecturers(classes, lecturer);
+            }
+        }
+
+        System.out.println("");
     }
 
         private static DayOfWeek resolveDayOfWeek(String dayOfWeek) {

@@ -295,20 +295,13 @@ public class FrontController {
                                         @RequestParam("endTime") String endTime,
                                         @RequestParam("department") String department,
                                         @RequestParam("classroom") String classroom,
-                                        @RequestParam("major") String major,
-                                        @RequestParam("studyYear") String studyYear,
-                                        @RequestParam("group") String group,
                                         @RequestParam("subject") String subject,
-                                        @RequestParam("semesterType") String semesterType,
-                                        @RequestParam("isDiploma") String isDiploma,
-                                        @RequestParam("academicYear") String academicYear,
                                         @RequestParam("frequency") String frequency,
                                         @RequestParam("lecturers") String lecturersList,
                                         @RequestParam("eventId") Long semesterClassesId,
                                         Model model) {
         model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
-        classesController.updateClasses(classesType, dayOfWeek, startTime, endTime, department, classroom, major, studyYear, group, subject, semesterType, isDiploma, academicYear, frequency, lecturersList, semesterClassesId);
-
+        classesController.updateClasses(classesType, dayOfWeek, startTime, endTime, department, classroom, subject, frequency, lecturersList, semesterClassesId);
         return "/modify-full-time-classes";
     }
 

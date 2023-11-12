@@ -44,6 +44,10 @@ public class ClassesLecturersService {
         return classesLecturersRepository.findByClasses_ClassesId(classesId).stream().map(ClassesLecturers::getLecturer).toList();
     }
 
+    public List<ClassesLecturers> findAllClassesLecturersByClasses(Long classesId) {
+        return classesLecturersRepository.findByClasses_ClassesId(classesId).stream().toList();
+    }
+
     public Boolean doesClassesLecturerExists(MajorGroup majorGroup, Subject subject, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, ClassesType classesType, DepartmentClassroom departmentClassroom, String name) {
         return classesLecturersRepository.existsByClasses_MajorGroupAndClasses_SubjectAndClasses_DayOfWeekAndClasses_StartTimeAndClasses_EndTimeAndClasses_ClassesTypeAndClasses_DepartmentClassroomAndLecturer_Name(majorGroup, subject, dayOfWeek, startTime, endTime, classesType, departmentClassroom, name);
     }
@@ -56,5 +60,9 @@ public class ClassesLecturersService {
         log.debug("Classes lecturer to save {} ", classesLecturer);
         classesLecturersRepository.save(classesLecturer);
         return classesLecturer;
+    }
+
+    public void deleteClassesLecturers(Long classesLecturersId) {
+        classesLecturersRepository.deleteByClassesLecturersId(classesLecturersId);
     }
 }
