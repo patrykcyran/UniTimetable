@@ -1,8 +1,10 @@
 package com.uni.timetable.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
@@ -11,6 +13,8 @@ import java.time.LocalTime;
 @Entity
 @Table(name = "Classes")
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Classes {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "classes_sequence")

@@ -10,4 +10,9 @@ import java.util.List;
 public interface MajorGroupRepository extends JpaRepository<MajorGroup, Long> {
     MajorGroup findByMajor_MajorNameAndGroup_GroupName(String majorName, String groupName);
 
+    List<MajorGroup> findByMajor_MajorName(String majorName);
+
+    List<MajorGroup> findByMajor_MajorNameAndStudyYear(String majorName, Integer studyYear);
+
+    MajorGroup findByMajor_MajorNameAndStudyYearAndGroup_GroupName(String majorName, Integer studyYear, String groupName);
 }

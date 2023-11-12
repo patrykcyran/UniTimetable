@@ -45,6 +45,30 @@
             box-shadow: 0px 0px 10px 0px #000000;
         }
     </style>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Attach a change event handler to the department selectpicker
+            $('#department').on('change', function () {
+                // Get the selected value
+                var selectedDepartment = $(this).val();
+
+                // Make a GET request to the current URL with the selected department as a query parameter
+                // This will trigger a server-side action, and the view will be updated accordingly
+                window.location.href = window.location.pathname + '?selectedDepartment=' + selectedDepartment;
+            });
+
+            $('#major').on('change', function () {
+                // Get the selected value
+                var selectedMajor = $(this).val();
+
+                // Make a GET request to the current URL with the selected department as a query parameter
+                // This will trigger a server-side action, and the view will be updated accordingly
+                window.location.href = window.location.pathname + '?selectedMajor=' + selectedMajor;
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -78,7 +102,7 @@
                 <div class="form-group">
                     <label for="department">Wydział:</label>
                     <select type="text" class="form-control" id="department" name="department">
-                        <option th:each="department: ${Departments}" th:value="${department}" th:text="${department}"></option>
+                        <option th:each="department: ${Departments}" th:value="${department}" th:text="${department}" th:selected="${department == selectedDepartment}"></option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -90,7 +114,13 @@
                 <div class="form-group">
                     <label for="major">Kierunek:</label>
                     <select type="text" class="form-control" id="major" name="major">
-                        <option th:each="major: ${Majors}" th:value="${major}" th:text="${major}"></option>
+                        <option th:each="major: ${Majors}" th:value="${major}" th:text="${major}" th:selected="${major == selectedMajor}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="studyYear">Rok studiów:</label>
+                    <select type="text" class="form-control" id="studyYear" name="studyYear">
+                        <option th:each="studyYear: ${StudyYears}" th:value="${studyYear}" th:text="${studyYear}"></option>
                     </select>
                 </div>
                 <div class="form-group">

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -42,7 +43,7 @@ public class ClassesController {
 
     @PostMapping("/byGroupAndSemester")
     public ResponseEntity<List<Classes>> findByGroup(@RequestParam("groupName") String groupName, @RequestParam("semesterNumber") String semesterNumber) {
-       return new ResponseEntity<>(classesService.findByGroupAndSemesterNumber(groupName, semesterNumber), HttpStatus.OK);
+        return new ResponseEntity<>(classesService.findByGroupAndSemesterNumber(groupName, semesterNumber), HttpStatus.OK);
     }
 
     @PostMapping("/byLecturerId")
@@ -62,9 +63,18 @@ public class ClassesController {
                             String department,
                             String classroom,
                             String major,
+                            String studyYear,
                             String group,
                             String subjectName) {
-        MajorGroup majorGroup = majorGroupService.findByMajorAndGroupNames(major, group);
+
+        List<MajorGroup> majorGroups = new ArrayList<>();
+        if ("Cały kierunek".equals(group)) {
+            majorGroups.addAll(majorGroupService.findMajorGroupsByMajorAndYear(major, studyYear));
+        } else {
+            MajorGroup majorGroup = majorGroupService.findByMajorGroupAndYear(major, studyYear, group);
+            majorGroups.add(majorGroup);
+        }
+
         Subject subject = subjectService.findSubjectByName(subjectName);
         DayOfWeek dayOfWeek = resolveDayOfWeek(dayOfWeekString);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -77,7 +87,10 @@ public class ClassesController {
             throw new TimetableException("Czas rozpoczęcia zajęć nie może być po ich zakończeiu");
         }
 
-        classesService.saveClasses(majorGroup, subject, dayOfWeek, startTime, endTime, classesType, departmentClassroom);
+        //When whole major is chosen, iterate over each group and add classes to them
+        for (MajorGroup majorGroup : majorGroups) {
+            classesService.saveClasses(majorGroup, subject, dayOfWeek, startTime, endTime, classesType, departmentClassroom);
+        }
     }
 
     private static DayOfWeek resolveDayOfWeek(String dayOfWeek) {
