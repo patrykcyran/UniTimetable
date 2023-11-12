@@ -148,9 +148,11 @@
                     $('#loading').toggle(bool);
                 },
                 eventClick: function (event, element) {
-                    //displayinfo(event, element);
-                    console.log(event)
-                    window.location.href = "/modify-classes?eventId=" + event.eventId + "&studyType=" + event.studyType;
+                    var confirmation = window.confirm('Chcesz edytować wybrane zajęcia?');
+                    if (confirmation) {
+                        var editPageUrl = "/modify-classes?eventId=" + event.eventId + "&studyType=" + event.studyType
+                        window.location.href = editPageUrl;
+                    }
                 },
 
                 //Display event title on hover

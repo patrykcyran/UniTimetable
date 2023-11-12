@@ -4,7 +4,6 @@ import com.uni.timetable.model.ClassesType;
 import com.uni.timetable.model.Frequency;
 import com.uni.timetable.model.MajorGroup;
 import com.uni.timetable.model.SemesterType;
-import com.uni.timetable.repository.MajorGroupRepository;
 import com.uni.timetable.security.SecurityUtils;
 import com.uni.timetable.service.*;
 import lombok.extern.slf4j.Slf4j;
@@ -152,7 +151,7 @@ public class FrontController {
         return "admin";
     }
 
-    @GetMapping("/add-classes")
+    @GetMapping("/add-full-time-classes")
     public String addClassesView(@RequestParam(required = false, defaultValue = "Wydział Inżynierii Elektrycznej i Komputerowej") String selectedDepartment,
                                  @RequestParam(required = false, defaultValue = "Informatyka w Inżynierii Komputerowej") String selectedMajor,
                                  Model model) {
@@ -165,15 +164,11 @@ public class FrontController {
                 "Wtorek",
                 "Środa",
                 "Czwartek",
-                "Piątek",
-                "Sobota",
-                "Niedziela"
+                "Piątek"
         ));
         model.addAttribute("Departments", departmentService.findAllDepartmentNames());
         model.addAttribute("Classrooms", departmentClassroomService.findAllClassroomsForDepartment(selectedDepartment));
         model.addAttribute("Majors", majorService.findAllMajorNames());
-        List<String> groupNames = new ArrayList<>(majorGroupService.findMajorGroupsByMajor(selectedMajor).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
-        groupNames.add("Cały kierunek");
         model.addAttribute("StudyYears", majorGroupService.findAll().stream().map(MajorGroup::getStudyYear).distinct().toList());
         model.addAttribute("Groups", majorGroupService.findMajorGroupsByMajor(selectedMajor).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
         model.addAttribute("Subjects", subjectService.findAllSubjectNames());
@@ -181,10 +176,10 @@ public class FrontController {
         model.addAttribute("AcademicYears", semesterService.findAllAcademicYears());
         model.addAttribute("Frequencies", Arrays.stream(Frequency.values()).map(Frequency::getDescription));
         model.addAttribute("LecturersNames", lecturerService.findAllNames());
-        return "add-classes";
+        return "add-full-time-classes";
     }
 
-    @PostMapping("/add-classes")
+    @PostMapping("/add-full-time-classes")
     public String addClasses(@RequestParam("classesType") String classesType,
                              @RequestParam("dayOfWeek") String dayOfWeek,
                              @RequestParam("startTime") String startTime,
@@ -203,8 +198,7 @@ public class FrontController {
                              Model model) {
         model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
         classesController.saveClasses(classesType, dayOfWeek, startTime, endTime, department, classroom, major, studyYear, group, subject, semesterType, isDiploma, academicYear, frequency, lecturersList);
-        //TODO teraz mozna by stowrzyc z tego obiekt Classes, przejsc do widoku dodawania zajęć dla studiów stacjonranych albo niestacjonarnych w zaleznosci od wybranego dnia tygodnia
-        return "add-classes";
+        return "add-full-time-classes";
     }
 
     @GetMapping("/modify-classes")
