@@ -3,11 +3,14 @@ package com.uni.timetable.repository;
 import com.uni.timetable.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Repository
 public interface SemesterClassesRepository extends JpaRepository<SemesterClasses, Long> {
+    @Transactional
+    long deleteBySemesterClassesId(Long semesterClassesId);
     //List<SemesterClasses> findBySemester_AcademicYearAndSemester_SemesterTypeAndClasses_LecturerId_Name(String academicYear, SemesterType semesterType, String name);
 
     List<SemesterClasses> findBySemester_AcademicYearAndSemester_SemesterType(String academicYear, SemesterType semesterType);
@@ -18,4 +21,5 @@ public interface SemesterClassesRepository extends JpaRepository<SemesterClasses
 
     List<SemesterClasses> findByClasses_DepartmentClassroom_Department_DepartmentNameAndClasses_DepartmentClassroom_Classroom_ClassroomName(String departmentName, String classroomName);
 
+    SemesterClasses findBySemesterClassesId(Long semesterClassesId);
 }

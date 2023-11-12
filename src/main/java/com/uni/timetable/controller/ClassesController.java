@@ -14,6 +14,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.uni.timetable.controller.FrontController.mapWeekdayToPolish;
+
 @Controller
 @RequestMapping("/classes")
 public class ClassesController {
@@ -124,7 +126,50 @@ public class ClassesController {
         }
     }
 
-    private static DayOfWeek resolveDayOfWeek(String dayOfWeek) {
+    public void updateClasses(String classesTypeString,
+                              String dayOfWeekString,
+                              String startTimeString,
+                              String endTimeString,
+                              String department,
+                              String classroom,
+                              String major,
+                              String studyYear,
+                              String group,
+                              String subjectName,
+                              String semesterType,
+                              String isDiplomaString,
+                              String academicYear,
+                              String frequencyString,
+                              String lecturersList,
+                              Long semesterClassesId) {
+
+        SemesterClasses semesterClasses = semesterClassesService.findById(semesterClassesId);
+
+        //TODO przeleciec wszystko co sie moze tutaj zmienic, i potem robimy zmiany w calej bazie
+        if (!classesTypeString.equals(semesterClasses.getClasses().getClassesType().description)) {
+
+        }
+
+        String classesTypeString = semesterClasses.getClasses().getClassesType().description;
+        String weekday = mapWeekdayToPolish(semesterClasses.getClasses().getDayOfWeek());
+        String startTime = semesterClasses.getClasses().getStartTime().toString();
+        String endTime = semesterClasses.getClasses().getEndTime().toString();
+        String department = semesterClasses.getClasses().getDepartmentClassroom().getDepartment().getDepartmentName();
+        String classroom = semesterClasses.getClasses().getDepartmentClassroom().getClassroom().getClassroomName();
+        String major = semesterClasses.getClasses().getMajorGroup().getMajor().getMajorName();
+        String studyYear = semesterClasses.getClasses().getMajorGroup().getStudyYear().toString();
+        String group = semesterClasses.getClasses().getMajorGroup().getGroup().getGroupName();
+        String subject = semesterClasses.getClasses().getSubject().getSubjectName();
+        String semesterType = semesterClasses.getSemester().getSemesterType().getDescription();
+        String academicYear = semesterClasses.getSemester().getAcademicYear();
+        String frequency = semesterClasses.getFrequency().getDescription();
+
+
+
+
+    }
+
+        private static DayOfWeek resolveDayOfWeek(String dayOfWeek) {
         switch (dayOfWeek) {
             case "Poniedziałek":
                 return DayOfWeek.MONDAY;

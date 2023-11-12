@@ -80,27 +80,32 @@
 <div class="row justify-content-center">
     <div class="col-md-6 col-sm-8">
         <div class="login-form">
-            <h2 class="text-center">Dodaj zajęcia</h2>
-            <form th:action="@{/add-full-time-classes}" method="post" action="#">
+            <h2 class="text-center">Modyfikuj zajęcia stacjonarne</h2>
+            <form th:action="@{/delete-full-time-classes}" method="post" action="#">
+                <input type="hidden" id="eventId" name="eventId" th:value="${eventId}" />
+                <button type="submit" class="btn btn-primary btn-block">Usuń</button>
+            </form>
+            <form th:action="@{/modify-full-time-classes}" method="post" action="#">
+                <input type="hidden" name="eventId" th:value="${eventId}" />
                 <div class="form-group">
                     <label for="classesType">Typ zajęć:</label>
                     <select class="form-control" id="classesType" name="classesType">
-                        <option th:each="type: ${ClassesTypes}" th:value="${type}" th:text="${type}"></option>
+                        <option th:each="type: ${ClassesTypes}" th:value="${type}" th:text="${type}" th:selected="${type == selectedType}"></option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="dayOfWeek">Dzień tygodnia:</label>
                     <select type="text" class="form-control" id="dayOfWeek" name="dayOfWeek">
-                        <option th:each="weekday: ${Weekdays}" th:value="${weekday}" th:text="${weekday}"></option>
+                        <option th:each="weekday: ${Weekdays}" th:value="${weekday}" th:text="${weekday}" th:selected="${weekday == selectedWeekday}"></option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="startTime">Godzina rozpoczęcia:</label>
-                    <input type="time" class="form-control" id="startTime" name="startTime" value="08:00">
+                    <input type="time" class="form-control" id="startTime" name="startTime" th:value="${startTimeSelected}">
                 </div>
                 <div class="form-group">
                     <label for="endTime">Godzina zakończenia:</label>
-                    <input type="time" class="form-control" id="endTime" name="endTime" value="10:30">
+                    <input type="time" class="form-control" id="endTime" name="endTime" th:value="${endTimeSelected}">
                 </div>
                 <div class="form-group">
                     <label for="department">Wydział:</label>
@@ -111,7 +116,7 @@
                 <div class="form-group">
                     <label for="classroom">Sala:</label>
                     <select type="text" class="form-control" id="classroom" name="classroom">
-                        <option th:each="classroom: ${Classrooms}" th:value="${classroom}" th:text="${classroom}"></option>
+                        <option th:each="classroom: ${Classrooms}" th:value="${classroom}" th:text="${classroom}" th:selected="${classroom == selectedClassroom}"></option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -123,25 +128,25 @@
                 <div class="form-group">
                     <label for="studyYear">Rok studiów:</label>
                     <select type="text" class="form-control" id="studyYear" name="studyYear">
-                        <option th:each="studyYear: ${StudyYears}" th:value="${studyYear}" th:text="${studyYear}"></option>
+                        <option th:each="studyYear: ${StudyYears}" th:value="${studyYear}" th:text="${studyYear}" th:selected="${studyYear == selectedStudyYear}"></option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="group">Grupa:</label>
                     <select type="text" class="form-control" id="group" name="group">
-                        <option th:each="group: ${Groups}" th:value="${group}" th:text="${group}"></option>
+                        <option th:each="group: ${Groups}" th:value="${group}" th:text="${group}" th:selected="${group == selectedGroup}"></option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="subject">Przedmiot:</label>
                     <select type="text" class="form-control" id="subject" name="subject">
-                        <option th:each="subject: ${Subjects}" th:value="${subject}" th:text="${subject}"></option>
+                        <option th:each="subject: ${Subjects}" th:value="${subject}" th:text="${subject}" th:selected="${subject == selectedSubject}"></option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="semesterType">Semestr:</label>
                     <select type="text" class="form-control" id="semesterType" name="semesterType">
-                        <option th:each="semesterType: ${SemesterTypes}" th:value="${semesterType}" th:text="${semesterType}"></option>
+                        <option th:each="semesterType: ${SemesterTypes}" th:value="${semesterType}" th:text="${semesterType}" th:selected="${semesterType == selectedSemesterType}"></option>
                     </select>
                 </div>
                 <div class="form-group">
@@ -154,22 +159,23 @@
                 <div class="form-group">
                     <label for="academicYear">Rok akademicki:</label>
                     <select type="text" class="form-control" id="academicYear" name="academicYear">
-                        <option th:each="academicYear: ${AcademicYears}" th:value="${academicYear}" th:text="${academicYear}"></option>
+                        <option th:each="academicYear: ${AcademicYears}" th:value="${academicYear}" th:text="${academicYear}" th:selected="${academicYear == selectedAcademicYear}"></option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="frequency">Częstotliwość:</label>
                     <select type="text" class="form-control" id="frequency" name="frequency">
-                        <option th:each="frequency: ${Frequencies}" th:value="${frequency}" th:text="${frequency}"></option>
+                        <option th:each="frequency: ${Frequencies}" th:value="${frequency}" th:text="${frequency}" th:selected="${frequency == selectedFrequency}"></option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="lecturers">Prowadzący:</label>
                     <select type="text" class="form-control selectpicker" id="lecturers" name="lecturers" multiple data-size="100">
-                        <option th:each="lecturers: ${LecturersNames}" th:value="${lecturers}" th:text="${lecturers}"></option>
+                        <option th:each="lecturers: ${LecturersNames}" th:value="${lecturers}" th:text="${lecturers}" th:selected="${#lists.contains(selectedLecturers, lecturers)}"></option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Dodaj</button>
+
+                <button type="submit" class="btn btn-primary btn-block">Modyfikuj</button>
             </form>
         </div>
     </div>

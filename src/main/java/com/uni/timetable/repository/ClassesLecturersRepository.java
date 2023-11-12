@@ -14,5 +14,7 @@ public interface ClassesLecturersRepository extends JpaRepository<ClassesLecture
 
     boolean existsByClasses_MajorGroupAndClasses_SubjectAndClasses_DayOfWeekAndClasses_StartTimeAndClasses_EndTimeAndClasses_ClassesTypeAndClasses_DepartmentClassroomAndLecturer_Name(MajorGroup majorGroup, Subject subject, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, ClassesType classesType, DepartmentClassroom departmentClassroom, String name);
 
+    List<ClassesLecturers> findByClasses_ClassesId(Long classesId);
+
 
 }

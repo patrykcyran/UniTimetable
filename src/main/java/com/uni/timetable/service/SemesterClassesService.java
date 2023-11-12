@@ -66,4 +66,13 @@ public class SemesterClassesService {
         semesterClassesRepository.save(semesterClasses);
         return semesterClasses;
     }
+
+    public void deleteSemesterClassesById(Long id) {
+        log.debug("Deleting semester classes by id {}", id);
+        semesterClassesRepository.deleteBySemesterClassesId(id);
+    }
+
+    public SemesterClasses findById(Long id) {
+        return semesterClassesRepository.findBySemesterClassesId(id);
+    }
 }

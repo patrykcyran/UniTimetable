@@ -40,6 +40,10 @@ public class ClassesLecturersService {
         return classes;
     }
 
+    public List<Lecturer> findAllLecturersByClasses(Long classesId) {
+        return classesLecturersRepository.findByClasses_ClassesId(classesId).stream().map(ClassesLecturers::getLecturer).toList();
+    }
+
     public Boolean doesClassesLecturerExists(MajorGroup majorGroup, Subject subject, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, ClassesType classesType, DepartmentClassroom departmentClassroom, String name) {
         return classesLecturersRepository.existsByClasses_MajorGroupAndClasses_SubjectAndClasses_DayOfWeekAndClasses_StartTimeAndClasses_EndTimeAndClasses_ClassesTypeAndClasses_DepartmentClassroomAndLecturer_Name(majorGroup, subject, dayOfWeek, startTime, endTime, classesType, departmentClassroom, name);
     }
