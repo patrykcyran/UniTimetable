@@ -148,7 +148,9 @@
                     $('#loading').toggle(bool);
                 },
                 eventClick: function (event, element) {
-                    displayinfo(event, element);
+                    //displayinfo(event, element);
+                    console.log(event)
+                    window.location.href = "/modify-classes?eventId=" + event.eventId + "&studyType=" + event.studyType;
                 },
 
                 //Display event title on hover

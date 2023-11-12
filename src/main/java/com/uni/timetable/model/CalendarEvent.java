@@ -10,6 +10,8 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class CalendarEvent {
+    private Long eventId;
+    private StudyType studyType;
     private LocalDateTime start;
     private LocalDateTime end;
     private String title;

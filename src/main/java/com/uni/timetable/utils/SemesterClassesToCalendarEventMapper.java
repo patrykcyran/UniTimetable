@@ -49,6 +49,8 @@ public class SemesterClassesToCalendarEventMapper {
         title.append(classes.getDepartmentClassroom().getClassroom().getClassroomName());
 
         return CalendarEvent.builder()
+                .eventId(semesterClasses.getSemesterClassesId())
+                .studyType(StudyType.FULL_TIME)
                 .title(title.toString())
                 .start(classesStart)
                 .end(classesEnd)
@@ -93,6 +95,8 @@ public class SemesterClassesToCalendarEventMapper {
         }
                 title.append(classes.getDepartmentClassroom().getClassroom().getClassroomName());
         return CalendarEvent.builder()
+                .eventId(partTimeSemesterClasses.getPartTimeSemesterClassesId())
+                .studyType(StudyType.PART_TIME)
                 .title(title.toString())
                 .start(classesStart)
                 .end(classesEnd)

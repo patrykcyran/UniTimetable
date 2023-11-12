@@ -206,4 +206,12 @@ public class FrontController {
         //TODO teraz mozna by stowrzyc z tego obiekt Classes, przejsc do widoku dodawania zajęć dla studiów stacjonranych albo niestacjonarnych w zaleznosci od wybranego dnia tygodnia
         return "add-classes";
     }
+
+    @GetMapping("/modify-classes")
+    public String modifyClasses(@RequestParam Long eventId,
+                             @RequestParam String studyType,
+                             Model model) {
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        return "modify-classes";
+    }
 }
