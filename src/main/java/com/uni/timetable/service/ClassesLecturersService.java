@@ -1,11 +1,12 @@
 package com.uni.timetable.service;
 
-import com.uni.timetable.model.Classes;
-import com.uni.timetable.model.ClassesLecturers;
+import com.uni.timetable.model.*;
 import com.uni.timetable.repository.ClassesLecturersRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
 import java.util.List;
 
 @Service
@@ -37,5 +38,19 @@ public class ClassesLecturersService {
         List<Classes> classes = classesLecturersRepository.findByLecturer_Name(name).stream().map(ClassesLecturers::getClasses).toList();
         log.debug("Classes classes found" + classes);
         return classes;
+    }
+
+    public Boolean doesClassesLecturerExists(MajorGroup majorGroup, Subject subject, DayOfWeek dayOfWeek, LocalTime startTime, LocalTime endTime, ClassesType classesType, DepartmentClassroom departmentClassroom, String name) {
+        return classesLecturersRepository.existsByClasses_MajorGroupAndClasses_SubjectAndClasses_DayOfWeekAndClasses_StartTimeAndClasses_EndTimeAndClasses_ClassesTypeAndClasses_DepartmentClassroomAndLecturer_Name(majorGroup, subject, dayOfWeek, startTime, endTime, classesType, departmentClassroom, name);
+    }
+
+    public ClassesLecturers saveClassesLecturers(Classes classes, Lecturer lecturer) {
+        ClassesLecturers classesLecturer = ClassesLecturers.builder()
+                .classes(classes)
+                .lecturer(lecturer)
+                .build();
+        log.debug("Classes lecturer to save {} ", classesLecturer);
+        classesLecturersRepository.save(classesLecturer);
+        return classesLecturer;
     }
 }

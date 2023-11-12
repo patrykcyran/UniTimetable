@@ -14,8 +14,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class SemesterClasses {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "classes_sequence")
-    @SequenceGenerator(name = "classes_sequence", sequenceName = "classes_sequence", allocationSize = 1, initialValue = 10)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "semester_classes_sequence")
+    @SequenceGenerator(name = "semester_classes_sequence", sequenceName = "semester_classes_sequence", allocationSize = 1, initialValue = 10)
     @Column(name = "semmester_classes_id", nullable = false)
     private Long semesterClassesId;
 

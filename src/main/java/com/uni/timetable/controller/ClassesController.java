@@ -24,19 +24,25 @@ public class ClassesController {
     private final SubjectService subjectService;
     private final SemesterClassesService semesterClassesService;
     private final SemesterService semesterService;
+    private final ClassesLecturersService classesLecturersService;
+    private final LecturerService lecturerService;
 
     public ClassesController(ClassesService classesService,
                              MajorGroupService majorGroupService,
                              DepartmentClassroomService departmentClassroomService,
                              SubjectService subjectService,
                              SemesterClassesService semesterClassesService,
-                             SemesterService semesterService) {
+                             SemesterService semesterService,
+                             ClassesLecturersService classesLecturersService,
+                             LecturerService lecturerService) {
         this.classesService = classesService;
         this.majorGroupService = majorGroupService;
         this.departmentClassroomService = departmentClassroomService;
         this.subjectService = subjectService;
         this.semesterClassesService = semesterClassesService;
         this.semesterService = semesterService;
+        this.classesLecturersService = classesLecturersService;
+        this.lecturerService = lecturerService;
     }
 
     @GetMapping("/all")
@@ -72,7 +78,8 @@ public class ClassesController {
                             String semesterType,
                             String isDiplomaString,
                             String academicYear,
-                            String frequencyString) {
+                            String frequencyString,
+                            String lecturersList) {
 
         List<MajorGroup> majorGroups = new ArrayList<>();
         if ("Cały kierunek".equals(group)) {
@@ -100,6 +107,16 @@ public class ClassesController {
             savedClasses.add(classesService.saveClasses(majorGroup, subject, dayOfWeek, startTime, endTime, classesType, departmentClassroom));
         }
 
+        List<String> lecturerNames = List.of(lecturersList.split(","));
+        for (Classes classes : savedClasses) {
+            for (String lecturerName : lecturerNames) {
+                Boolean doesExists = classesLecturersService.doesClassesLecturerExists(classes.getMajorGroup(), classes.getSubject(), classes.getDayOfWeek(), classes.getStartTime(), classes.getEndTime(), classes.getClassesType(), classes.getDepartmentClassroom(), lecturerName);
+                if (Boolean.FALSE.equals(doesExists)) {
+                    Lecturer lecturer = lecturerService.findLecturerByName(lecturerName);
+                    classesLecturersService.saveClassesLecturers(classes, lecturer);
+                }
+            }
+        }
 
         Boolean isDiploma = "Tak".equals(isDiplomaString);
         Semester semester = semesterService.findSemesterByYearTypeAndDiploma(academicYear, SemesterType.fromDescription(semesterType), isDiploma);

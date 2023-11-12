@@ -181,7 +181,7 @@ public class FrontController {
         model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
         model.addAttribute("AcademicYears", semesterService.findAllAcademicYears());
         model.addAttribute("Frequencies", Arrays.stream(Frequency.values()).map(Frequency::getDescription));
-
+        model.addAttribute("LecturersNames", lecturerService.findAllNames());
         return "add-classes";
     }
 
@@ -200,9 +200,10 @@ public class FrontController {
                              @RequestParam("isDiploma") String isDiploma,
                              @RequestParam("academicYear") String academicYear,
                              @RequestParam("frequency") String frequency,
+                             @RequestParam("lecturers") String lecturersList,
                              Model model) {
         model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
-        classesController.saveClasses(classesType, dayOfWeek, startTime, endTime, department, classroom, major, studyYear, group, subject, semesterType, isDiploma, academicYear, frequency);
+        classesController.saveClasses(classesType, dayOfWeek, startTime, endTime, department, classroom, major, studyYear, group, subject, semesterType, isDiploma, academicYear, frequency, lecturersList);
         //TODO teraz mozna by stowrzyc z tego obiekt Classes, przejsc do widoku dodawania zajęć dla studiów stacjonranych albo niestacjonarnych w zaleznosci od wybranego dnia tygodnia
         return "add-classes";
     }

@@ -46,6 +46,7 @@
         }
     </style>
 
+    <!--Potrzebne zeby aktualizowac dane w formularzu po wybraniu wydziały albo kierunku-->
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
         $(document).ready(function () {
@@ -67,6 +68,8 @@
                 // This will trigger a server-side action, and the view will be updated accordingly
                 window.location.href = window.location.pathname + '?selectedMajor=' + selectedMajor;
             });
+
+            $('.selectpicker').selectpicker();
         });
     </script>
 </head>
@@ -81,7 +84,7 @@
             <form th:action="@{/add-classes}" method="post" action="#">
                 <div class="form-group">
                     <label for="classesType">Typ zajęć:</label>
-                    <select class="selectpicker" id="classesType" name="classesType">
+                    <select class="form-control" id="classesType" name="classesType">
                         <option th:each="type: ${ClassesTypes}" th:value="${type}" th:text="${type}"></option>
                     </select>
                 </div>
@@ -158,6 +161,12 @@
                     <label for="frequency">Częstotliwość:</label>
                     <select type="text" class="form-control" id="frequency" name="frequency">
                         <option th:each="frequency: ${Frequencies}" th:value="${frequency}" th:text="${frequency}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="lecturers">Prowadzący:</label>
+                    <select type="text" class="form-control selectpicker" id="lecturers" name="lecturers" multiple data-size="100">
+                        <option th:each="lecturers: ${LecturersNames}" th:value="${lecturers}" th:text="${lecturers}"></option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Dodaj</button>

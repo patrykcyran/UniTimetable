@@ -29,4 +29,8 @@ public class LecturerService {
         log.debug("Lecturers found" + lecturers);
         return lecturers;
     }
+
+    public Lecturer findLecturerByName(String lecturerName) {
+        return lecturerRepository.findByName(lecturerName);
+    }
 }
