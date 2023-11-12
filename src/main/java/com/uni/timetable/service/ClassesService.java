@@ -55,7 +55,7 @@ public class ClassesService {
         return null;
     }
 
-    public void saveClasses(MajorGroup majorGroup,
+    public Classes saveClasses(MajorGroup majorGroup,
                             Subject subject,
                             DayOfWeek dayOfWeek,
                             LocalTime startTime,
@@ -74,6 +74,7 @@ public class ClassesService {
 
         log.debug("Classes to save {} ", classes);
         classesRepository.save(classes);
+        return classes;
     }
 
 

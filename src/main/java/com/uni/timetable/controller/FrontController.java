@@ -1,6 +1,7 @@
 package com.uni.timetable.controller;
 
 import com.uni.timetable.model.ClassesType;
+import com.uni.timetable.model.Frequency;
 import com.uni.timetable.model.MajorGroup;
 import com.uni.timetable.model.SemesterType;
 import com.uni.timetable.repository.MajorGroupRepository;
@@ -177,6 +178,9 @@ public class FrontController {
         model.addAttribute("StudyYears", majorGroupService.findAll().stream().map(MajorGroup::getStudyYear).distinct().toList());
         model.addAttribute("Groups", groupNames);
         model.addAttribute("Subjects", subjectService.findAllSubjectNames());
+        model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
+        model.addAttribute("AcademicYears", semesterService.findAllAcademicYears());
+        model.addAttribute("Frequencies", Arrays.stream(Frequency.values()).map(Frequency::getDescription));
 
         return "add-classes";
     }
@@ -192,9 +196,13 @@ public class FrontController {
                              @RequestParam("studyYear") String studyYear,
                              @RequestParam("group") String group,
                              @RequestParam("subject") String subject,
+                             @RequestParam("semesterType") String semesterType,
+                             @RequestParam("isDiploma") String isDiploma,
+                             @RequestParam("academicYear") String academicYear,
+                             @RequestParam("frequency") String frequency,
                              Model model) {
         model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
-        classesController.saveClasses(classesType, dayOfWeek, startTime, endTime, department, classroom, major, studyYear, group, subject);
+        classesController.saveClasses(classesType, dayOfWeek, startTime, endTime, department, classroom, major, studyYear, group, subject, semesterType, isDiploma, academicYear, frequency);
         //TODO teraz mozna by stowrzyc z tego obiekt Classes, przejsc do widoku dodawania zajęć dla studiów stacjonranych albo niestacjonarnych w zaleznosci od wybranego dnia tygodnia
         return "add-classes";
     }

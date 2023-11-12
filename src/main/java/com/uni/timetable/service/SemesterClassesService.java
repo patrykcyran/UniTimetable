@@ -53,4 +53,17 @@ public class SemesterClassesService {
     public List<SemesterClasses> findSemesterClassesByDepartmentAndClassroom(String departmentName, String classroomName) {
         return semesterClassesRepository.findByClasses_DepartmentClassroom_Department_DepartmentNameAndClasses_DepartmentClassroom_Classroom_ClassroomName(departmentName, classroomName);
     }
+
+    public SemesterClasses saveSemesterClasses(Semester semester,
+                                               Classes classes,
+                                               Frequency frequency) {
+        SemesterClasses semesterClasses = SemesterClasses.builder()
+                .semester(semester)
+                .classes(classes)
+                .frequency(frequency)
+                .build();
+        log.debug("Semester classes to save {} ", semesterClasses);
+        semesterClassesRepository.save(semesterClasses);
+        return semesterClasses;
+    }
 }

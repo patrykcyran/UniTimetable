@@ -93,11 +93,11 @@
                 </div>
                 <div class="form-group">
                     <label for="startTime">Godzina rozpoczęcia:</label>
-                    <input type="time" class="form-control" id="startTime" name="startTime">
+                    <input type="time" class="form-control" id="startTime" name="startTime" value="08:00">
                 </div>
                 <div class="form-group">
                     <label for="endTime">Godzina zakończenia:</label>
-                    <input type="time" class="form-control" id="endTime" name="endTime">
+                    <input type="time" class="form-control" id="endTime" name="endTime" value="10:30">
                 </div>
                 <div class="form-group">
                     <label for="department">Wydział:</label>
@@ -133,6 +133,31 @@
                     <label for="subject">Przedmiot:</label>
                     <select type="text" class="form-control" id="subject" name="subject">
                         <option th:each="subject: ${Subjects}" th:value="${subject}" th:text="${subject}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="semesterType">Semestr:</label>
+                    <select type="text" class="form-control" id="semesterType" name="semesterType">
+                        <option th:each="semesterType: ${SemesterTypes}" th:value="${semesterType}" th:text="${semesterType}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="isDiploma">Semestr dyplomowy:</label>
+                    <div>
+                        <label><input type="radio" name="isDiploma" value="Nie" checked> Nie</label>
+                        <label><input type="radio" id="isDiploma" name="isDiploma" value="Tak" > Tak</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="academicYear">Rok akademicki:</label>
+                    <select type="text" class="form-control" id="academicYear" name="academicYear">
+                        <option th:each="academicYear: ${AcademicYears}" th:value="${academicYear}" th:text="${academicYear}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="frequency">Częstotliwość:</label>
+                    <select type="text" class="form-control" id="frequency" name="frequency">
+                        <option th:each="frequency: ${Frequencies}" th:value="${frequency}" th:text="${frequency}"></option>
                     </select>
                 </div>
                 <button type="submit" class="btn btn-primary btn-block">Dodaj</button>

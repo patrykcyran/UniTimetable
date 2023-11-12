@@ -2,10 +2,7 @@ package com.uni.timetable.controller;
 
 import com.uni.timetable.exception.TimetableException;
 import com.uni.timetable.model.*;
-import com.uni.timetable.service.ClassesService;
-import com.uni.timetable.service.DepartmentClassroomService;
-import com.uni.timetable.service.MajorGroupService;
-import com.uni.timetable.service.SubjectService;
+import com.uni.timetable.service.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,15 +22,21 @@ public class ClassesController {
     private final MajorGroupService majorGroupService;
     private final DepartmentClassroomService departmentClassroomService;
     private final SubjectService subjectService;
+    private final SemesterClassesService semesterClassesService;
+    private final SemesterService semesterService;
 
     public ClassesController(ClassesService classesService,
                              MajorGroupService majorGroupService,
                              DepartmentClassroomService departmentClassroomService,
-                             SubjectService subjectService) {
+                             SubjectService subjectService,
+                             SemesterClassesService semesterClassesService,
+                             SemesterService semesterService) {
         this.classesService = classesService;
         this.majorGroupService = majorGroupService;
         this.departmentClassroomService = departmentClassroomService;
         this.subjectService = subjectService;
+        this.semesterClassesService = semesterClassesService;
+        this.semesterService = semesterService;
     }
 
     @GetMapping("/all")
@@ -65,7 +68,11 @@ public class ClassesController {
                             String major,
                             String studyYear,
                             String group,
-                            String subjectName) {
+                            String subjectName,
+                            String semesterType,
+                            String isDiplomaString,
+                            String academicYear,
+                            String frequencyString) {
 
         List<MajorGroup> majorGroups = new ArrayList<>();
         if ("Cały kierunek".equals(group)) {
@@ -84,12 +91,21 @@ public class ClassesController {
         DepartmentClassroom departmentClassroom = departmentClassroomService.findByDepartmentAndClassroomName(department, classroom);
 
         if (startTime.isAfter(endTime)) {
-            throw new TimetableException("Czas rozpoczęcia zajęć nie może być po ich zakończeiu");
+            throw new TimetableException("Czas rozpoczęcia zajęć nie może być po ich zakończeniu");
         }
 
+        List<Classes> savedClasses = new ArrayList<>();
         //When whole major is chosen, iterate over each group and add classes to them
         for (MajorGroup majorGroup : majorGroups) {
-            classesService.saveClasses(majorGroup, subject, dayOfWeek, startTime, endTime, classesType, departmentClassroom);
+            savedClasses.add(classesService.saveClasses(majorGroup, subject, dayOfWeek, startTime, endTime, classesType, departmentClassroom));
+        }
+
+
+        Boolean isDiploma = "Tak".equals(isDiplomaString);
+        Semester semester = semesterService.findSemesterByYearTypeAndDiploma(academicYear, SemesterType.fromDescription(semesterType), isDiploma);
+        Frequency frequency = Frequency.fromDescription(frequencyString);
+        for (Classes classes : savedClasses) {
+            semesterClassesService.saveSemesterClasses(semester, classes, frequency);
         }
     }
 

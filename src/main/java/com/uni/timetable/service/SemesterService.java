@@ -1,6 +1,7 @@
 package com.uni.timetable.service;
 
 import com.uni.timetable.model.Semester;
+import com.uni.timetable.model.SemesterType;
 import com.uni.timetable.repository.SemesterRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -29,5 +30,11 @@ public class SemesterService {
         List<String> academicYears = semesterRepository.findAll().stream().map(Semester::getAcademicYear).distinct().toList();
         log.debug("Academic years found" + academicYears);
         return academicYears;
+    }
+
+    public Semester findSemesterByYearTypeAndDiploma(String academicYear, SemesterType semesterType, Boolean isDiploma) {
+        Semester semester = semesterRepository.findByAcademicYearAndSemesterTypeAndIsDiploma(academicYear, semesterType, isDiploma);
+        log.debug("Semester found by year {} type {} and isDiploma {} : {}", academicYear, semesterType, isDiploma, semester);
+        return semester;
     }
 }
