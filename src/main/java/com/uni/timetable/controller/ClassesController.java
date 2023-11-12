@@ -82,12 +82,6 @@ public class ClassesController {
                             String lecturersList) {
 
         List<MajorGroup> majorGroups = new ArrayList<>();
-/*        if ("Cały kierunek".equals(group)) {
-            majorGroups.addAll(majorGroupService.findMajorGroupsByMajorAndYear(major, studyYear));
-        } else {
-            MajorGroup majorGroup = majorGroupService.findByMajorGroupAndYear(major, studyYear, group);
-            majorGroups.add(majorGroup);
-        }*/
 
         MajorGroup majorGroup1 = majorGroupService.findByMajorGroupAndYear(major, studyYear, group);
         majorGroups.add(majorGroup1);

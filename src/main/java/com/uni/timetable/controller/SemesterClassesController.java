@@ -49,12 +49,12 @@ public class SemesterClassesController {
         List<Classes> classesByLecturers = classesLecturersService.findClassesByLecturerName(lecturerName);
         fullTimeClasses = fullTimeClasses.stream()
                 .filter(semesterClasses -> classesByLecturers.stream()
-                        .anyMatch(classes -> classes.getClassesId().equals(semesterClasses.getSemesterClassesId()))).toList();
+                        .anyMatch(classes -> classes.getClassesId().equals(semesterClasses.getClasses().getClassesId()))).toList();
 
         List<PartTimeSemesterClasses> partTimeSemesterClasses = partTimeSemesterClassesService.findPartTimeSemesterClassesBySemester(academicYear, SemesterType.fromDescription(semesterType));
         partTimeSemesterClasses = partTimeSemesterClasses.stream()
                 .filter(partTimeClasses -> classesByLecturers.stream()
-                        .anyMatch(classes -> classes.getClassesId().equals(partTimeClasses.getPartTimeSemesterClassesId()))).toList();
+                        .anyMatch(classes -> classes.getClassesId().equals(partTimeClasses.getClasses().getClassesId()))).toList();
 
         List<ClassesLecturers> classesLecturersList = classesLecturersService.findAll();
         List<CalendarEvent> calendarEvents = SemesterClassesToCalendarEventMapper.mapPartTimeClassesToCalendarEvent(partTimeSemesterClasses, classesLecturersList);

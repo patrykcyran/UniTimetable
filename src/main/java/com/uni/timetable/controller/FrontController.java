@@ -152,7 +152,6 @@ public class FrontController {
         return "admin";
     }
 
-    //TODO dodac przesylanie aktualnie wybranego wydzialy i filtrowac po salach tylko z niego albo po prostu dodawac taka sale jak nie ma jej na wydziale
     @GetMapping("/add-classes")
     public String addClassesView(@RequestParam(required = false, defaultValue = "Wydział Inżynierii Elektrycznej i Komputerowej") String selectedDepartment,
                                  @RequestParam(required = false, defaultValue = "Informatyka w Inżynierii Komputerowej") String selectedMajor,
