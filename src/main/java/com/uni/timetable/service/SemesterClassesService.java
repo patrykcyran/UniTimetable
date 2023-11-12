@@ -75,4 +75,8 @@ public class SemesterClassesService {
     public SemesterClasses findById(Long id) {
         return semesterClassesRepository.findBySemesterClassesId(id);
     }
+
+    public void update(SemesterClasses semesterClasses) {
+        semesterClassesRepository.updateSemesterAndClassesAndFrequencyBySemesterClassesId(semesterClasses.getSemester(), semesterClasses.getClasses(), semesterClasses.getFrequency(), semesterClasses.getSemesterClassesId());
+    }
 }

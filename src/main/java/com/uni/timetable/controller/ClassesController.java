@@ -150,7 +150,7 @@ public class ClassesController {
 
         }
 
-        String classesTypeString = semesterClasses.getClasses().getClassesType().description;
+/*        String classesTypeString = semesterClasses.getClasses().getClassesType().description;
         String weekday = mapWeekdayToPolish(semesterClasses.getClasses().getDayOfWeek());
         String startTime = semesterClasses.getClasses().getStartTime().toString();
         String endTime = semesterClasses.getClasses().getEndTime().toString();
@@ -162,8 +162,10 @@ public class ClassesController {
         String subject = semesterClasses.getClasses().getSubject().getSubjectName();
         String semesterType = semesterClasses.getSemester().getSemesterType().getDescription();
         String academicYear = semesterClasses.getSemester().getAcademicYear();
-        String frequency = semesterClasses.getFrequency().getDescription();
+        String frequency = semesterClasses.getFrequency().getDescription();*/
 
+        semesterClasses.getSemester().setAcademicYear("24-25");
+        semesterClassesService.update(semesterClasses);
 
 
 

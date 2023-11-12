@@ -312,7 +312,7 @@ public class FrontController {
         return "/modify-full-time-classes";
     }
 
-    private static String mapWeekdayToPolish(DayOfWeek dayOfWeek) {
+    static String mapWeekdayToPolish(DayOfWeek dayOfWeek) {
         switch (dayOfWeek) {
 
             case MONDAY -> {
