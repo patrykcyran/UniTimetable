@@ -176,7 +176,7 @@ public class FrontController {
         List<String> groupNames = new ArrayList<>(majorGroupService.findMajorGroupsByMajor(selectedMajor).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
         groupNames.add("Cały kierunek");
         model.addAttribute("StudyYears", majorGroupService.findAll().stream().map(MajorGroup::getStudyYear).distinct().toList());
-        model.addAttribute("Groups", groupNames);
+        model.addAttribute("Groups", majorGroupService.findMajorGroupsByMajor(selectedMajor).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
         model.addAttribute("Subjects", subjectService.findAllSubjectNames());
         model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
         model.addAttribute("AcademicYears", semesterService.findAllAcademicYears());

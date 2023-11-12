@@ -82,12 +82,16 @@ public class ClassesController {
                             String lecturersList) {
 
         List<MajorGroup> majorGroups = new ArrayList<>();
-        if ("Cały kierunek".equals(group)) {
+/*        if ("Cały kierunek".equals(group)) {
             majorGroups.addAll(majorGroupService.findMajorGroupsByMajorAndYear(major, studyYear));
         } else {
             MajorGroup majorGroup = majorGroupService.findByMajorGroupAndYear(major, studyYear, group);
             majorGroups.add(majorGroup);
-        }
+        }*/
+
+        MajorGroup majorGroup1 = majorGroupService.findByMajorGroupAndYear(major, studyYear, group);
+        majorGroups.add(majorGroup1);
+
 
         Subject subject = subjectService.findSubjectByName(subjectName);
         DayOfWeek dayOfWeek = resolveDayOfWeek(dayOfWeekString);
