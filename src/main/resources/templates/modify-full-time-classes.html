@@ -81,10 +81,6 @@
     <div class="col-md-6 col-sm-8">
         <div class="login-form">
             <h2 class="text-center">Modyfikuj zajęcia stacjonarne</h2>
-            <form th:action="@{/delete-full-time-classes}" method="post" action="#">
-                <input type="hidden" id="eventId" name="eventId" th:value="${eventId}" />
-                <button type="submit" class="btn btn-primary btn-block">Usuń</button>
-            </form>
             <form th:action="@{/modify-full-time-classes}" method="post" action="#">
                 <input type="hidden" name="eventId" th:value="${eventId}" />
                 <div class="form-group">
@@ -139,6 +135,10 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-block">Modyfikuj</button>
+            </form>
+            <form th:action="@{/delete-full-time-classes}" method="post" action="#">
+                <input type="hidden" id="eventId" name="eventId" th:value="${eventId}" />
+                <button type="submit" class="btn btn-primary btn-block">Usuń</button>
             </form>
         </div>
     </div>

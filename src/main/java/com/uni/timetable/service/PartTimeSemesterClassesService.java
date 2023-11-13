@@ -52,4 +52,18 @@ public class PartTimeSemesterClassesService {
         partTimeSemesterClassesRepository.save(partTimeSemesterClasses);
         return partTimeSemesterClasses;
     }
+
+    public void deletePartTimeSemesterClassesById(Long id) {
+        log.debug("Deleting part time semester classes by id {}", id);
+        partTimeSemesterClassesRepository.deleteByPartTimeSemesterClassesId(id);
+    }
+
+    public PartTimeSemesterClasses findById(Long id) {
+        return partTimeSemesterClassesRepository.findByPartTimeSemesterClassesId(id);
+    }
+
+    public void update(PartTimeSemesterClasses partTimeSemesterClasses) {
+        log.debug("Updating part time semester classes {}", partTimeSemesterClasses);
+        partTimeSemesterClassesRepository.updateSemesterAndClassesAndClassesDateByPartTimeSemesterClassesId(partTimeSemesterClasses.getSemester(), partTimeSemesterClasses.getClasses(), partTimeSemesterClasses.getClassesDate(), partTimeSemesterClasses.getPartTimeSemesterClassesId());
+    }
 }

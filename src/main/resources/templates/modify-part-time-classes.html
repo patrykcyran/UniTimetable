@@ -81,11 +81,7 @@
     <div class="col-md-6 col-sm-8">
         <div class="login-form">
             <h2 class="text-center">Modyfikuj zajęcia zaoczne</h2>
-            <form th:action="@{/delete-full-time-classes}" method="post" action="#">
-                <input type="hidden" id="eventId" name="eventId" th:value="${eventId}" />
-                <button type="submit" class="btn btn-primary btn-block">Usuń</button>
-            </form>
-            <form th:action="@{/modify-full-time-classes}" method="post" action="#">
+            <form th:action="@{/modify-part-time-classes}" method="post" action="#">
                 <input type="hidden" name="eventId" th:value="${eventId}" />
                 <div class="form-group">
                     <label for="classesType">Typ zajęć:</label>
@@ -94,10 +90,8 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="dayOfWeek">Dzień tygodnia:</label>
-                    <select type="text" class="form-control" id="dayOfWeek" name="dayOfWeek">
-                        <option th:each="weekday: ${Weekdays}" th:value="${weekday}" th:text="${weekday}" th:selected="${weekday == selectedWeekday}"></option>
-                    </select>
+                    <label for="classesDate">Data:</label>
+                    <input type="date" class="form-control" id="classesDate" name="classesDate" th:value="${selectedDate}">
                 </div>
                 <div class="form-group">
                     <label for="startTime">Godzina rozpoczęcia:</label>
@@ -126,12 +120,6 @@
                     </select>
                 </div>
                 <div class="form-group">
-                    <label for="frequency">Częstotliwość:</label>
-                    <select type="text" class="form-control" id="frequency" name="frequency">
-                        <option th:each="frequency: ${Frequencies}" th:value="${frequency}" th:text="${frequency}" th:selected="${frequency == selectedFrequency}"></option>
-                    </select>
-                </div>
-                <div class="form-group">
                     <label for="lecturers">Prowadzący:</label>
                     <select type="text" class="form-control selectpicker" id="lecturers" name="lecturers" multiple data-size="100">
                         <option th:each="lecturers: ${LecturersNames}" th:value="${lecturers}" th:text="${lecturers}" th:selected="${#lists.contains(selectedLecturers, lecturers)}"></option>
@@ -139,6 +127,10 @@
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-block">Modyfikuj</button>
+            </form>
+            <form th:action="@{/delete-part-time-classes}" method="post" action="#">
+                <input type="hidden" id="eventId" name="eventId" th:value="${eventId}" />
+                <button type="submit" class="btn btn-primary btn-block">Usuń</button>
             </form>
         </div>
     </div>

@@ -251,6 +251,57 @@ public class ClassesController {
         }
     }
 
+    public void updatePartTimeClasses(String classesTypeString,
+                                      String classesDate,
+                                      String startTimeString,
+                                      String endTimeString,
+                                      String departmentName,
+                                      String classroom,
+                                      String subjectName,
+                                      String lecturersList,
+                                      Long partTimeSemesterClassesId) {
+        PartTimeSemesterClasses partTimeSemesterClasses = partTimeSemesterClassesService.findById(partTimeSemesterClassesId);
+        Classes classes = partTimeSemesterClasses.getClasses();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime startTime = LocalTime.parse(startTimeString, formatter);
+        LocalTime endTime = LocalTime.parse(endTimeString, formatter);
+        DepartmentClassroom departmentClassroom = departmentClassroomService.findByDepartmentAndClassroomName(departmentName, classroom);
+        Subject subject = subjectService.findSubjectByName(subjectName);
+
+        if (startTime.isAfter(endTime)) {
+            throw new TimetableException("Czas rozpoczęcia zajęć nie może być po ich zakończeniu");
+        }
+
+        partTimeSemesterClasses.getClasses().setClassesType(ClassesType.fromDescription(classesTypeString));
+        partTimeSemesterClasses.setClassesDate(LocalDate.parse(classesDate));
+        partTimeSemesterClasses.getClasses().setStartTime(startTime);
+        partTimeSemesterClasses.getClasses().setEndTime(endTime);
+        partTimeSemesterClasses.getClasses().setDepartmentClassroom(departmentClassroom);
+        partTimeSemesterClasses.getClasses().setSubject(subject);
+
+        partTimeSemesterClassesService.update(partTimeSemesterClasses);
+        List<String> lecturerNames = List.of(lecturersList.split(","));
+
+        List<ClassesLecturers> classesLecturers = classesLecturersService.findAllClassesLecturersByClasses(partTimeSemesterClasses.getClasses().getClassesId());
+
+
+        //Delete all lecturers that are no longer part of the classes
+        for (ClassesLecturers cl : classesLecturers) {
+            if (!lecturerNames.contains(cl.getLecturer().getName())) {
+                classesLecturersService.deleteClassesLecturers(cl.getClassesLecturersId());
+            }
+        }
+
+        //Add all new lecturers that were not part of the classes until not
+        for (String lecturerName : lecturerNames) {
+            if (classesLecturers.stream().noneMatch(cl -> cl.getLecturer().getName().equals(lecturerName))) {
+                Lecturer lecturer = lecturerService.findLecturerByName(lecturerName);
+                classesLecturersService.saveClassesLecturers(classes, lecturer);
+            }
+        }
+
+    }
+
     private static DayOfWeek resolveDayOfWeek(String dayOfWeek) {
         switch (dayOfWeek) {
             case "Poniedziałek":
