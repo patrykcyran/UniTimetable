@@ -44,4 +44,8 @@ public class MajorService {
         log.debug("Major names found" + majorNames);
         return majorNames;
     }
+
+    public Major findFullTimeMajorByName(String majorName) {
+        return majorRepository.findByMajorNameAndStudyType(majorName, StudyType.FULL_TIME);
+    }
 }

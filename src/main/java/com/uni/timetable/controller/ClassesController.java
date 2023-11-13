@@ -9,10 +9,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+
+import static java.util.Objects.isNull;
 
 
 @Controller
@@ -24,29 +27,38 @@ public class ClassesController {
     private final DepartmentClassroomService departmentClassroomService;
     private final SubjectService subjectService;
     private final SemesterClassesService semesterClassesService;
+    private final PartTimeSemesterClassesService partTimeSemesterClassesService;
     private final SemesterService semesterService;
     private final ClassesLecturersService classesLecturersService;
     private final LecturerService lecturerService;
     private final DepartmentService departmentService;
+    private final MajorService majorService;
+    private final GroupService groupService;
 
     public ClassesController(ClassesService classesService,
                              MajorGroupService majorGroupService,
                              DepartmentClassroomService departmentClassroomService,
                              SubjectService subjectService,
                              SemesterClassesService semesterClassesService,
+                             PartTimeSemesterClassesService partTimeSemesterClassesService,
                              SemesterService semesterService,
                              ClassesLecturersService classesLecturersService,
                              LecturerService lecturerService,
-                             DepartmentService departmentService) {
+                             DepartmentService departmentService,
+                             MajorService majorService,
+                             GroupService groupService) {
         this.classesService = classesService;
         this.majorGroupService = majorGroupService;
         this.departmentClassroomService = departmentClassroomService;
         this.subjectService = subjectService;
         this.semesterClassesService = semesterClassesService;
+        this.partTimeSemesterClassesService = partTimeSemesterClassesService;
         this.semesterService = semesterService;
         this.classesLecturersService = classesLecturersService;
         this.lecturerService = lecturerService;
         this.departmentService = departmentService;
+        this.majorService = majorService;
+        this.groupService = groupService;
     }
 
     @GetMapping("/all")
@@ -85,11 +97,13 @@ public class ClassesController {
                                     String frequencyString,
                                     String lecturersList) {
 
-        List<MajorGroup> majorGroups = new ArrayList<>();
-
-        MajorGroup majorGroup1 = majorGroupService.findByMajorGroupAndYear(major, studyYear, group);
-        majorGroups.add(majorGroup1);
-
+        MajorGroup majorGroup = majorGroupService.findByMajorGroupAndYear(major, studyYear, group);
+        if (isNull(majorGroup)) {
+            Major majorToSave = majorService.findFullTimeMajorByName(major);
+            SemesterNumber semesterNumber = resolveSemesterNumber(SemesterType.fromDescription(semesterType), Integer.valueOf(studyYear));
+            Group groupToSave = groupService.findGroupByNameAndSemester(group, semesterNumber);
+            majorGroup = majorGroupService.saveMajorGroup(majorToSave, groupToSave, Integer.valueOf(studyYear));
+        }
 
         Subject subject = subjectService.findSubjectByName(subjectName);
         DayOfWeek dayOfWeek = resolveDayOfWeek(dayOfWeekString);
@@ -104,10 +118,8 @@ public class ClassesController {
         }
 
         List<Classes> savedClasses = new ArrayList<>();
-        //When whole major is chosen, iterate over each group and add classes to them
-        for (MajorGroup majorGroup : majorGroups) {
-            savedClasses.add(classesService.saveClasses(majorGroup, subject, dayOfWeek, startTime, endTime, classesType, departmentClassroom));
-        }
+        savedClasses.add(classesService.saveClasses(majorGroup, subject, dayOfWeek, startTime, endTime, classesType, departmentClassroom));
+
 
         List<String> lecturerNames = List.of(lecturersList.split(","));
         for (Classes classes : savedClasses) {
@@ -181,7 +193,65 @@ public class ClassesController {
 
     }
 
-        private static DayOfWeek resolveDayOfWeek(String dayOfWeek) {
+    public void savePartTimeClasses(String classesTypeString,
+                                    String classesDateString,
+                                    String startTimeString,
+                                    String endTimeString,
+                                    String department,
+                                    String classroom,
+                                    String major,
+                                    String studyYear,
+                                    String group,
+                                    String subjectName,
+                                    String semesterType,
+                                    String isDiplomaString,
+                                    String academicYear,
+                                    String lecturersList) {
+
+        MajorGroup majorGroup = majorGroupService.findByMajorGroupAndYear(major, studyYear, group);
+        if (isNull(majorGroup)) {
+            Major majorToSave = majorService.findFullTimeMajorByName(major);
+            SemesterNumber semesterNumber = resolveSemesterNumber(SemesterType.fromDescription(semesterType), Integer.valueOf(studyYear));
+            Group groupToSave = groupService.findGroupByNameAndSemester(group, semesterNumber);
+            majorGroup = majorGroupService.saveMajorGroup(majorToSave, groupToSave, Integer.valueOf(studyYear));
+        }
+
+
+        Subject subject = subjectService.findSubjectByName(subjectName);
+        LocalDate classesDate = LocalDate.parse(classesDateString);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime startTime = LocalTime.parse(startTimeString, formatter);
+        LocalTime endTime = LocalTime.parse(endTimeString, formatter);
+        ClassesType classesType = ClassesType.fromDescription(classesTypeString);
+        DepartmentClassroom departmentClassroom = departmentClassroomService.findByDepartmentAndClassroomName(department, classroom);
+
+        if (startTime.isAfter(endTime)) {
+            throw new TimetableException("Czas rozpoczęcia zajęć nie może być po ich zakończeniu");
+        }
+
+        List<Classes> savedClasses = new ArrayList<>();
+        savedClasses.add(classesService.saveClasses(majorGroup, subject, classesDate.getDayOfWeek(), startTime, endTime, classesType, departmentClassroom));
+
+
+        List<String> lecturerNames = List.of(lecturersList.split(","));
+        for (Classes classes : savedClasses) {
+            for (String lecturerName : lecturerNames) {
+                Boolean doesExists = classesLecturersService.doesClassesLecturerExists(classes.getMajorGroup(), classes.getSubject(), classes.getDayOfWeek(), classes.getStartTime(), classes.getEndTime(), classes.getClassesType(), classes.getDepartmentClassroom(), lecturerName);
+                if (Boolean.FALSE.equals(doesExists)) {
+                    Lecturer lecturer = lecturerService.findLecturerByName(lecturerName);
+                    classesLecturersService.saveClassesLecturers(classes, lecturer);
+                }
+            }
+        }
+
+        Boolean isDiploma = "Tak".equals(isDiplomaString);
+        Semester semester = semesterService.findSemesterByYearTypeAndDiploma(academicYear, SemesterType.fromDescription(semesterType), isDiploma);
+        for (Classes classes : savedClasses) {
+            partTimeSemesterClassesService.savePartTimeSemesterClasses(semester, classes, classesDate);
+        }
+    }
+
+    private static DayOfWeek resolveDayOfWeek(String dayOfWeek) {
         switch (dayOfWeek) {
             case "Poniedziałek":
                 return DayOfWeek.MONDAY;
@@ -200,5 +270,30 @@ public class ClassesController {
             default:
                 throw new ClassCastException("Cannot cast given string to DayOfWeek class: " + dayOfWeek);
         }
+    }
+
+    private static SemesterNumber resolveSemesterNumber(SemesterType semesterType, Integer studyYear) {
+        if (semesterType.equals(SemesterType.WINTER)) {
+            switch (studyYear) {
+                case 1:
+                    return SemesterNumber.I;
+                case 2:
+                    return SemesterNumber.III;
+                case 3:
+                    return SemesterNumber.V;
+                case 4:
+                    return SemesterNumber.VII;
+            }
+        } else {
+            switch (studyYear) {
+                case 1:
+                    return SemesterNumber.II;
+                case 2:
+                    return SemesterNumber.IV;
+                case 3:
+                    return SemesterNumber.VI;
+            }
+        }
+        return SemesterNumber.I;
     }
 }

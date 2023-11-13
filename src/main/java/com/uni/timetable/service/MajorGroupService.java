@@ -1,9 +1,6 @@
 package com.uni.timetable.service;
 
-import com.uni.timetable.model.Department;
-import com.uni.timetable.model.Major;
-import com.uni.timetable.model.MajorGroup;
-import com.uni.timetable.model.StudyType;
+import com.uni.timetable.model.*;
 import com.uni.timetable.repository.DepartmentRepository;
 import com.uni.timetable.repository.MajorGroupRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -62,5 +59,17 @@ public class MajorGroupService {
         List<MajorGroup> majorGroups = majorGroupRepository.findByMajor_MajorNameAndStudyYear(majorName, Integer.valueOf(studyYear));
         log.debug("Major groups found by major {} and study year {} : {}", majorName, studyYear, majorGroups);
         return majorGroups;
+    }
+
+    public MajorGroup saveMajorGroup(Major major,
+                                     Group group,
+                                     Integer studyYear) {
+        MajorGroup majorGroup = MajorGroup.builder()
+                .major(major)
+                .group(group)
+                .studyYear(studyYear)
+                .build();
+        majorGroupRepository.save(majorGroup);
+        return majorGroup;
     }
 }

@@ -1,11 +1,11 @@
 package com.uni.timetable.service;
 
-import com.uni.timetable.model.PartTimeSemesterClasses;
-import com.uni.timetable.model.SemesterType;
+import com.uni.timetable.model.*;
 import com.uni.timetable.repository.PartTimeSemesterClassesRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -36,6 +36,20 @@ public class PartTimeSemesterClassesService {
         log.debug("Finding part time classes by semester type and study year " + semesterType + ", " + studyYear);
         List<PartTimeSemesterClasses> partTimeSemesterClasses = partTimeSemesterClassesRepository.findBySemester_AcademicYearAndSemester_SemesterType(studyYear, semesterType);
         log.debug("Classes found {}", partTimeSemesterClasses);
+        return partTimeSemesterClasses;
+    }
+
+    public PartTimeSemesterClasses savePartTimeSemesterClasses(Semester semester,
+                                               Classes classes,
+                                               LocalDate classesDate) {
+        PartTimeSemesterClasses partTimeSemesterClasses = PartTimeSemesterClasses.builder()
+                .semester(semester)
+                .classes(classes)
+                .classesDate(classesDate)
+                .build();
+
+        log.debug("Part Time Semester classes to save {} ", partTimeSemesterClasses);
+        partTimeSemesterClassesRepository.save(partTimeSemesterClasses);
         return partTimeSemesterClasses;
     }
 }

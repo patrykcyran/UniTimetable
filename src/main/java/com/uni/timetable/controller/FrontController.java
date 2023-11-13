@@ -173,7 +173,7 @@ public class FrontController {
         model.addAttribute("Classrooms", departmentClassroomService.findAllClassroomsForDepartment(selectedDepartment));
         model.addAttribute("Majors", majorService.findAllFullTimeMajorNames());
         model.addAttribute("StudyYears", majorGroupService.findAll().stream().map(MajorGroup::getStudyYear).distinct().toList());
-        model.addAttribute("Groups", majorGroupService.findMajorGroupsByFullTimeMajor(selectedMajor).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
+        model.addAttribute("Groups", majorGroupService.findMajorGroupsByMajor(selectedMajor).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
         model.addAttribute("Subjects", subjectService.findAllSubjectNames());
         model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
         model.addAttribute("AcademicYears", semesterService.findAllAcademicYears());
@@ -261,7 +261,7 @@ public class FrontController {
             model.addAttribute("Classrooms", departmentClassroomService.findAllClassroomsForDepartment(department));
             model.addAttribute("Majors", majorService.findAllFullTimeMajorNames());
             model.addAttribute("StudyYears", majorGroupService.findAll().stream().map(MajorGroup::getStudyYear).distinct().toList());
-            model.addAttribute("Groups", majorGroupService.findMajorGroupsByFullTimeMajor(major).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
+            model.addAttribute("Groups", majorGroupService.findMajorGroupsByMajor(major).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
             model.addAttribute("Subjects", subjectService.findAllSubjectNames());
             model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
             model.addAttribute("AcademicYears", semesterService.findAllAcademicYears());
@@ -313,7 +313,7 @@ public class FrontController {
         model.addAttribute("Classrooms", departmentClassroomService.findAllClassroomsForDepartment(selectedDepartment));
         model.addAttribute("Majors", majorService.findAllPartTimeMajorNames());
         model.addAttribute("StudyYears", majorGroupService.findAll().stream().map(MajorGroup::getStudyYear).distinct().toList());
-        model.addAttribute("Groups", majorGroupService.findMajorGroupsByPartTimeMajor(selectedMajor).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
+        model.addAttribute("Groups", majorGroupService.findMajorGroupsByMajor(selectedMajor).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
         model.addAttribute("Subjects", subjectService.findAllSubjectNames());
         model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
         model.addAttribute("AcademicYears", semesterService.findAllAcademicYears());
@@ -323,7 +323,7 @@ public class FrontController {
 
     @PostMapping("/add-part-time-classes")
     public String addPartTimeClasses(@RequestParam("classesType") String classesType,
-                                     @RequestParam("dayOfWeek") String classesDate,
+                                     @RequestParam("classesDate") String classesDate,
                                      @RequestParam("startTime") String startTime,
                                      @RequestParam("endTime") String endTime,
                                      @RequestParam("department") String department,
@@ -338,6 +338,7 @@ public class FrontController {
                                      @RequestParam("lecturers") String lecturersList,
                                      Model model) {
         model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        classesController.savePartTimeClasses(classesType, classesDate, startTime, endTime, department, classroom, major, studyYear, group, subject, semesterType, isDiploma, academicYear, lecturersList);
         return "add-part-time-classes";
     }
 

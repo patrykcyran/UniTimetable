@@ -2,6 +2,8 @@ package com.uni.timetable.service;
 
 import com.uni.timetable.model.Group;
 import com.uni.timetable.model.Major;
+import com.uni.timetable.model.SemesterNumber;
+import com.uni.timetable.model.StudyType;
 import com.uni.timetable.repository.GroupRepository;
 import com.uni.timetable.repository.MajorRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -31,5 +33,9 @@ public class GroupService {
         List<String> groupsNames = groupRepository.findAll().stream().map(Group::getGroupName).toList();
         log.debug("Groups names found" + groupsNames);
         return groupsNames;
+    }
+
+    public Group findGroupByNameAndSemester(String groupName, SemesterNumber semesterNumber) {
+        return groupRepository.findByGroupNameAndSemesterNumber(groupName, semesterNumber);
     }
 }

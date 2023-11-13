@@ -1,13 +1,19 @@
 package com.uni.timetable.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
 @Entity
 @Table(name = "Part_Time_Semester_Classes")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PartTimeSemesterClasses {
 
     @Id
