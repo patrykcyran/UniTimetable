@@ -3,7 +3,6 @@ package com.uni.timetable.controller;
 import com.uni.timetable.exception.TimetableException;
 import com.uni.timetable.model.*;
 import com.uni.timetable.service.*;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -70,21 +69,21 @@ public class ClassesController {
         return new ResponseEntity<>(classesService.findByClassroom(classroomName, departmentName), HttpStatus.OK);
     }
 
-    public void saveClasses(String classesTypeString,
-                            String dayOfWeekString,
-                            String startTimeString,
-                            String endTimeString,
-                            String department,
-                            String classroom,
-                            String major,
-                            String studyYear,
-                            String group,
-                            String subjectName,
-                            String semesterType,
-                            String isDiplomaString,
-                            String academicYear,
-                            String frequencyString,
-                            String lecturersList) {
+    public void saveFullTimeClasses(String classesTypeString,
+                                    String dayOfWeekString,
+                                    String startTimeString,
+                                    String endTimeString,
+                                    String department,
+                                    String classroom,
+                                    String major,
+                                    String studyYear,
+                                    String group,
+                                    String subjectName,
+                                    String semesterType,
+                                    String isDiplomaString,
+                                    String academicYear,
+                                    String frequencyString,
+                                    String lecturersList) {
 
         List<MajorGroup> majorGroups = new ArrayList<>();
 
@@ -129,16 +128,16 @@ public class ClassesController {
         }
     }
 
-    public void updateClasses(String classesTypeString,
-                              String dayOfWeekString,
-                              String startTimeString,
-                              String endTimeString,
-                              String departmentName,
-                              String classroom,
-                              String subjectName,
-                              String frequencyString,
-                              String lecturersList,
-                              Long semesterClassesId) {
+    public void updateFullTimeClasses(String classesTypeString,
+                                      String dayOfWeekString,
+                                      String startTimeString,
+                                      String endTimeString,
+                                      String departmentName,
+                                      String classroom,
+                                      String subjectName,
+                                      String frequencyString,
+                                      String lecturersList,
+                                      Long semesterClassesId) {
         SemesterClasses semesterClasses = semesterClassesService.findById(semesterClassesId);
         Classes classes = semesterClasses.getClasses();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
@@ -180,7 +179,6 @@ public class ClassesController {
             }
         }
 
-        System.out.println("");
     }
 
         private static DayOfWeek resolveDayOfWeek(String dayOfWeek) {

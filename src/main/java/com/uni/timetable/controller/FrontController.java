@@ -4,7 +4,6 @@ import com.uni.timetable.model.*;
 import com.uni.timetable.security.SecurityUtils;
 import com.uni.timetable.service.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.Banner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -156,7 +155,7 @@ public class FrontController {
     }
 
     @GetMapping("/add-full-time-classes")
-    public String addClassesView(@RequestParam(required = false, defaultValue = "Wydział Inżynierii Elektrycznej i Komputerowej") String selectedDepartment,
+    public String addFullTimeClassesView(@RequestParam(required = false, defaultValue = "Wydział Inżynierii Elektrycznej i Komputerowej") String selectedDepartment,
                                  @RequestParam(required = false, defaultValue = "Informatyka w Inżynierii Komputerowej") String selectedMajor,
                                  Model model) {
         model.addAttribute("selectedDepartment", selectedDepartment);
@@ -172,9 +171,9 @@ public class FrontController {
         ));
         model.addAttribute("Departments", departmentService.findAllDepartmentNames());
         model.addAttribute("Classrooms", departmentClassroomService.findAllClassroomsForDepartment(selectedDepartment));
-        model.addAttribute("Majors", majorService.findAllMajorNames());
+        model.addAttribute("Majors", majorService.findAllFullTimeMajorNames());
         model.addAttribute("StudyYears", majorGroupService.findAll().stream().map(MajorGroup::getStudyYear).distinct().toList());
-        model.addAttribute("Groups", majorGroupService.findMajorGroupsByMajor(selectedMajor).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
+        model.addAttribute("Groups", majorGroupService.findMajorGroupsByFullTimeMajor(selectedMajor).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
         model.addAttribute("Subjects", subjectService.findAllSubjectNames());
         model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
         model.addAttribute("AcademicYears", semesterService.findAllAcademicYears());
@@ -184,7 +183,7 @@ public class FrontController {
     }
 
     @PostMapping("/add-full-time-classes")
-    public String addClasses(@RequestParam("classesType") String classesType,
+    public String addFullTimeClasses(@RequestParam("classesType") String classesType,
                              @RequestParam("dayOfWeek") String dayOfWeek,
                              @RequestParam("startTime") String startTime,
                              @RequestParam("endTime") String endTime,
@@ -201,11 +200,11 @@ public class FrontController {
                              @RequestParam("lecturers") String lecturersList,
                              Model model) {
         model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
-        classesController.saveClasses(classesType, dayOfWeek, startTime, endTime, department, classroom, major, studyYear, group, subject, semesterType, isDiploma, academicYear, frequency, lecturersList);
+        classesController.saveFullTimeClasses(classesType, dayOfWeek, startTime, endTime, department, classroom, major, studyYear, group, subject, semesterType, isDiploma, academicYear, frequency, lecturersList);
         return "add-full-time-classes";
     }
 
-    @GetMapping("/modify-full-time-classes")
+    @GetMapping("/modify-classes")
     public String modifyClasses(@RequestParam Long eventId,
                                 @RequestParam("studyType") String studyTypeString,
                                 Model model) {
@@ -260,32 +259,19 @@ public class FrontController {
             ));
             model.addAttribute("Departments", departmentService.findAllDepartmentNames());
             model.addAttribute("Classrooms", departmentClassroomService.findAllClassroomsForDepartment(department));
-            model.addAttribute("Majors", majorService.findAllMajorNames());
+            model.addAttribute("Majors", majorService.findAllFullTimeMajorNames());
             model.addAttribute("StudyYears", majorGroupService.findAll().stream().map(MajorGroup::getStudyYear).distinct().toList());
-            model.addAttribute("Groups", majorGroupService.findMajorGroupsByMajor(major).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
+            model.addAttribute("Groups", majorGroupService.findMajorGroupsByFullTimeMajor(major).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
             model.addAttribute("Subjects", subjectService.findAllSubjectNames());
             model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
             model.addAttribute("AcademicYears", semesterService.findAllAcademicYears());
             model.addAttribute("Frequencies", Arrays.stream(Frequency.values()).map(Frequency::getDescription));
             model.addAttribute("LecturersNames", lecturerService.findAllNames());
 
-
-
-            //TODO teraz mozna stworzyc widok dla edycji, wypelniony danymi z przekazanego eventu, i dodac przycisk do usuniecie z potwierdzeniem
             return "modify-full-time-classes";
         } else {
-            return "modify-full-time-classes";
+            return "modify-part-time-classes";
         }
-    }
-
-    @PostMapping("/delete-full-time-classes")
-    public String deleteFullTimeClasses(@RequestParam Long eventId,
-                                        Model model) {
-        semesterClassesService.deleteSemesterClassesById(eventId);
-        return students("Informatyka w Inżynierii Komputerowej",
-                "4",
-                "Zimowy",
-                model);
     }
 
     @PostMapping("/modify-full-time-classes")
@@ -301,8 +287,58 @@ public class FrontController {
                                         @RequestParam("eventId") Long semesterClassesId,
                                         Model model) {
         model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
-        classesController.updateClasses(classesType, dayOfWeek, startTime, endTime, department, classroom, subject, frequency, lecturersList, semesterClassesId);
+        classesController.updateFullTimeClasses(classesType, dayOfWeek, startTime, endTime, department, classroom, subject, frequency, lecturersList, semesterClassesId);
         return "/modify-full-time-classes";
+    }
+
+    @PostMapping("/delete-full-time-classes")
+    public String deleteFullTimeClasses(@RequestParam Long eventId,
+                                        Model model) {
+        semesterClassesService.deleteSemesterClassesById(eventId);
+        return students("Informatyka w Inżynierii Komputerowej",
+                "4",
+                "Zimowy",
+                model);
+    }
+
+    @GetMapping("/add-part-time-classes")
+    public String addPartTimeClassesView(@RequestParam(required = false, defaultValue = "Wydział Inżynierii Elektrycznej i Komputerowej") String selectedDepartment,
+                                 @RequestParam(required = false, defaultValue = "Informatyka w Inżynierii Komputerowej") String selectedMajor,
+                                 Model model) {
+        model.addAttribute("selectedDepartment", selectedDepartment);
+        model.addAttribute("selectedMajor", selectedMajor);
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        model.addAttribute("ClassesTypes", Arrays.stream(ClassesType.values()).map(classesType -> classesType.description));
+        model.addAttribute("Departments", departmentService.findAllDepartmentNames());
+        model.addAttribute("Classrooms", departmentClassroomService.findAllClassroomsForDepartment(selectedDepartment));
+        model.addAttribute("Majors", majorService.findAllPartTimeMajorNames());
+        model.addAttribute("StudyYears", majorGroupService.findAll().stream().map(MajorGroup::getStudyYear).distinct().toList());
+        model.addAttribute("Groups", majorGroupService.findMajorGroupsByPartTimeMajor(selectedMajor).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
+        model.addAttribute("Subjects", subjectService.findAllSubjectNames());
+        model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
+        model.addAttribute("AcademicYears", semesterService.findAllAcademicYears());
+        model.addAttribute("LecturersNames", lecturerService.findAllNames());
+        return "add-part-time-classes";
+    }
+
+    @PostMapping("/add-part-time-classes")
+    public String addPartTimeClasses(@RequestParam("classesType") String classesType,
+                                     @RequestParam("dayOfWeek") String classesDate,
+                                     @RequestParam("startTime") String startTime,
+                                     @RequestParam("endTime") String endTime,
+                                     @RequestParam("department") String department,
+                                     @RequestParam("classroom") String classroom,
+                                     @RequestParam("major") String major,
+                                     @RequestParam("studyYear") String studyYear,
+                                     @RequestParam("group") String group,
+                                     @RequestParam("subject") String subject,
+                                     @RequestParam("semesterType") String semesterType,
+                                     @RequestParam("isDiploma") String isDiploma,
+                                     @RequestParam("academicYear") String academicYear,
+                                     @RequestParam("lecturers") String lecturersList,
+                                     Model model) {
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        return "add-part-time-classes";
     }
 
     static String mapWeekdayToPolish(DayOfWeek dayOfWeek) {

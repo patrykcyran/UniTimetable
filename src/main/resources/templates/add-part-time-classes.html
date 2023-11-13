@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <div th:replace="fragment/general.html :: headerFragment" th:remove="tag"></div>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+    <link rel="stylesheet" href="http://cdn.jsdelivr.net/webjars/fullcalendar/2.2.5/fullcalendar.css">
+    <link rel="stylesheet" href="http://cdn.jsdelivr.net/webjars/fullcalendar/2.2.5/fullcalendar.print.css" media="print">
+    <link href="http://cdn.jsdelivr.net/webjars/fullcalendar/2.2.5/fullcalendar.css"
+          th:href="@{/webjars/fullcalendar/2.2.5/fullcalendar.css}"
+          rel="stylesheet"></link>
+    <link href="http://cdn.jsdelivr.net/webjars/fullcalendar/2.2.5/fullcalendar.print.css"
+          th:href="@{/webjars/fullcalendar/2.2.5/fullcalendar.print.css}"
+          rel="stylesheet" media="print"></link>
+
+    <script src="http://cdn.jsdelivr.net/webjars/jquery/2.9.0/jquery.min.js"
+            th:src="@{/webjars/momentjs/2.9.0/min/moment.min.js}"
+            type="text/javascript"></script>
+    <script src="http://cdn.jsdelivr.net/webjars/fullcalendar/2.2.5/fullcalendar.min.js"
+            th:src="@{/webjars/fullcalendar/2.2.5/fullcalendar.min.js}"
+            type="text/javascript"></script>
+
+    <link rel="stylesheet"
+          href="http//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css"
+          th:href="@{/webjars/jquery-ui/1.12.1/jquery-ui.css}"/>
+    <script
+            src="http//code.jquery.com/ui/1.12.1/themes/smoothness/jquery-ui.css"
+            th:src="@{/webjars/jquery-u i/1.12.1/jquery-ui.js}"
+            type="text/javascript"></script>
+    <!--Polska paczka językowa-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.0/locale/pl.js"></script>
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .login-container {
+            margin-top: 5%;
+        }
+
+        .login-form {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px #000000;
+        }
+    </style>
+
+    <!--Potrzebne zeby aktualizowac dane w formularzu po wybraniu wydziały albo kierunku-->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Attach a change event handler to the department selectpicker
+            $('#department').on('change', function () {
+                // Get the selected value
+                var selectedDepartment = $(this).val();
+
+                // Make a GET request to the current URL with the selected department as a query parameter
+                // This will trigger a server-side action, and the view will be updated accordingly
+                window.location.href = window.location.pathname + '?selectedDepartment=' + selectedDepartment;
+            });
+
+            $('#major').on('change', function () {
+                // Get the selected value
+                var selectedMajor = $(this).val();
+
+                // Make a GET request to the current URL with the selected department as a query parameter
+                // This will trigger a server-side action, and the view will be updated accordingly
+                window.location.href = window.location.pathname + '?selectedMajor=' + selectedMajor;
+            });
+
+            $('.selectpicker').selectpicker();
+        });
+    </script>
+</head>
+
+<body>
+<div th:replace="fragment/general.html :: navigation-bar" id="navigation"></div>
+
+<div class="row justify-content-center">
+    <div class="col-md-6 col-sm-8">
+        <div class="login-form">
+            <h2 class="text-center">Dodaj zajęcia zaoczne</h2>
+            <form th:action="@{/add-full-time-classes}" method="post" action="#">
+                <div class="form-group">
+                    <label for="classesType">Typ zajęć:</label>
+                    <select class="form-control" id="classesType" name="classesType">
+                        <option th:each="type: ${ClassesTypes}" th:value="${type}" th:text="${type}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="classesDate">Data:</label>
+                    <input type="date" class="form-control" id="classesDate" name="classesDate" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
+                </div>
+                <div class="form-group">
+                    <label for="startTime">Godzina rozpoczęcia:</label>
+                    <input type="time" class="form-control" id="startTime" name="startTime" value="08:00">
+                </div>
+                <div class="form-group">
+                    <label for="endTime">Godzina zakończenia:</label>
+                    <input type="time" class="form-control" id="endTime" name="endTime" value="10:30">
+                </div>
+                <div class="form-group">
+                    <label for="department">Wydział:</label>
+                    <select type="text" class="form-control" id="department" name="department">
+                        <option th:each="department: ${Departments}" th:value="${department}" th:text="${department}" th:selected="${department == selectedDepartment}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="classroom">Sala:</label>
+                    <select type="text" class="form-control" id="classroom" name="classroom">
+                        <option th:each="classroom: ${Classrooms}" th:value="${classroom}" th:text="${classroom}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="major">Kierunek:</label>
+                    <select type="text" class="form-control" id="major" name="major">
+                        <option th:each="major: ${Majors}" th:value="${major}" th:text="${major}" th:selected="${major == selectedMajor}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="studyYear">Rok studiów:</label>
+                    <select type="text" class="form-control" id="studyYear" name="studyYear">
+                        <option th:each="studyYear: ${StudyYears}" th:value="${studyYear}" th:text="${studyYear}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="group">Grupa:</label>
+                    <select type="text" class="form-control" id="group" name="group">
+                        <option th:each="group: ${Groups}" th:value="${group}" th:text="${group}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="subject">Przedmiot:</label>
+                    <select type="text" class="form-control" id="subject" name="subject">
+                        <option th:each="subject: ${Subjects}" th:value="${subject}" th:text="${subject}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="semesterType">Semestr:</label>
+                    <select type="text" class="form-control" id="semesterType" name="semesterType">
+                        <option th:each="semesterType: ${SemesterTypes}" th:value="${semesterType}" th:text="${semesterType}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="isDiploma">Semestr dyplomowy:</label>
+                    <div>
+                        <label><input type="radio" name="isDiploma" value="Nie" checked> Nie</label>
+                        <label><input type="radio" id="isDiploma" name="isDiploma" value="Tak" > Tak</label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="academicYear">Rok akademicki:</label>
+                    <select type="text" class="form-control" id="academicYear" name="academicYear">
+                        <option th:each="academicYear: ${AcademicYears}" th:value="${academicYear}" th:text="${academicYear}"></option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="lecturers">Prowadzący:</label>
+                    <select type="text" class="form-control selectpicker" id="lecturers" name="lecturers" multiple data-size="100">
+                        <option th:each="lecturers: ${LecturersNames}" th:value="${lecturers}" th:text="${lecturers}"></option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Dodaj</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+
+</body>
+
+</html>

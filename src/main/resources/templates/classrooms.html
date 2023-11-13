@@ -137,7 +137,7 @@
                 eventClick: function (event, element) {
                     var confirmation = true;//window.confirm('Chcesz edytować wybrane zajęcia?');
                     if (confirmation) {
-                        var editPageUrl = "/modify-full-time-classes?eventId=" + event.eventId + "&studyType=" + event.studyType
+                        var editPageUrl = "/modify-classes?eventId=" + event.eventId + "&studyType=" + event.studyType
                         window.location.href = editPageUrl;
                     }
                 },

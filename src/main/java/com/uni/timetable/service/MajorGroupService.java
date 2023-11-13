@@ -3,6 +3,7 @@ package com.uni.timetable.service;
 import com.uni.timetable.model.Department;
 import com.uni.timetable.model.Major;
 import com.uni.timetable.model.MajorGroup;
+import com.uni.timetable.model.StudyType;
 import com.uni.timetable.repository.DepartmentRepository;
 import com.uni.timetable.repository.MajorGroupRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -41,6 +42,18 @@ public class MajorGroupService {
 
     public List<MajorGroup> findMajorGroupsByMajor(String majorName) {
         List<MajorGroup> majorGroups = majorGroupRepository.findByMajor_MajorName(majorName);
+        log.debug("Major groups found by major {} : {}", majorName, majorGroups);
+        return majorGroups;
+    }
+
+    public List<MajorGroup> findMajorGroupsByPartTimeMajor(String majorName) {
+        List<MajorGroup> majorGroups = majorGroupRepository.findByMajor_MajorName(majorName).stream().filter(majorGroup -> majorGroup.getMajor().getStudyType().equals(StudyType.PART_TIME)).toList();
+        log.debug("Major groups found by major {} : {}", majorName, majorGroups);
+        return majorGroups;
+    }
+
+    public List<MajorGroup> findMajorGroupsByFullTimeMajor(String majorName) {
+        List<MajorGroup> majorGroups = majorGroupRepository.findByMajor_MajorName(majorName).stream().filter(majorGroup -> majorGroup.getMajor().getStudyType().equals(StudyType.FULL_TIME)).toList();
         log.debug("Major groups found by major {} : {}", majorName, majorGroups);
         return majorGroups;
     }
