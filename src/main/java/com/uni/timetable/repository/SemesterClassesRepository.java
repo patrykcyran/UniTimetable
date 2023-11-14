@@ -27,6 +27,8 @@ public interface SemesterClassesRepository extends JpaRepository<SemesterClasses
 
     List<SemesterClasses> findByClasses_MajorGroup_Major_MajorNameAndClasses_MajorGroup_StudyYearAndSemester_SemesterTypeAndClasses_MajorGroup_Major_StudyType(String majorName, Integer studyYear, SemesterType semesterType, StudyType studyType);
 
+    List<SemesterClasses> findByClasses_MajorGroup_Major_MajorNameAndClasses_MajorGroup_StudyYearAndSemester_SemesterTypeAndClasses_MajorGroup_Major_StudyTypeAndClasses_MajorGroup_Group_GroupName(String majorName, Integer studyYear, SemesterType semesterType, StudyType studyType, String groupName);
+
     List<SemesterClasses> findByClasses_DepartmentClassroom_Department_DepartmentNameAndClasses_DepartmentClassroom_Classroom_ClassroomName(String departmentName, String classroomName);
 
     SemesterClasses findBySemesterClassesId(Long semesterClassesId);

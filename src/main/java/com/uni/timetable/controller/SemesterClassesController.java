@@ -62,12 +62,18 @@ public class SemesterClassesController {
         return calendarEvents;
     }
 
-    @GetMapping("/full-time-major/{majorName}/{academicYear}/{semesterType}")
+    @GetMapping("/full-time-major/{majorName}/{academicYear}/{semesterType}/{group}")
     @ResponseBody
     public List<CalendarEvent> findClassesByFullTimeMajor(@PathVariable String majorName,
-                                                         @PathVariable String academicYear,
-                                                         @PathVariable String semesterType) {
-        List<SemesterClasses> classesByFullTimeMajor = semesterClassesService.findSemesterClassesByFullTimeMajorAndSemester(majorName, academicYear, SemesterType.fromDescription(semesterType));
+                                                          @PathVariable String academicYear,
+                                                          @PathVariable String semesterType,
+                                                          @PathVariable String group) {
+        List<SemesterClasses> classesByFullTimeMajor;
+        if ("Cały kierunek".equals(group)) {
+            classesByFullTimeMajor = semesterClassesService.findSemesterClassesByFullTimeMajorAndSemester(majorName, academicYear, SemesterType.fromDescription(semesterType));
+        } else {
+            classesByFullTimeMajor = semesterClassesService.findSemesterClassesByFullTimeMajorSemesterAndGroup(majorName, academicYear, SemesterType.fromDescription(semesterType), group);
+        }
         List<ClassesLecturers> classesLecturersList = classesLecturersService.findAll();
         return SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByFullTimeMajor, classesLecturersList);
     }

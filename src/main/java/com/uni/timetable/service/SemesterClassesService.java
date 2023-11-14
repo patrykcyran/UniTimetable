@@ -35,6 +35,10 @@ public class SemesterClassesService {
         return semesterClassesRepository.findByClasses_MajorGroup_Major_MajorNameAndClasses_MajorGroup_StudyYearAndSemester_SemesterTypeAndClasses_MajorGroup_Major_StudyType(majorName, Integer.valueOf(studyYear), semesterType, StudyType.FULL_TIME);
     }
 
+    public List<SemesterClasses> findSemesterClassesByFullTimeMajorSemesterAndGroup(String majorName, String studyYear, SemesterType semesterType, String group) {
+        return semesterClassesRepository.findByClasses_MajorGroup_Major_MajorNameAndClasses_MajorGroup_StudyYearAndSemester_SemesterTypeAndClasses_MajorGroup_Major_StudyTypeAndClasses_MajorGroup_Group_GroupName(majorName, Integer.valueOf(studyYear), semesterType, StudyType.FULL_TIME, group);
+    }
+
     public List<SemesterClasses> findSemesterClassesByPartTimeMajorAndSemester(String majorName, String studyYear, SemesterType semesterType) {
         return findSemesterClassesByMajorSemesterAndStudyType(majorName, studyYear, semesterType, StudyType.PART_TIME);
     }

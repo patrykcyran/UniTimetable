@@ -79,14 +79,17 @@ public class FrontController {
     public String students(@RequestParam(required = false, defaultValue = "Informatyka w Inżynierii Komputerowej") String majorName,
                            @RequestParam(required = false, defaultValue = "4") String studyYear,
                            @RequestParam(required = false, defaultValue = "Zimowy") String semesterType,
+                           @RequestParam(required = false, defaultValue = "Cały kierunek") String group,
                            Model model) {
 
         model.addAttribute("prevMajor", majorName);
         model.addAttribute("prevStudyYear", studyYear);
         model.addAttribute("prevSemesterType", semesterType);
+        model.addAttribute("prevGroup", group);
         model.addAttribute("MajorNames", majorService.findAllFullTimeMajorNames());
         model.addAttribute("StudyYears", List.of(1, 2, 3, 4, 5));
         model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
+        model.addAttribute("Groups", majorGroupService.findMajorGroupsByMajor(majorName).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
         model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
         return "full-time-students";
     }
@@ -361,6 +364,7 @@ public class FrontController {
         return students("Informatyka w Inżynierii Komputerowej",
                 "4",
                 "Zimowy",
+                "Cały kierunek",
                 model);
     }
 
@@ -371,6 +375,7 @@ public class FrontController {
         return students("Informatyka w Inżynierii Komputerowej",
                 "4",
                 "Zimowy",
+                "Cały kierunek",
                 model);
     }
 
