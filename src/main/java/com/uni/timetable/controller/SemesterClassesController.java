@@ -78,12 +78,19 @@ public class SemesterClassesController {
         return SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByFullTimeMajor, classesLecturersList);
     }
 
-    @GetMapping("/part-time-major/{majorName}/{academicYear}/{semesterType}")
+    @GetMapping("/part-time-major/{majorName}/{academicYear}/{semesterType}/{group}")
     @ResponseBody
     public List<CalendarEvent> findClassesByPartTimeMajor(@PathVariable String majorName,
                                                           @PathVariable String academicYear,
-                                                          @PathVariable String semesterType) {
-        List<PartTimeSemesterClasses> partTimeSemesterClasses = partTimeSemesterClassesService.findPartTimeSemesterClassesByMajorAndSemester(majorName, academicYear, SemesterType.fromDescription(semesterType));
+                                                          @PathVariable String semesterType,
+                                                          @PathVariable String group) {
+        List<PartTimeSemesterClasses> partTimeSemesterClasses;
+        if ("Cały kierunek".equals(group)) {
+            partTimeSemesterClasses = partTimeSemesterClassesService.findPartTimeSemesterClassesByMajorAndSemester(majorName, academicYear, SemesterType.fromDescription(semesterType));
+        } else {
+            partTimeSemesterClasses = partTimeSemesterClassesService.findPartTimeSemesterClassesByMajorSemesterAndGroup(majorName, academicYear, SemesterType.fromDescription(semesterType), group);
+        }
+
         List<ClassesLecturers> classesLecturersList = classesLecturersService.findAll();
         return SemesterClassesToCalendarEventMapper.mapPartTimeClassesToCalendarEvent(partTimeSemesterClasses, classesLecturersList);
     }

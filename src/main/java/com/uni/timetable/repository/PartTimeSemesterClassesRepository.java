@@ -20,6 +20,8 @@ public interface PartTimeSemesterClassesRepository extends JpaRepository<PartTim
     long deleteByPartTimeSemesterClassesId(Long partTimeSemesterClassesId);
     List<PartTimeSemesterClasses> findByClasses_MajorGroup_Major_MajorNameAndClasses_MajorGroup_StudyYearAndSemester_SemesterType(String majorName, Integer studyYear, SemesterType semesterType);
 
+    List<PartTimeSemesterClasses> findByClasses_MajorGroup_Major_MajorNameAndClasses_MajorGroup_StudyYearAndSemester_SemesterTypeAndClasses_MajorGroup_Group_GroupName(String majorName, Integer studyYear, SemesterType semesterType, String groupName);
+
     @Transactional
     @Modifying
     @Query("""

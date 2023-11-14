@@ -59,6 +59,13 @@
                 <option th:each="semesterType: ${SemesterTypes}" th:value="${semesterType}" th:text="${semesterType}" th:selected="${semesterType} == ${prevSemesterType}">SELECT</option>
             </select>
             </label>
+
+            <label>Grupa:
+                <select id="group" class="selectpicker" th:value="${Groups}" name="group"
+                        onchange='if(this.value !== 0) {this.form.submit(); }'>
+                    <option th:each="group: ${Groups}" th:value="${group}" th:text="${group}" th:selected="${group} == ${prevGroup}">SELECT</option>
+                </select>
+            </label>
         </form>
     </div>
 
@@ -92,6 +99,9 @@
         let semesterType = '[[${prevSemesterType}]]';
         const semesterTypeSelect = $('#semesterType');
 
+        let group = '[[${prevGroup}]]';
+        const groupSelect = $('#semesterType');
+
         majorSelect.on('change', function () {
             patient_pesel = majorSelect.val(); // Update the patient_pesel variable with the selected value
             // Rest of your code...
@@ -106,6 +116,7 @@
             url = url.concat(majorName);
             url = url.concat('/' + studyYear)
             url = url.concat('/' + semesterType)
+            url = url.concat('/' + group)
             console.log(majorName);
             console.log(studyYear);
             console.log(semesterType);

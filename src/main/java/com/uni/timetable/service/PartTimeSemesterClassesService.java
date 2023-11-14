@@ -32,6 +32,13 @@ public class PartTimeSemesterClassesService {
         return partTimeSemesterClasses;
     }
 
+    public List<PartTimeSemesterClasses> findPartTimeSemesterClassesByMajorSemesterAndGroup(String majorName, String studyYear, SemesterType semesterType, String group) {
+        log.debug("Finding part time classes by major name, semester type, study year " + majorName + ", " + semesterType + ", " + studyYear);
+        List<PartTimeSemesterClasses> partTimeSemesterClasses = partTimeSemesterClassesRepository.findByClasses_MajorGroup_Major_MajorNameAndClasses_MajorGroup_StudyYearAndSemester_SemesterTypeAndClasses_MajorGroup_Group_GroupName(majorName, Integer.valueOf(studyYear), semesterType, group);
+        log.debug("Classes found {}", partTimeSemesterClasses);
+        return partTimeSemesterClasses;
+    }
+
     public List<PartTimeSemesterClasses> findPartTimeSemesterClassesBySemester(String studyYear, SemesterType semesterType) {
         log.debug("Finding part time classes by semester type and study year " + semesterType + ", " + studyYear);
         List<PartTimeSemesterClasses> partTimeSemesterClasses = partTimeSemesterClassesRepository.findBySemester_AcademicYearAndSemester_SemesterType(studyYear, semesterType);
