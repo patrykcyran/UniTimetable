@@ -118,7 +118,7 @@
                 },
                 defaultDate: moment().format("YYYY-MM-DD"),
                 defaultView: 'agendaWeek',
-                weekends: false,
+                weekends: true,
                 firstDay: 1,
                 editable: false,
                 eventLimit: true,
@@ -135,10 +135,12 @@
                     $('#loading').toggle(bool);
                 },
                 eventClick: function (event, element) {
-                    var confirmation = true;//window.confirm('Chcesz edytować wybrane zajęcia?');
-                    if (confirmation) {
-                        var editPageUrl = "/modify-classes?eventId=" + event.eventId + "&studyType=" + event.studyType
-                        window.location.href = editPageUrl;
+                    if ([[${isAdminLogged}]]) {
+                        var confirmation = window.confirm('Chcesz edytować wybrane zajęcia?');
+                        if (confirmation) {
+                            var editPageUrl = "/modify-classes?eventId=" + event.eventId + "&studyType=" + event.studyType
+                            window.location.href = editPageUrl;
+                        }
                     }
                 },
 

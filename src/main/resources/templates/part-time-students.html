@@ -160,10 +160,12 @@
                     $('#loading').toggle(bool);
                 },
                 eventClick: function (event, element) {
-                    var confirmation = true;//window.confirm('Chcesz edytować wybrane zajęcia?');
-                    if (confirmation) {
-                        var editPageUrl = "/modify-classes?eventId=" + event.eventId + "&studyType=" + event.studyType
-                        window.location.href = editPageUrl;
+                    if ([[${isAdminLogged}]]) {
+                        var confirmation = window.confirm('Chcesz edytować wybrane zajęcia?');
+                        if (confirmation) {
+                            var editPageUrl = "/modify-classes?eventId=" + event.eventId + "&studyType=" + event.studyType
+                            window.location.href = editPageUrl;
+                        }
                     }
                 },
 
