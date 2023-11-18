@@ -64,6 +64,12 @@
         <div class="col-md-6 col-sm-8">
             <div class="login-form">
                 <h2 class="text-center">Login</h2>
+                <div th:if="${errorMessage}">
+                    <p class="alert alert-danger" th:text="${errorMessage}"></p>
+                </div>
+<!--                <th:block th:if="${errorMessage}">
+                    <p class="alert alert-danger" th:text="${errorMessage}"></p>
+                </th:block>-->
                 <form th:action="@{/login}" method="post">
                     <div class="form-group">
                         <label for="username">Login:</label>

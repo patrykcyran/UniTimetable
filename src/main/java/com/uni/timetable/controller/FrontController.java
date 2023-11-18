@@ -4,11 +4,15 @@ import com.uni.timetable.model.*;
 import com.uni.timetable.security.SecurityUtils;
 import com.uni.timetable.service.*;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.*;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.DayOfWeek;
 import java.util.Arrays;
@@ -30,6 +34,10 @@ public class FrontController {
     SemesterClassesService semesterClassesService;
     PartTimeSemesterClassesService partTimeSemesterClassesService;
     ClassesLecturersService classesLecturersService;
+    AdminService adminService;
+
+    @Autowired
+    private RestTemplate restTemplate;
 
     public FrontController(LecturerService lecturerService,
                            SemesterService semesterService,
@@ -43,7 +51,8 @@ public class FrontController {
                            ClassesController classesController,
                            SemesterClassesService semesterClassesService,
                            PartTimeSemesterClassesService partTimeSemesterClassesService,
-                           ClassesLecturersService classesLecturersService) {
+                           ClassesLecturersService classesLecturersService,
+                           AdminService adminService) {
         this.lecturerService = lecturerService;
         this.semesterService = semesterService;
         this.majorService = majorService;
@@ -57,6 +66,7 @@ public class FrontController {
         this.semesterClassesService = semesterClassesService;
         this.partTimeSemesterClassesService = partTimeSemesterClassesService;
         this.classesLecturersService = classesLecturersService;
+        this.adminService = adminService;
     }
 
     @GetMapping()
@@ -71,7 +81,7 @@ public class FrontController {
         model.addAttribute("MajorNames", majorService.findAllFullTimeMajorNames());
         model.addAttribute("StudyYears", List.of(1, 2, 3, 4, 5));
         model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
-        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
         return "full-time-students";
     }
 
@@ -90,7 +100,7 @@ public class FrontController {
         model.addAttribute("StudyYears", List.of(1, 2, 3, 4, 5));
         model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
         model.addAttribute("Groups", majorGroupService.findMajorGroupsByMajor(majorName).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
-        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
         return "full-time-students";
     }
 
@@ -109,7 +119,7 @@ public class FrontController {
         model.addAttribute("StudyYears", List.of(1, 2, 3, 4, 5));
         model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
         model.addAttribute("Groups", majorGroupService.findMajorGroupsByMajor(majorName).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
-        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
         return "part-time-students";
     }
 
@@ -122,7 +132,7 @@ public class FrontController {
         model.addAttribute("prevClassroom", classroomName);
         model.addAttribute("DepartmentNames", departmentService.findAllDepartmentNames());
         model.addAttribute("Classrooms", departmentClassroomService.findAllClassroomsForDepartment(departmentName));
-        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
         return "classrooms";
     }
 
@@ -137,13 +147,13 @@ public class FrontController {
         model.addAttribute("LecturersNames", lecturerService.findAllNames());
         model.addAttribute("AcademicYears", semesterService.findAllAcademicYears());
         model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
-        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
         return "lecturers";
     }
 
     @GetMapping("/admin")
     public String adminView(Model model) {
-        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
         return "admin";
     }
 
@@ -151,15 +161,37 @@ public class FrontController {
     public String login(@RequestParam String username,
                         @RequestParam String password,
                         Model model) {
-        SecurityUtils.verifyAdminLogin("admin", "admin");
-        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        AdminRequest adminRequest = new AdminRequest();
+        adminRequest.setUsername(username);
+        adminRequest.setPassword(password);
+        HttpEntity<AdminRequest> requestEntity = new HttpEntity<>(adminRequest, headers);
+        ResponseEntity<String> authorizationResponse;
+        try {
+            //Call internal controller method
+            authorizationResponse = restTemplate.postForEntity("http://localhost:8080/adminController/authorize",
+                    requestEntity,
+                    String.class);
+        } catch (HttpClientErrorException e) {
+            authorizationResponse = new ResponseEntity<>(e.getResponseBodyAsString(), e.getStatusCode());
+        }
+        boolean authorized = authorizationResponse.getStatusCode().equals(HttpStatus.OK);
+        model.addAttribute("isAdminLogged", authorized);
+        model.addAttribute("errorMessage", authorizationResponse.getBody());
+
+        if (authorized) {
+            return "lecturers";
+        }
+
         return "admin";
     }
 
     @GetMapping("/logout")
     public String logout(Model model) {
         SecurityUtils.logOut();
-        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
         return "admin";
     }
 
@@ -169,7 +201,7 @@ public class FrontController {
                                  Model model) {
         model.addAttribute("selectedDepartment", selectedDepartment);
         model.addAttribute("selectedMajor", selectedMajor);
-        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
         model.addAttribute("ClassesTypes", Arrays.stream(ClassesType.values()).map(classesType -> classesType.description));
         model.addAttribute("Weekdays", List.of(
                 "Poniedziałek",
@@ -208,7 +240,7 @@ public class FrontController {
                              @RequestParam("frequency") String frequency,
                              @RequestParam("lecturers") String lecturersList,
                              Model model) {
-        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
         classesController.saveFullTimeClasses(classesType, dayOfWeek, startTime, endTime, department, classroom, major, studyYear, group, subject, semesterType, isDiploma, academicYear, frequency, lecturersList);
         return "add-full-time-classes";
     }
@@ -220,7 +252,7 @@ public class FrontController {
 
         StudyType studyType = StudyType.valueOf(studyTypeString);
         if (studyType.equals(StudyType.FULL_TIME)) {
-            model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+            model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
             model.addAttribute("eventId", eventId);
 
 
@@ -278,7 +310,7 @@ public class FrontController {
 
             return "modify-full-time-classes";
         } else {
-            model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+            model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
             model.addAttribute("eventId", eventId);
             PartTimeSemesterClasses partTimeSemesterClasses = partTimeSemesterClassesService.findById(eventId);
             String classesTypeString = partTimeSemesterClasses.getClasses().getClassesType().description;
@@ -311,7 +343,7 @@ public class FrontController {
             model.addAttribute("selectedLecturers", classesLecturersService.findAllLecturersByClasses(classesId).stream().map(Lecturer::getName).toList());
 
 
-            model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+            model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
             model.addAttribute("ClassesTypes", Arrays.stream(ClassesType.values()).map(classesType -> classesType.description));
             model.addAttribute("Departments", departmentService.findAllDepartmentNames());
             model.addAttribute("Classrooms", departmentClassroomService.findAllClassroomsForDepartment(department));
@@ -339,7 +371,7 @@ public class FrontController {
                                         @RequestParam("lecturers") String lecturersList,
                                         @RequestParam("eventId") Long semesterClassesId,
                                         Model model) {
-        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
         classesController.updateFullTimeClasses(classesType, dayOfWeek, startTime, endTime, department, classroom, subject, frequency, lecturersList, semesterClassesId);
         return "/modify-full-time-classes";
     }
@@ -355,7 +387,7 @@ public class FrontController {
                                         @RequestParam("lecturers") String lecturersList,
                                         @RequestParam("eventId") Long semesterClassesId,
                                         Model model) {
-        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
         classesController.updatePartTimeClasses(classesType, classesDate, startTime, endTime, department, classroom, subject, lecturersList, semesterClassesId);
         return "/modify-part-time-classes";
     }
@@ -388,7 +420,7 @@ public class FrontController {
                                  Model model) {
         model.addAttribute("selectedDepartment", selectedDepartment);
         model.addAttribute("selectedMajor", selectedMajor);
-        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
         model.addAttribute("ClassesTypes", Arrays.stream(ClassesType.values()).map(classesType -> classesType.description));
         model.addAttribute("Departments", departmentService.findAllDepartmentNames());
         model.addAttribute("Classrooms", departmentClassroomService.findAllClassroomsForDepartment(selectedDepartment));
@@ -418,7 +450,7 @@ public class FrontController {
                                      @RequestParam("academicYear") String academicYear,
                                      @RequestParam("lecturers") String lecturersList,
                                      Model model) {
-        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged);
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
         classesController.savePartTimeClasses(classesType, classesDate, startTime, endTime, department, classroom, major, studyYear, group, subject, semesterType, isDiploma, academicYear, lecturersList);
         return "add-part-time-classes";
     }

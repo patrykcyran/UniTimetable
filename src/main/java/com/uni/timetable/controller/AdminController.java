@@ -9,8 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import static java.util.Objects.isNull;
+
 @Controller
-@RequestMapping("/admin")
+@RequestMapping("/adminController")
 public class AdminController {
 
     private final AdminService adminService;
@@ -22,8 +24,22 @@ public class AdminController {
     @PostMapping("/register")
     public ResponseEntity<Admin> registerAdmin(@RequestHeader String signature,
             @RequestBody AdminRequest adminRequest) {
-        HttpStatus httpsStatus = SecurityUtils.register(signature, adminRequest);
+        ResponseEntity<Admin> responseEntity = SecurityUtils.register(signature, adminRequest);
+        adminService.addAdmin(responseEntity.getBody());
+        return responseEntity;
+    }
 
-        return new ResponseEntity<>(httpsStatus);
+    @PostMapping("/authorize")
+    public ResponseEntity<String> verifyLogin(@RequestBody AdminRequest adminRequest) {
+        Admin adminFromDb = adminService.findByUsername(adminRequest.getUsername());
+        if (isNull(adminFromDb)) {
+            return new ResponseEntity<>("Podany login nie istnieje", HttpStatus.NOT_FOUND);
+        }
+        boolean areCredentialsCorrect = SecurityUtils.checkAdminCredentials(adminRequest, adminFromDb);
+        if (!areCredentialsCorrect) {
+            return new ResponseEntity<>("Podano błędne hasło", HttpStatus.NOT_FOUND);
+        }
+        SecurityUtils.setAdminLogged(areCredentialsCorrect);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
