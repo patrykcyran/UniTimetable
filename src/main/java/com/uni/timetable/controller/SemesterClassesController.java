@@ -46,6 +46,9 @@ public class SemesterClassesController {
                                                          @PathVariable String academicYear,
                                                          @PathVariable String semesterType) {
         List<SemesterClasses> fullTimeClasses = semesterClassesService.findSemesterClassesBySemester(academicYear, SemesterType.fromDescription(semesterType));
+        String[] splitName = lecturerName.split(" ");
+        int length = splitName.length;
+        lecturerName = splitName[length-2] + " " + splitName[length-1];
         List<Classes> classesByLecturers = classesLecturersService.findClassesByLecturerName(lecturerName);
         fullTimeClasses = fullTimeClasses.stream()
                 .filter(semesterClasses -> classesByLecturers.stream()

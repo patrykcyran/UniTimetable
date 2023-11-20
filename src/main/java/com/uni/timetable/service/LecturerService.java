@@ -5,6 +5,7 @@ import com.uni.timetable.repository.LecturerRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -23,11 +24,20 @@ public class LecturerService {
         return lecturers;
     }
 
-    public List<String> findAllNames() {
+    public List<String> findAllPlainNames() {
         log.debug("Finding all lecturers");
         List<String> lecturers = lecturerRepository.findAll().stream().map(Lecturer::getName).distinct().toList();
         log.debug("Lecturers found" + lecturers);
         return lecturers;
+    }
+
+    public List<String> findAllNames() {
+        List<Lecturer> lecturers = lecturerRepository.findAll();
+        List<String> lecturersString = new ArrayList<>();
+        for (Lecturer lecturer : lecturers) {
+            lecturersString.add(lecturer.getAcademicTitle() + " " + lecturer.getName());
+        }
+        return lecturersString;
     }
 
     public Lecturer findLecturerByName(String lecturerName) {

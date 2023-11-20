@@ -14,6 +14,8 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import static java.util.Objects.isNull;
 
@@ -122,6 +124,7 @@ public class ClassesController {
 
 
         List<String> lecturerNames = List.of(lecturersList.split(","));
+        lecturerNames = separateTitleFromLecturer(lecturerNames);
         for (Classes classes : savedClasses) {
             for (String lecturerName : lecturerNames) {
                 Boolean doesExists = classesLecturersService.doesClassesLecturerExists(classes.getMajorGroup(), classes.getSubject(), classes.getDayOfWeek(), classes.getStartTime(), classes.getEndTime(), classes.getClassesType(), classes.getDepartmentClassroom(), lecturerName);
@@ -138,6 +141,16 @@ public class ClassesController {
         for (Classes classes : savedClasses) {
             semesterClassesService.saveSemesterClasses(semester, classes, frequency);
         }
+    }
+
+    private List<String> separateTitleFromLecturer(List<String> lecturers) {
+        List<String> returnList = new ArrayList<>();
+        for (String lecturer : lecturers) {
+            String[] splitName = lecturer.split(" ");
+            int length = splitName.length;
+            returnList.add(splitName[length-2] + " " + splitName[length-1]);
+        }
+        return returnList;
     }
 
     public void updateFullTimeClasses(String classesTypeString,
