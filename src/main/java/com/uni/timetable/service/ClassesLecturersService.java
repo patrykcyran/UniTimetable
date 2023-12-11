@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -42,6 +43,15 @@ public class ClassesLecturersService {
 
     public List<Lecturer> findAllLecturersByClasses(Long classesId) {
         return classesLecturersRepository.findByClasses_ClassesId(classesId).stream().map(ClassesLecturers::getLecturer).toList();
+    }
+
+    public List<String> findAllLecturersNamesWithTitlesByClasses(Long classesId) {
+        List<String> lecturerNames = new ArrayList<>();
+        List<Lecturer> lecturers = classesLecturersRepository.findByClasses_ClassesId(classesId).stream().map(ClassesLecturers::getLecturer).toList();
+        for (Lecturer lecturer : lecturers) {
+            lecturerNames.add(lecturer.getAcademicTitle() + " " + lecturer.getName());
+        }
+        return lecturerNames;
     }
 
     public List<ClassesLecturers> findAllClassesLecturersByClasses(Long classesId) {

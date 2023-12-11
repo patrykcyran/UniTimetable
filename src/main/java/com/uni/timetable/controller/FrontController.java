@@ -15,6 +15,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -286,7 +287,7 @@ public class FrontController {
             model.addAttribute("selectedSemesterType", semesterType);
             model.addAttribute("selectedAcademicYear", academicYear);
             model.addAttribute("selectedFrequency", frequency);
-            model.addAttribute("selectedLecturers", classesLecturersService.findAllLecturersByClasses(classesId).stream().map(Lecturer::getName).toList());
+            model.addAttribute("selectedLecturers", classesLecturersService.findAllLecturersNamesWithTitlesByClasses(classesId));
 
 
             model.addAttribute("ClassesTypes", Arrays.stream(ClassesType.values()).map(classesType -> classesType.description));
@@ -340,7 +341,7 @@ public class FrontController {
             model.addAttribute("selectedSubject", subject);
             model.addAttribute("selectedSemesterType", semesterType);
             model.addAttribute("selectedAcademicYear", academicYear);
-            model.addAttribute("selectedLecturers", classesLecturersService.findAllLecturersByClasses(classesId).stream().map(Lecturer::getName).toList());
+            model.addAttribute("selectedLecturers", classesLecturersService.findAllLecturersNamesWithTitlesByClasses(classesId));
 
 
             model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());

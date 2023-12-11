@@ -185,6 +185,7 @@ public class ClassesController {
 
         semesterClassesService.update(semesterClasses);
         List<String> lecturerNames = List.of(lecturersList.split(","));
+        lecturerNames = separateTitleFromLecturer(lecturerNames);
 
         List<ClassesLecturers> classesLecturers = classesLecturersService.findAllClassesLecturersByClasses(semesterClasses.getClasses().getClassesId());
 
@@ -247,6 +248,7 @@ public class ClassesController {
 
 
         List<String> lecturerNames = List.of(lecturersList.split(","));
+        lecturerNames = separateTitleFromLecturer(lecturerNames);
         for (Classes classes : savedClasses) {
             for (String lecturerName : lecturerNames) {
                 Boolean doesExists = classesLecturersService.doesClassesLecturerExists(classes.getMajorGroup(), classes.getSubject(), classes.getDayOfWeek(), classes.getStartTime(), classes.getEndTime(), classes.getClassesType(), classes.getDepartmentClassroom(), lecturerName);
@@ -294,6 +296,7 @@ public class ClassesController {
 
         partTimeSemesterClassesService.update(partTimeSemesterClasses);
         List<String> lecturerNames = List.of(lecturersList.split(","));
+        lecturerNames = separateTitleFromLecturer(lecturerNames);
 
         List<ClassesLecturers> classesLecturers = classesLecturersService.findAllClassesLecturersByClasses(partTimeSemesterClasses.getClasses().getClassesId());
 
