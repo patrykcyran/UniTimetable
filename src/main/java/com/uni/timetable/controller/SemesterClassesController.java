@@ -1,10 +1,8 @@
 package com.uni.timetable.controller;
 
 import com.uni.timetable.model.*;
-import com.uni.timetable.service.ClassesLecturersService;
-import com.uni.timetable.service.ClassesService;
-import com.uni.timetable.service.PartTimeSemesterClassesService;
-import com.uni.timetable.service.SemesterClassesService;
+import com.uni.timetable.service.*;
+import com.uni.timetable.utils.OneTimeEventToCalendarEventMapper;
 import com.uni.timetable.utils.SemesterClassesToCalendarEventMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,15 +22,18 @@ public class SemesterClassesController {
     private final PartTimeSemesterClassesService partTimeSemesterClassesService;
     private final ClassesLecturersService classesLecturersService;
     private final ClassesService classesService;
+    private final OneTimeEventService oneTimeEventService;
 
     public SemesterClassesController(SemesterClassesService semesterClassesService,
                                      PartTimeSemesterClassesService partTimeSemesterClassesService,
                                      ClassesLecturersService classesLecturersService,
-                                     ClassesService classesService) {
+                                     ClassesService classesService,
+                                     OneTimeEventService oneTimeEventService) {
         this.semesterClassesService = semesterClassesService;
         this.partTimeSemesterClassesService = partTimeSemesterClassesService;
         this.classesLecturersService = classesLecturersService;
         this.classesService = classesService;
+        this.oneTimeEventService = oneTimeEventService;
     }
 
     @GetMapping("/all")
@@ -104,6 +105,10 @@ public class SemesterClassesController {
                                                                    @PathVariable String classroomName) {
         List<SemesterClasses> classesByDepartmentAndClassroom = semesterClassesService.findSemesterClassesByDepartmentAndClassroom(departmentName, classroomName);
         List<ClassesLecturers> classesLecturersList = classesLecturersService.findAll();
-        return SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByDepartmentAndClassroom, classesLecturersList);
+        List<CalendarEvent> calendarEvents = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByDepartmentAndClassroom, classesLecturersList);
+
+        List<OneTimeEvent> oneTimeEventsByDepartmentAndClassroom = oneTimeEventService.getOneTimeEventsByDepartmentAndClassroom(departmentName, classroomName);
+        calendarEvents.addAll(OneTimeEventToCalendarEventMapper.mapOneTimeEventsToCalendarEvents(oneTimeEventsByDepartmentAndClassroom));
+        return calendarEvents;
     }
 }

@@ -35,6 +35,7 @@ public class FrontController {
     SemesterClassesService semesterClassesService;
     PartTimeSemesterClassesService partTimeSemesterClassesService;
     ClassesLecturersService classesLecturersService;
+    OneTimeEventController oneTimeEventController;
     AdminService adminService;
 
     @Autowired
@@ -53,6 +54,7 @@ public class FrontController {
                            SemesterClassesService semesterClassesService,
                            PartTimeSemesterClassesService partTimeSemesterClassesService,
                            ClassesLecturersService classesLecturersService,
+                           OneTimeEventController oneTimeEventController,
                            AdminService adminService) {
         this.lecturerService = lecturerService;
         this.semesterService = semesterService;
@@ -67,6 +69,7 @@ public class FrontController {
         this.semesterClassesService = semesterClassesService;
         this.partTimeSemesterClassesService = partTimeSemesterClassesService;
         this.classesLecturersService = classesLecturersService;
+        this.oneTimeEventController = oneTimeEventController;
         this.adminService = adminService;
     }
 
@@ -468,13 +471,14 @@ public class FrontController {
     }
 
     @PostMapping("/add-one-time-event")
-    public String addOneTimeEvent(@RequestParam("classesDate") String classesDate,
+    public String addOneTimeEvent(@RequestParam("classesDate") String eventDate,
                                   @RequestParam("startTime") String startTime,
                                   @RequestParam("endTime") String endTime,
                                   @RequestParam("department") String department,
                                   @RequestParam("classroom") String classroom,
                                   Model model) {
         model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
+        oneTimeEventController.saveOneTimeEvent(eventDate, startTime, endTime, department, classroom);
         return "add-one-time-event";
     }
 
