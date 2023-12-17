@@ -21,7 +21,7 @@ public class SecurityUtils {
     private static final String TOKEN = "X1xSUHDhVXq2iPZuMmEVjBTOAXOdWs9WVwIbdkJ04qWVkoDuJUO2YoRveX2MzJxp";
     @Setter
     @Getter
-    private static boolean isAdminLogged = false;
+    private static boolean isAdminLogged = true;
 
     public static void verifyAdminLogin(String username, String password) {
         if (!isAdminLogged) {

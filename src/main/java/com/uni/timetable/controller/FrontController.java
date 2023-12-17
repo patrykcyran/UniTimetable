@@ -456,6 +456,28 @@ public class FrontController {
         return "add-part-time-classes";
     }
 
+    @GetMapping("/add-one-time-event")
+    public String addOneTimeEvent(@RequestParam(required = false, defaultValue = "Wydział Inżynierii Elektrycznej i Komputerowej") String selectedDepartment,
+                                  Model model) {
+        model.addAttribute("selectedDepartment", selectedDepartment);
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
+        model.addAttribute("Departments", departmentService.findAllDepartmentNames());
+        model.addAttribute("Classrooms", departmentClassroomService.findAllClassroomsForDepartment(selectedDepartment));
+        model.addAttribute("Majors", majorService.findAllPartTimeMajorNames());
+        return "add-one-time-event";
+    }
+
+    @PostMapping("/add-one-time-event")
+    public String addOneTimeEvent(@RequestParam("classesDate") String classesDate,
+                                  @RequestParam("startTime") String startTime,
+                                  @RequestParam("endTime") String endTime,
+                                  @RequestParam("department") String department,
+                                  @RequestParam("classroom") String classroom,
+                                  Model model) {
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
+        return "add-one-time-event";
+    }
+
     static String mapWeekdayToPolish(DayOfWeek dayOfWeek) {
         switch (dayOfWeek) {
 
