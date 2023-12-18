@@ -101,18 +101,22 @@
                     department: department,
                     classroom: classroom
                   },
-                  success: function () {
-                    // Handle success
-                  },
-                  error: function () {
-                    // Handle error
-                  }
                 });
               } else {
                 // User declined, you can handle this case if needed
               }
             } else {
-              // Handle other cases if needed
+              $.ajax({
+                type: 'POST',
+                url: '/add-one-time-event',
+                data: {
+                  classesDate: classesDate,
+                  startTime: startTime,
+                  endTime: endTime,
+                  department: department,
+                  classroom: classroom
+                },
+              });
             }
           },
           error: function () {

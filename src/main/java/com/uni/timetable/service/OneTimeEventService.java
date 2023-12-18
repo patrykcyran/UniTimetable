@@ -46,4 +46,8 @@ public class OneTimeEventService {
         oneTimeEventRepository.save(oneTimeEvent);
         return oneTimeEvent;
     }
+
+    public void deleteOneTimeEventById(Long id) {
+        oneTimeEventRepository.deleteById(id);
+    }
 }

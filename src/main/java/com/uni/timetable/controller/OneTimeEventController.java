@@ -11,10 +11,7 @@ import com.uni.timetable.service.PartTimeSemesterClassesService;
 import com.uni.timetable.service.SemesterClassesService;
 import com.uni.timetable.utils.SemesterClassesToCalendarEventMapper;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -57,11 +54,6 @@ public class OneTimeEventController {
         }
 
         DepartmentClassroom departmentClassroom = departmentClassroomService.findByDepartmentAndClassroomName(department, classroom);
-
-        if (checkIfEventCollide(eventDate, startTime, endTime)) {
-            throw new TimetableException("Wydarzenie koliduje z aktualnym planem zajec");
-        }
-
         oneTimeEventService.saveOneTimeEvent(eventDate, startTime, endTime, departmentClassroom);
     }
 
@@ -77,6 +69,12 @@ public class OneTimeEventController {
         return checkIfEventCollide(eventDate, startTime, endTime);
     }
 
+    @DeleteMapping("/delete/{eventId}")
+    public String deleteEvent(@PathVariable Long eventId) {
+        oneTimeEventService.deleteOneTimeEventById(eventId);
+        return "classrooms";
+    }
+
     private boolean checkIfEventCollide(LocalDate eventDate, LocalTime startTime, LocalTime endTime) {
         List<SemesterClasses> allSemesterClasses = semesterClassesService.findAll();
         List<PartTimeSemesterClasses> partTimeSemesterClasses = partTimeSemesterClassesService.findAll();
@@ -85,7 +83,7 @@ public class OneTimeEventController {
 
         LocalDateTime startDateTime = LocalDateTime.of(eventDate, startTime);
         LocalDateTime endDateTime = LocalDateTime.of(eventDate, endTime);
-        Optional<CalendarEvent> optionalCollidingEvent = allEvents.stream().filter(event -> event.getStart().isBefore(startDateTime) && event.getEnd().isAfter(startDateTime)).findAny();
+        Optional<CalendarEvent> optionalCollidingEvent = allEvents.stream().filter(event -> (event.getStart().isBefore(startDateTime) && event.getEnd().isAfter(startDateTime)) || (event.getStart().isBefore(endDateTime) && event.getEnd().isAfter(endDateTime))).findAny();
         return optionalCollidingEvent.isPresent();
     }
 }
