@@ -63,6 +63,78 @@
       $('.selectpicker').selectpicker();
     });
   </script>
+
+  <script>
+    $(document).ready(function () {
+      // Function to handle the button click
+      function handleButtonClick() {
+        // Get form values
+        var classesDate = $('#classesDate').val();
+        var startTime = $('#startTime').val();
+        var endTime = $('#endTime').val();
+        var department = $('#department').val();
+        var classroom = $('#classroom').val();
+
+        // Make an AJAX request to a new endpoint
+        $.ajax({
+          type: 'GET',
+          url: '/one-time-event/check-event-collision',
+          data:{
+            classesDate: classesDate,
+            startTime: startTime,
+            endTime: endTime
+          },
+          success: function (response) {
+            // Check the response and display window.confirm or proceed further
+            if (response === true) {
+              var confirmed = window.confirm('Rezerwacja koliduje z aktualnym planem zajęć, na pewno chcesz kontynuować?');
+              if (confirmed) {
+                // User confirmed, proceed with another post request or any other action
+                // Example: Make another post request with form data
+                $.ajax({
+                  type: 'POST',
+                  url: '/add-one-time-event',
+                  data: {
+                    classesDate: classesDate,
+                    startTime: startTime,
+                    endTime: endTime,
+                    department: department,
+                    classroom: classroom
+                  },
+                  success: function () {
+                    // Handle success
+                  },
+                  error: function () {
+                    // Handle error
+                  }
+                });
+              } else {
+                // User declined, you can handle this case if needed
+              }
+            } else {
+              // Handle other cases if needed
+            }
+          },
+          error: function () {
+            // Handle error if the AJAX request fails
+          }
+        });
+      }
+
+      // Attach the click event handler to your button
+      $('#reserve-button').on('click', function () {
+        // Call the function to handle the button click
+        handleButtonClick();
+      });
+
+      // Prevent form submission when the button is clicked
+      $('#reservation-form').on('submit', function (event) {
+        event.preventDefault();
+      });
+
+      // ... Your existing document ready code ...
+    });
+  </script>
 </head>
 
 <body>
@@ -72,7 +144,7 @@
   <div class="col-md-6 col-sm-8">
     <div class="login-form">
       <h2 class="text-center">Zarezerwuj salę</h2>
-      <form th:action="@{/add-one-time-event}" method="post" action="#">
+      <form th:action="@{/add-one-time-event}" method="post" action="#" id="reservation-form">
         <div class="form-group">
           <label for="classesDate">Data:</label>
           <input type="date" class="form-control" id="classesDate" name="classesDate" th:value="${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}">
@@ -97,7 +169,7 @@
             <option th:each="classroom: ${Classrooms}" th:value="${classroom}" th:text="${classroom}"></option>
           </select>
         </div>
-        <button type="submit" class="btn btn-primary btn-block">Zarezerwuj</button>
+        <button id="reserve-button" type="submit" class="btn btn-primary btn-block">Zarezerwuj</button>
       </form>
     </div>
   </div>
