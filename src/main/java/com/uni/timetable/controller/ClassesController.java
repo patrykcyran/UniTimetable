@@ -143,7 +143,7 @@ public class ClassesController {
         }
     }
 
-    private List<String> separateTitleFromLecturer(List<String> lecturers) {
+    public static List<String> separateTitleFromLecturer(List<String> lecturers) {
         List<String> returnList = new ArrayList<>();
         for (String lecturer : lecturers) {
             String[] splitName = lecturer.split(" ");
@@ -318,7 +318,7 @@ public class ClassesController {
 
     }
 
-    private static DayOfWeek resolveDayOfWeek(String dayOfWeek) {
+    public static DayOfWeek resolveDayOfWeek(String dayOfWeek) {
         switch (dayOfWeek) {
             case "Poniedziałek":
                 return DayOfWeek.MONDAY;
@@ -339,7 +339,7 @@ public class ClassesController {
         }
     }
 
-    private static SemesterNumber resolveSemesterNumber(SemesterType semesterType, Integer studyYear) {
+    public static SemesterNumber resolveSemesterNumber(SemesterType semesterType, Integer studyYear) {
         if (semesterType.equals(SemesterType.WINTER)) {
             switch (studyYear) {
                 case 1:

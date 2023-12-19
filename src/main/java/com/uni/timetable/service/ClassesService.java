@@ -55,6 +55,24 @@ public class ClassesService {
         return null;
     }
 
+    public Classes createClasses(MajorGroup majorGroup,
+                                 Subject subject,
+                                 DayOfWeek dayOfWeek,
+                                 LocalTime startTime,
+                                 LocalTime endTime,
+                                 ClassesType classesType,
+                                 DepartmentClassroom departmentClassroom) {
+        return Classes.builder()
+                .majorGroup(majorGroup)
+                .subject(subject)
+                .dayOfWeek(dayOfWeek)
+                .startTime(startTime)
+                .endTime(endTime)
+                .classesType(classesType)
+                .departmentClassroom(departmentClassroom)
+                .build();
+    }
+
     public Classes saveClasses(MajorGroup majorGroup,
                             Subject subject,
                             DayOfWeek dayOfWeek,

@@ -1,5 +1,6 @@
 package com.uni.timetable.controller;
 
+import com.uni.timetable.exception.TimetableException;
 import com.uni.timetable.model.*;
 import com.uni.timetable.service.*;
 import com.uni.timetable.utils.OneTimeEventToCalendarEventMapper;
@@ -7,12 +8,18 @@ import com.uni.timetable.utils.SemesterClassesToCalendarEventMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+
+import static com.uni.timetable.controller.ClassesController.*;
+import static java.util.Objects.isNull;
 
 @Controller
 @RequestMapping("/semesterClasses")
@@ -23,17 +30,41 @@ public class SemesterClassesController {
     private final ClassesLecturersService classesLecturersService;
     private final ClassesService classesService;
     private final OneTimeEventService oneTimeEventService;
+    private final MajorGroupService majorGroupService;
+    private final DepartmentClassroomService departmentClassroomService;
+    private final SubjectService subjectService;
+    private final SemesterService semesterService;
+    private final LecturerService lecturerService;
+    private final DepartmentService departmentService;
+    private final MajorService majorService;
+    private final GroupService groupService;
 
     public SemesterClassesController(SemesterClassesService semesterClassesService,
                                      PartTimeSemesterClassesService partTimeSemesterClassesService,
                                      ClassesLecturersService classesLecturersService,
                                      ClassesService classesService,
-                                     OneTimeEventService oneTimeEventService) {
+                                     OneTimeEventService oneTimeEventService,
+                                     MajorGroupService majorGroupService,
+                                     DepartmentClassroomService departmentClassroomService,
+                                     SubjectService subjectService,
+                                     SemesterService semesterService,
+                                     LecturerService lecturerService,
+                                     DepartmentService departmentService,
+                                     MajorService majorService,
+                                     GroupService groupService) {
         this.semesterClassesService = semesterClassesService;
         this.partTimeSemesterClassesService = partTimeSemesterClassesService;
         this.classesLecturersService = classesLecturersService;
         this.classesService = classesService;
         this.oneTimeEventService = oneTimeEventService;
+        this.majorGroupService = majorGroupService;
+        this.departmentClassroomService = departmentClassroomService;
+        this.subjectService = subjectService;
+        this.semesterService = semesterService;
+        this.lecturerService = lecturerService;
+        this.departmentService = departmentService;
+        this.majorService = majorService;
+        this.groupService = groupService;
     }
 
     @GetMapping("/all")
@@ -110,5 +141,98 @@ public class SemesterClassesController {
         List<OneTimeEvent> oneTimeEventsByDepartmentAndClassroom = oneTimeEventService.getOneTimeEventsByDepartmentAndClassroom(departmentName, classroomName);
         calendarEvents.addAll(OneTimeEventToCalendarEventMapper.mapOneTimeEventsToCalendarEvents(oneTimeEventsByDepartmentAndClassroom));
         return calendarEvents;
+    }
+
+    @GetMapping("/check-full-time-classes-collision")
+    @ResponseBody
+    public boolean checkForFullTimeClassesCollision(@RequestParam("classesType") String classesType,
+                                                    @RequestParam("dayOfWeek") String dayOfWeek,
+                                                    @RequestParam("startTime") String startTime,
+                                                    @RequestParam("endTime") String endTime,
+                                                    @RequestParam("department") String department,
+                                                    @RequestParam("classroom") String classroom,
+                                                    @RequestParam("major") String major,
+                                                    @RequestParam("studyYear") String studyYear,
+                                                    @RequestParam("group") String group,
+                                                    @RequestParam("subject") String subject,
+                                                    @RequestParam("semesterType") String semesterType,
+                                                    @RequestParam("isDiploma") String isDiploma,
+                                                    @RequestParam("academicYear") String academicYear,
+                                                    @RequestParam("frequency") String frequency,
+                                                    @RequestParam("lecturers") String lecturers) {
+        List<SemesterClasses> semesterClasses = getSemesterClasses(classesType, dayOfWeek, startTime, endTime, department, classroom, major, studyYear, group, subject, semesterType, isDiploma, academicYear, frequency, lecturers);
+        List<ClassesLecturers> classesLecturersList = classesLecturersService.findAll();
+        List<CalendarEvent> calendarEventsByNewSemesterClasses = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(semesterClasses, classesLecturersList);
+
+        List<SemesterClasses> classesByClassroomAndDepartment = semesterClassesService.findAllClassesByClassroomAndDepartment(classroom, department);
+        List<CalendarEvent> calendarEventsByClassroom = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByClassroomAndDepartment, classesLecturersList);
+
+        for (CalendarEvent newSemesterEvent : calendarEventsByNewSemesterClasses) {
+            for (CalendarEvent classroomEvent : calendarEventsByClassroom) {
+                if (newSemesterEvent.getStart().equals(classroomEvent.getStart()) &&
+                        newSemesterEvent.getEnd().equals(classroomEvent.getEnd())) {
+                    return true;
+                }
+            }
+        }
+
+
+
+        return false;
+    }
+
+    public List<SemesterClasses> getSemesterClasses(String classesTypeString,
+                                    String dayOfWeekString,
+                                    String startTimeString,
+                                    String endTimeString,
+                                    String department,
+                                    String classroom,
+                                    String major,
+                                    String studyYear,
+                                    String group,
+                                    String subjectName,
+                                    String semesterType,
+                                    String isDiplomaString,
+                                    String academicYear,
+                                    String frequencyString,
+                                    String lecturersList) {
+
+        MajorGroup majorGroup = majorGroupService.findByMajorGroupAndYear(major, studyYear, group);
+
+        Subject subject = subjectService.findSubjectByName(subjectName);
+        DayOfWeek dayOfWeek = resolveDayOfWeek(dayOfWeekString);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+        LocalTime startTime = LocalTime.parse(startTimeString, formatter);
+        LocalTime endTime = LocalTime.parse(endTimeString, formatter);
+        ClassesType classesType = ClassesType.fromDescription(classesTypeString);
+        DepartmentClassroom departmentClassroom = departmentClassroomService.findByDepartmentAndClassroomName(department, classroom);
+
+        if (startTime.isAfter(endTime)) {
+            throw new TimetableException("Czas rozpoczęcia zajęć nie może być po ich zakończeniu");
+        }
+
+        List<Classes> savedClasses = new ArrayList<>();
+        savedClasses.add(classesService.createClasses(majorGroup, subject, dayOfWeek, startTime, endTime, classesType, departmentClassroom));
+
+
+        List<String> lecturerNames = List.of(lecturersList.split(","));
+        lecturerNames = separateTitleFromLecturer(lecturerNames);
+        for (Classes classes : savedClasses) {
+            for (String lecturerName : lecturerNames) {
+                Boolean doesExists = classesLecturersService.doesClassesLecturerExists(classes.getMajorGroup(), classes.getSubject(), classes.getDayOfWeek(), classes.getStartTime(), classes.getEndTime(), classes.getClassesType(), classes.getDepartmentClassroom(), lecturerName);
+                if (Boolean.FALSE.equals(doesExists)) {
+                    Lecturer lecturer = lecturerService.findLecturerByName(lecturerName);
+                }
+            }
+        }
+
+        Boolean isDiploma = "Tak".equals(isDiplomaString);
+        Semester semester = semesterService.findSemesterByYearTypeAndDiploma(academicYear, SemesterType.fromDescription(semesterType), isDiploma);
+        Frequency frequency = Frequency.fromDescription(frequencyString);
+        List<SemesterClasses> semesterClasses = new ArrayList<>();
+        for (Classes classes : savedClasses) {
+            semesterClasses.add(semesterClassesService.createSemesterClasses(semester, classes, frequency));
+        }
+        return semesterClasses;
     }
 }

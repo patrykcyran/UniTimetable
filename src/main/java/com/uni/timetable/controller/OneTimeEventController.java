@@ -9,16 +9,15 @@ import com.uni.timetable.service.DepartmentClassroomService;
 import com.uni.timetable.service.OneTimeEventService;
 import com.uni.timetable.service.PartTimeSemesterClassesService;
 import com.uni.timetable.service.SemesterClassesService;
+import com.uni.timetable.utils.CollisionChecker;
 import com.uni.timetable.utils.SemesterClassesToCalendarEventMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/one-time-event")
@@ -66,24 +65,18 @@ public class OneTimeEventController {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
         LocalTime startTime = LocalTime.parse(startTimeString, formatter);
         LocalTime endTime = LocalTime.parse(endTimeString, formatter);
-        return checkIfEventCollide(eventDate, startTime, endTime);
+
+        List<SemesterClasses> allSemesterClasses = semesterClassesService.findAll();
+        List<PartTimeSemesterClasses> partTimeSemesterClasses = partTimeSemesterClassesService.findAll();
+        List<CalendarEvent> allEvents = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(allSemesterClasses, List.of());
+        allEvents.addAll(SemesterClassesToCalendarEventMapper.mapPartTimeClassesToCalendarEvent(partTimeSemesterClasses, List.of()));
+
+        return CollisionChecker.checkIfEventsCollideByDate(eventDate, startTime, endTime, allEvents);
     }
 
     @DeleteMapping("/delete/{eventId}")
     public String deleteEvent(@PathVariable Long eventId) {
         oneTimeEventService.deleteOneTimeEventById(eventId);
         return "classrooms";
-    }
-
-    private boolean checkIfEventCollide(LocalDate eventDate, LocalTime startTime, LocalTime endTime) {
-        List<SemesterClasses> allSemesterClasses = semesterClassesService.findAll();
-        List<PartTimeSemesterClasses> partTimeSemesterClasses = partTimeSemesterClassesService.findAll();
-        List<CalendarEvent> allEvents = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(allSemesterClasses, List.of());
-        allEvents.addAll(SemesterClassesToCalendarEventMapper.mapPartTimeClassesToCalendarEvent(partTimeSemesterClasses, List.of()));
-
-        LocalDateTime startDateTime = LocalDateTime.of(eventDate, startTime);
-        LocalDateTime endDateTime = LocalDateTime.of(eventDate, endTime);
-        Optional<CalendarEvent> optionalCollidingEvent = allEvents.stream().filter(event -> (event.getStart().isBefore(startDateTime) && event.getEnd().isAfter(startDateTime)) || (event.getStart().isBefore(endDateTime) && event.getEnd().isAfter(endDateTime))).findAny();
-        return optionalCollidingEvent.isPresent();
     }
 }

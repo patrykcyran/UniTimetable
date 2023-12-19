@@ -58,6 +58,16 @@ public class SemesterClassesService {
         return semesterClassesRepository.findByClasses_DepartmentClassroom_Department_DepartmentNameAndClasses_DepartmentClassroom_Classroom_ClassroomName(departmentName, classroomName);
     }
 
+    public SemesterClasses createSemesterClasses(Semester semester,
+                                               Classes classes,
+                                               Frequency frequency) {
+        return SemesterClasses.builder()
+                .semester(semester)
+                .classes(classes)
+                .frequency(frequency)
+                .build();
+    }
+
     public SemesterClasses saveSemesterClasses(Semester semester,
                                                Classes classes,
                                                Frequency frequency) {
@@ -83,5 +93,9 @@ public class SemesterClassesService {
     public void update(SemesterClasses semesterClasses) {
         log.debug("Updating semester classes {}", semesterClasses);
         semesterClassesRepository.updateSemesterAndClassesAndFrequencyBySemesterClassesId(semesterClasses.getSemester(), semesterClasses.getClasses(), semesterClasses.getFrequency(), semesterClasses.getSemesterClassesId());
+    }
+
+    public List<SemesterClasses> findAllClassesByClassroomAndDepartment(String classroom, String department) {
+        return semesterClassesRepository.findByClasses_DepartmentClassroom_Classroom_ClassroomNameAndClasses_DepartmentClassroom_Department_DepartmentName(classroom, department);
     }
 }

@@ -17,4 +17,14 @@ public class CalendarEventDescription {
     String department;
     String classroom;
     String descriptionText;
+
+    public CalendarEventDescription(CalendarEventDescription other) {
+        this.group = other.group;
+        this.major = other.major;
+        this.type = other.type;
+        this.lecturerName = other.lecturerName;
+        this.department = other.department;
+        this.classroom = other.classroom;
+        this.descriptionText = other.descriptionText;
+    }
 }

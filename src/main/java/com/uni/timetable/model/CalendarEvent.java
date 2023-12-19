@@ -17,4 +17,14 @@ public class CalendarEvent {
     private String title;
     private CalendarEventDescription description;
     private String color;
+
+    public CalendarEvent(CalendarEvent other) {
+        this.eventId = other.eventId;
+        this.studyType = other.studyType;
+        this.start = other.start;
+        this.end = other.end;
+        this.title = other.title;
+        this.description = new CalendarEventDescription(other.description); // Assuming CalendarEventDescription has a copy constructor
+        this.color = other.color;
+    }
 }
