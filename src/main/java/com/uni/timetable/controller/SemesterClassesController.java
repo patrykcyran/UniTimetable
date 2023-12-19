@@ -164,6 +164,7 @@ public class SemesterClassesController {
         List<ClassesLecturers> classesLecturersList = classesLecturersService.findAll();
         List<CalendarEvent> calendarEventsByNewSemesterClasses = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(semesterClasses, classesLecturersList);
 
+
         List<SemesterClasses> classesByClassroomAndDepartment = semesterClassesService.findAllClassesByClassroomAndDepartment(classroom, department);
         List<CalendarEvent> calendarEventsByClassroom = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByClassroomAndDepartment, classesLecturersList);
 
@@ -176,6 +177,25 @@ public class SemesterClassesController {
             }
         }
 
+        List<String> lecturerNames = List.of(lecturers.split(","));
+        lecturerNames = separateTitleFromLecturer(lecturerNames);
+        List<SemesterClasses> allClasses = semesterClassesService.findAll();
+        for (String lecturer : lecturerNames) {
+            List<Classes> classesByLecturers = classesLecturersService.findClassesByLecturerName(lecturer);
+            allClasses = allClasses.stream()
+                    .filter(sc -> classesByLecturers.stream()
+                            .anyMatch(classes -> classes.getClassesId().equals(sc.getClasses().getClassesId()))).toList();
+            List<CalendarEvent> calendarEventsByLecturer = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByClassroomAndDepartment, classesLecturersList);
+
+            for (CalendarEvent newSemesterEvent : calendarEventsByNewSemesterClasses) {
+                for (CalendarEvent lecturerEvent : calendarEventsByLecturer) {
+                    if (newSemesterEvent.getStart().equals(lecturerEvent.getStart()) &&
+                            newSemesterEvent.getEnd().equals(lecturerEvent.getEnd())) {
+                        return true;
+                    }
+                }
+            }
+        }
 
 
         return false;
