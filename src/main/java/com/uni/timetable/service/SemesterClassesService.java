@@ -98,4 +98,8 @@ public class SemesterClassesService {
     public List<SemesterClasses> findAllClassesByClassroomAndDepartment(String classroom, String department) {
         return semesterClassesRepository.findByClasses_DepartmentClassroom_Classroom_ClassroomNameAndClasses_DepartmentClassroom_Department_DepartmentName(classroom, department);
     }
+
+    public List<SemesterClasses> findAllClassesByGroupAndMajor(String group, String major) {
+        return semesterClassesRepository.findByClasses_MajorGroup_Group_GroupNameAndClasses_MajorGroup_Major_MajorName(group, major);
+    }
 }

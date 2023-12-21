@@ -168,6 +168,7 @@ public class SemesterClassesController {
         List<SemesterClasses> classesByClassroomAndDepartment = semesterClassesService.findAllClassesByClassroomAndDepartment(classroom, department);
         List<CalendarEvent> calendarEventsByClassroom = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByClassroomAndDepartment, classesLecturersList);
 
+        //Check for collision with classrooms
         for (CalendarEvent newSemesterEvent : calendarEventsByNewSemesterClasses) {
             for (CalendarEvent classroomEvent : calendarEventsByClassroom) {
                 if (newSemesterEvent.getStart().equals(classroomEvent.getStart()) &&
@@ -177,6 +178,7 @@ public class SemesterClassesController {
             }
         }
 
+        //Check for collision with lecturers
         List<String> lecturerNames = List.of(lecturers.split(","));
         lecturerNames = separateTitleFromLecturer(lecturerNames);
         List<SemesterClasses> allClasses = semesterClassesService.findAll();
@@ -197,6 +199,17 @@ public class SemesterClassesController {
             }
         }
 
+        //Check for collision with group
+        List<SemesterClasses> classesByGroupAndMajor = semesterClassesService.findAllClassesByGroupAndMajor(group, major);
+        List<CalendarEvent> calendarEventsByGroup = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByGroupAndMajor, classesLecturersList);
+        for (CalendarEvent newSemesterEvent : calendarEventsByNewSemesterClasses) {
+            for (CalendarEvent groupEvent : calendarEventsByGroup) {
+                if (newSemesterEvent.getStart().equals(groupEvent.getStart()) &&
+                        newSemesterEvent.getEnd().equals(groupEvent.getEnd())) {
+                    return true;
+                }
+            }
+        }
 
         return false;
     }

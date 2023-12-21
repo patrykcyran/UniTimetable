@@ -35,5 +35,7 @@ public interface SemesterClassesRepository extends JpaRepository<SemesterClasses
 
     List<SemesterClasses> findByClasses_DepartmentClassroom_Classroom_ClassroomNameAndClasses_DepartmentClassroom_Department_DepartmentName(String classroomName, String departmentName);
 
+    List<SemesterClasses> findByClasses_MajorGroup_Group_GroupNameAndClasses_MajorGroup_Major_MajorName(String groupName, String majorName);
+
 
 }
