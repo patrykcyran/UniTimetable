@@ -30,4 +30,10 @@ public interface PartTimeSemesterClassesRepository extends JpaRepository<PartTim
     int updateSemesterAndClassesAndClassesDateByPartTimeSemesterClassesId(Semester semester, Classes classes, LocalDate classesDate, Long partTimeSemesterClassesId);
 
     List<PartTimeSemesterClasses> findBySemester_AcademicYearAndSemester_SemesterType(String academicYear, SemesterType semesterType);
+
+    List<PartTimeSemesterClasses> findByClasses_DepartmentClassroom_Classroom_ClassroomNameAndClasses_DepartmentClassroom_Department_DepartmentName(String classroomName, String departmentName);
+
+    List<PartTimeSemesterClasses> findByClasses_MajorGroup_Group_GroupNameAndClasses_MajorGroup_Major_MajorName(String groupName, String majorName);
+
+
 }

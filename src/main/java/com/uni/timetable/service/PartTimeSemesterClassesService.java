@@ -46,6 +46,16 @@ public class PartTimeSemesterClassesService {
         return partTimeSemesterClasses;
     }
 
+    public PartTimeSemesterClasses createPartTimeSemesterClasses(Semester semester,
+                                                               Classes classes,
+                                                               LocalDate classesDate) {
+        return PartTimeSemesterClasses.builder()
+                .semester(semester)
+                .classes(classes)
+                .classesDate(classesDate)
+                .build();
+    }
+
     public PartTimeSemesterClasses savePartTimeSemesterClasses(Semester semester,
                                                Classes classes,
                                                LocalDate classesDate) {
@@ -72,5 +82,13 @@ public class PartTimeSemesterClassesService {
     public void update(PartTimeSemesterClasses partTimeSemesterClasses) {
         log.debug("Updating part time semester classes {}", partTimeSemesterClasses);
         partTimeSemesterClassesRepository.updateSemesterAndClassesAndClassesDateByPartTimeSemesterClassesId(partTimeSemesterClasses.getSemester(), partTimeSemesterClasses.getClasses(), partTimeSemesterClasses.getClassesDate(), partTimeSemesterClasses.getPartTimeSemesterClassesId());
+    }
+
+    public List<PartTimeSemesterClasses> findAllPartTimeClassesByClassroomAndDepartment(String classroom, String department) {
+        return partTimeSemesterClassesRepository.findByClasses_DepartmentClassroom_Classroom_ClassroomNameAndClasses_DepartmentClassroom_Department_DepartmentName(classroom, department);
+    }
+
+    public List<PartTimeSemesterClasses> findAllPartTimeClassesByGroupAndMajor(String group, String major) {
+        return partTimeSemesterClassesRepository.findByClasses_MajorGroup_Group_GroupNameAndClasses_MajorGroup_Major_MajorName(group, major);
     }
 }

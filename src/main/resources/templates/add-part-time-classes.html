@@ -72,6 +72,113 @@
             $('.selectpicker').selectpicker();
         });
     </script>
+
+    <script>
+        $(document).ready(function () {
+            function handleButtonClick() {
+                var classesType = $('#classesType').val();
+                var classesDate = $('#classesDate').val();
+                var startTime = $('#startTime').val();
+                var endTime = $('#endTime').val();
+                var department = $('#department').val();
+                var classroom = $('#classroom').val();
+                var major = $('#major').val();
+                var studyYear = $('#studyYear').val();
+                var group = $('#group').val();
+                var subject = $('#subject').val();
+                var semesterType = $('#semesterType').val();
+                var isDiploma = $('#isDiploma').val();
+                var academicYear = $('#academicYear').val();
+                var lecturers = $('#lecturers').val().join(',');
+
+                // Make an AJAX request to a new endpoint
+                $.ajax({
+                    type: 'GET',
+                    url: '/semesterClasses/check-part-time-classes-collision',
+                    data:{
+                        classesType: classesType,
+                        classesDate: classesDate,
+                        startTime: startTime,
+                        endTime: endTime,
+                        department: department,
+                        classroom: classroom,
+                        major: major,
+                        studyYear: studyYear,
+                        group: group,
+                        subject: subject,
+                        semesterType: semesterType,
+                        isDiploma: isDiploma,
+                        academicYear: academicYear,
+                        lecturers: lecturers,
+                    },
+                    success: function (response) {
+                        // Check the response and display window.confirm or proceed further
+                        if (response === true) {
+                            var confirmed = window.confirm('Zajęcia kolidują z aktualnym planem zajęć, na pewno chcesz kontynuować?');
+                            if (confirmed) {
+                                // User confirmed, proceed with another post request or any other action
+                                // Example: Make another post request with form data
+                                $.ajax({
+                                    type: 'POST',
+                                    url: '/add-part-time-classes',
+                                    data: {
+                                        classesType: classesType,
+                                        classesDate: classesDate,
+                                        startTime: startTime,
+                                        endTime: endTime,
+                                        department: department,
+                                        classroom: classroom,
+                                        major: major,
+                                        studyYear: studyYear,
+                                        group: group,
+                                        subject: subject,
+                                        semesterType: semesterType,
+                                        isDiploma: isDiploma,
+                                        academicYear: academicYear,
+                                        lecturers: lecturers,
+                                    },
+                                });
+                            } else {
+                                // User declined, you can handle this case if needed
+                            }
+                        } else {
+                            $.ajax({
+                                type: 'POST',
+                                url: '/add-part-time-classes',
+                                data: {
+                                    classesType: classesType,
+                                    classesDate: classesDate,
+                                    startTime: startTime,
+                                    endTime: endTime,
+                                    department: department,
+                                    classroom: classroom,
+                                    major: major,
+                                    studyYear: studyYear,
+                                    group: group,
+                                    subject: subject,
+                                    semesterType: semesterType,
+                                    isDiploma: isDiploma,
+                                    academicYear: academicYear,
+                                    lecturers: lecturers,
+                                },
+                            });
+                        }
+                    },
+                    error: function () {
+                        // Handle error if the AJAX request fails
+                    }
+                });
+            }
+
+            $('#submit-classes-button').on('click', function () {
+                handleButtonClick();
+            });
+
+            $('#add-part-time-classes-form').on('submit', function (event) {
+                event.preventDefault();
+            });
+        });
+    </script>
 </head>
 
 <body>
@@ -81,7 +188,7 @@
     <div class="col-md-6 col-sm-8">
         <div class="login-form">
             <h2 class="text-center">Dodaj zajęcia niestacjonarne</h2>
-            <form th:action="@{/add-part-time-classes}" method="post" action="#">
+            <form th:action="@{/add-part-time-classes}" method="post" action="#" id="add-part-time-classes-form">
                 <div class="form-group">
                     <label for="classesType">Typ zajęć:</label>
                     <select class="form-control" id="classesType" name="classesType">
@@ -161,7 +268,7 @@
                         <option th:each="lecturers: ${LecturersNames}" th:value="${lecturers}" th:text="${lecturers}"></option>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-primary btn-block">Dodaj</button>
+                <button id="submit-classes-button" type="submit" class="btn btn-primary btn-block">Dodaj</button>
             </form>
         </div>
     </div>
