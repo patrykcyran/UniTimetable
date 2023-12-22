@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.DayOfWeek;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -424,5 +425,29 @@ public class SemesterClassesController {
             partTimeSemesterClasses.add(partTimeSemesterClassesService.createPartTimeSemesterClasses(semester, classes, classesDate));
         }
         return partTimeSemesterClasses;
+    }
+
+    public Double getSummedAmountOfHoursForPartTimeStudies(String major,
+                                                           String studyYear,
+                                                           String group,
+                                                           String subjectName,
+                                                           String semesterType,
+                                                           String isDiplomaString,
+                                                           String academicYear) {
+
+        Double summedHours = 0d;
+        Boolean isDiploma = "Tak".equals(isDiplomaString);
+        List<PartTimeSemesterClasses> partTimeSemesterClassesList = partTimeSemesterClassesService.findAllToGetHoursWhenAdding(major, Integer.parseInt(studyYear), group, subjectName, SemesterType.fromDescription(semesterType), isDiploma, academicYear);
+
+        for (PartTimeSemesterClasses partTimeSemesterClasses : partTimeSemesterClassesList) {
+            summedHours += calculateHoursFromClasses(partTimeSemesterClasses);
+        }
+
+        return summedHours;
+    }
+
+    private Double calculateHoursFromClasses(PartTimeSemesterClasses partTimeSemesterClasses) {
+        Duration duration = Duration.between(partTimeSemesterClasses.getClasses().getStartTime(), partTimeSemesterClasses.getClasses().getEndTime());
+        return (double) duration.toMinutes()/60;
     }
 }

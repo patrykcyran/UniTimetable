@@ -38,6 +38,7 @@ public class FrontController {
     ClassesLecturersService classesLecturersService;
     OneTimeEventController oneTimeEventController;
     LecturerNonAvailableController lecturerNonAvailableController;
+    SemesterClassesController semesterClassesController;
     AdminService adminService;
 
     @Autowired
@@ -58,6 +59,7 @@ public class FrontController {
                            ClassesLecturersService classesLecturersService,
                            OneTimeEventController oneTimeEventController,
                            LecturerNonAvailableController lecturerNonAvailableController,
+                           SemesterClassesController semesterClassesController,
                            AdminService adminService) {
         this.lecturerService = lecturerService;
         this.semesterService = semesterService;
@@ -74,6 +76,7 @@ public class FrontController {
         this.classesLecturersService = classesLecturersService;
         this.oneTimeEventController = oneTimeEventController;
         this.lecturerNonAvailableController = lecturerNonAvailableController;
+        this.semesterClassesController = semesterClassesController;
         this.adminService = adminService;
     }
 
@@ -222,7 +225,7 @@ public class FrontController {
         model.addAttribute("Classrooms", departmentClassroomService.findAllClassroomsForDepartment(selectedDepartment));
         model.addAttribute("Majors", majorService.findAllFullTimeMajorNames());
         model.addAttribute("StudyYears", majorGroupService.findAll().stream().map(MajorGroup::getStudyYear).distinct().toList());
-        model.addAttribute("Groups", majorGroupService.findMajorGroupsByMajor(selectedMajor).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
+        model.addAttribute("Groups", majorGroupService.findMajorGroupsByMajor(selectedMajor).stream().filter(majorGroup -> majorGroup.getMajor().getStudyType().equals(StudyType.FULL_TIME)).map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
         model.addAttribute("Subjects", subjectService.findAllSubjectNames());
         model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
         model.addAttribute("AcademicYears", semesterService.findAllAcademicYears());
@@ -425,20 +428,34 @@ public class FrontController {
     @GetMapping("/add-part-time-classes")
     public String addPartTimeClassesView(@RequestParam(required = false, defaultValue = "Wydział Inżynierii Elektrycznej i Komputerowej") String selectedDepartment,
                                  @RequestParam(required = false, defaultValue = "Informatyka w Inżynierii Komputerowej") String selectedMajor,
+                                 @RequestParam(required = false, defaultValue = "1") String selectedStudyYear,
+                                 @RequestParam(required = false, defaultValue = "42i") String selectedGroup,
+                                 @RequestParam(required = false, defaultValue = "Zaawansowane Bazy Danych") String selectedSubject,
+                                 @RequestParam(required = false, defaultValue = "Zimowy") String selectedSemesterType,
+                                 @RequestParam(required = false, defaultValue = "Nie") String selectedIsDiploma,
+                                 @RequestParam(required = false, defaultValue = "23-24") String selectedAcademicYear,
                                  Model model) {
         model.addAttribute("selectedDepartment", selectedDepartment);
         model.addAttribute("selectedMajor", selectedMajor);
+        model.addAttribute("selectedStudyYear", Integer.parseInt(selectedStudyYear));
+        model.addAttribute("selectedGroup", selectedGroup);
+        model.addAttribute("selectedSubject", selectedSubject);
+        model.addAttribute("selectedSemesterType", selectedSemesterType);
+        model.addAttribute("selectedIsDiploma", selectedIsDiploma);
+        model.addAttribute("selectedAcademicYear", selectedAcademicYear);
         model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
         model.addAttribute("ClassesTypes", Arrays.stream(ClassesType.values()).map(classesType -> classesType.description));
         model.addAttribute("Departments", departmentService.findAllDepartmentNames());
         model.addAttribute("Classrooms", departmentClassroomService.findAllClassroomsForDepartment(selectedDepartment));
         model.addAttribute("Majors", majorService.findAllPartTimeMajorNames());
         model.addAttribute("StudyYears", majorGroupService.findAll().stream().map(MajorGroup::getStudyYear).distinct().toList());
-        model.addAttribute("Groups", majorGroupService.findMajorGroupsByMajor(selectedMajor).stream().map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
+        model.addAttribute("Groups", majorGroupService.findMajorGroupsByMajor(selectedMajor).stream().filter(majorGroup -> majorGroup.getMajor().getStudyType().equals(StudyType.PART_TIME)).map(majorGroup -> majorGroup.getGroup().getGroupName()).distinct().toList());
         model.addAttribute("Subjects", subjectService.findAllSubjectNames());
         model.addAttribute("SemesterTypes", Arrays.stream(SemesterType.values()).map(SemesterType::getDescription));
         model.addAttribute("AcademicYears", semesterService.findAllAcademicYears());
         model.addAttribute("LecturersNames", lecturerService.findAllNames());
+        model.addAttribute("SummedHours", semesterClassesController.getSummedAmountOfHoursForPartTimeStudies(selectedMajor, selectedStudyYear, selectedGroup, selectedSubject, selectedSemesterType, selectedIsDiploma, selectedAcademicYear));
+
         return "add-part-time-classes";
     }
 

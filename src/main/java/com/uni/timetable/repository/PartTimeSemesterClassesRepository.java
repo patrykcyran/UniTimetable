@@ -35,5 +35,7 @@ public interface PartTimeSemesterClassesRepository extends JpaRepository<PartTim
 
     List<PartTimeSemesterClasses> findByClasses_MajorGroup_Group_GroupNameAndClasses_MajorGroup_Major_MajorName(String groupName, String majorName);
 
+    List<PartTimeSemesterClasses> findByClasses_MajorGroup_Major_MajorNameAndClasses_MajorGroup_StudyYearAndClasses_MajorGroup_Group_GroupNameAndClasses_Subject_SubjectNameAndSemester_SemesterTypeAndSemester_IsDiplomaAndSemester_AcademicYear(String majorName, Integer studyYear, String groupName, String subjectName, SemesterType semesterType, Boolean isDiploma, String academicYear);
+
 
 }

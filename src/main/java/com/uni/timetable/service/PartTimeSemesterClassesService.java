@@ -91,4 +91,8 @@ public class PartTimeSemesterClassesService {
     public List<PartTimeSemesterClasses> findAllPartTimeClassesByGroupAndMajor(String group, String major) {
         return partTimeSemesterClassesRepository.findByClasses_MajorGroup_Group_GroupNameAndClasses_MajorGroup_Major_MajorName(group, major);
     }
+
+    public List<PartTimeSemesterClasses> findAllToGetHoursWhenAdding(String majorName, Integer studyYear, String groupName, String subjectName, SemesterType semesterType, Boolean isDiploma, String academicYear) {
+        return partTimeSemesterClassesRepository.findByClasses_MajorGroup_Major_MajorNameAndClasses_MajorGroup_StudyYearAndClasses_MajorGroup_Group_GroupNameAndClasses_Subject_SubjectNameAndSemester_SemesterTypeAndSemester_IsDiplomaAndSemester_AcademicYear(majorName, studyYear, groupName, subjectName, semesterType, isDiploma, academicYear);
+    }
 }

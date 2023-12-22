@@ -52,21 +52,188 @@
         $(document).ready(function () {
             // Attach a change event handler to the department selectpicker
             $('#department').on('change', function () {
-                // Get the selected value
-                var selectedDepartment = $(this).val();
+                var selectedDepartment = $('#department').val();
+                var selectedMajor = $('#major').val();
+                var selectedStudyYear = $('#studyYear').val();
+                var selectedGroup = $('#group').val();
+                var selectedSubject = $('#subject').val();
+                var selectedSemesterType = $('#semesterType').val();
+                var selectedIsDiploma = $('input[name="isDiploma"]:checked').val();
+                var selectedAcademicYear = $('#academicYear').val();
 
-                // Make a GET request to the current URL with the selected department as a query parameter
-                // This will trigger a server-side action, and the view will be updated accordingly
-                window.location.href = window.location.pathname + '?selectedDepartment=' + selectedDepartment;
+                window.location.href = window.location.pathname + '?selectedDepartment=' + selectedDepartment +
+                    '&selectedMajor=' + selectedMajor +
+                    '&selectedStudyYear=' + selectedStudyYear +
+                    '&selectedGroup=' + selectedGroup +
+                    '&selectedSubject=' + selectedSubject +
+                    '&selectedSemesterType=' + selectedSemesterType +
+                    '&selectedIsDiploma=' + selectedIsDiploma +
+                    '&selectedAcademicYear=' + selectedAcademicYear;
             });
 
             $('#major').on('change', function () {
-                // Get the selected value
-                var selectedMajor = $(this).val();
+                var selectedDepartment = $('#department').val();
+                var selectedMajor = $('#major').val();
+                var selectedStudyYear = $('#studyYear').val();
+                var selectedGroup = $('#group').val();
+                var selectedSubject = $('#subject').val();
+                var selectedSemesterType = $('#semesterType').val();
+                var selectedIsDiploma = $('input[name="isDiploma"]:checked').val();
+                var selectedAcademicYear = $('#academicYear').val();
 
-                // Make a GET request to the current URL with the selected department as a query parameter
-                // This will trigger a server-side action, and the view will be updated accordingly
-                window.location.href = window.location.pathname + '?selectedMajor=' + selectedMajor;
+                window.location.href = window.location.pathname + '?selectedDepartment=' + selectedDepartment +
+                    '&selectedMajor=' + selectedMajor +
+                    '&selectedStudyYear=' + selectedStudyYear +
+                    '&selectedGroup=' + selectedGroup +
+                    '&selectedSubject=' + selectedSubject +
+                    '&selectedSemesterType=' + selectedSemesterType +
+                    '&selectedIsDiploma=' + selectedIsDiploma +
+                    '&selectedAcademicYear=' + selectedAcademicYear;
+            });
+
+            $('#studyYear').on('change', function () {
+                var selectedDepartment = $('#department').val();
+                var selectedMajor = $('#major').val();
+                var selectedStudyYear = $('#studyYear').val();
+                var selectedGroup = $('#group').val();
+                var selectedSubject = $('#subject').val();
+                var selectedSemesterType = $('#semesterType').val();
+                var selectedIsDiploma = $('input[name="isDiploma"]:checked').val();
+                var selectedAcademicYear = $('#academicYear').val();
+
+                window.location.href = window.location.pathname + '?selectedDepartment=' + selectedDepartment +
+                    '&selectedMajor=' + selectedMajor +
+                    '&selectedStudyYear=' + selectedStudyYear +
+                    '&selectedGroup=' + selectedGroup +
+                    '&selectedSubject=' + selectedSubject +
+                    '&selectedSemesterType=' + selectedSemesterType +
+                    '&selectedIsDiploma=' + selectedIsDiploma +
+                    '&selectedAcademicYear=' + selectedAcademicYear;
+            });
+
+
+            $('#group').on('change', function () {
+                var selectedDepartment = $('#department').val();
+                var selectedMajor = $('#major').val();
+                var selectedStudyYear = $('#studyYear').val();
+                var selectedGroup = $('#group').val();
+                var selectedSubject = $('#subject').val();
+                var selectedSemesterType = $('#semesterType').val();
+                var selectedIsDiploma = $('input[name="isDiploma"]:checked').val();
+                var selectedAcademicYear = $('#academicYear').val();
+
+                window.location.href = window.location.pathname + '?selectedDepartment=' + selectedDepartment +
+                    '&selectedMajor=' + selectedMajor +
+                    '&selectedStudyYear=' + selectedStudyYear +
+                    '&selectedGroup=' + selectedGroup +
+                    '&selectedSubject=' + selectedSubject +
+                    '&selectedSemesterType=' + selectedSemesterType +
+                    '&selectedIsDiploma=' + selectedIsDiploma +
+                    '&selectedAcademicYear=' + selectedAcademicYear;
+            });
+
+
+            $('#subject').on('change', function () {
+                var selectedDepartment = $('#department').val();
+                var selectedMajor = $('#major').val();
+                var selectedStudyYear = $('#studyYear').val();
+                var selectedGroup = $('#group').val();
+                var selectedSubject = $('#subject').val();
+                var selectedSemesterType = $('#semesterType').val();
+                var selectedIsDiploma = $('input[name="isDiploma"]:checked').val();
+                var selectedAcademicYear = $('#academicYear').val();
+
+                window.location.href = window.location.pathname + '?selectedDepartment=' + selectedDepartment +
+                    '&selectedMajor=' + selectedMajor +
+                    '&selectedStudyYear=' + selectedStudyYear +
+                    '&selectedGroup=' + selectedGroup +
+                    '&selectedSubject=' + selectedSubject +
+                    '&selectedSemesterType=' + selectedSemesterType +
+                    '&selectedIsDiploma=' + selectedIsDiploma +
+                    '&selectedAcademicYear=' + selectedAcademicYear;
+            });
+
+
+            $('#semesterType').on('change', function () {
+                var selectedDepartment = $('#department').val();
+                var selectedMajor = $('#major').val();
+                var selectedStudyYear = $('#studyYear').val();
+                var selectedGroup = $('#group').val();
+                var selectedSubject = $('#subject').val();
+                var selectedSemesterType = $('#semesterType').val();
+                var selectedIsDiploma = $('input[name="isDiploma"]:checked').val();
+                var selectedAcademicYear = $('#academicYear').val();
+
+                window.location.href = window.location.pathname + '?selectedDepartment=' + selectedDepartment +
+                    '&selectedMajor=' + selectedMajor +
+                    '&selectedStudyYear=' + selectedStudyYear +
+                    '&selectedGroup=' + selectedGroup +
+                    '&selectedSubject=' + selectedSubject +
+                    '&selectedSemesterType=' + selectedSemesterType +
+                    '&selectedIsDiploma=' + selectedIsDiploma +
+                    '&selectedAcademicYear=' + selectedAcademicYear;
+            });
+
+
+            $('#isDiploma').on('change', function () {
+                var selectedDepartment = $('#department').val();
+                var selectedMajor = $('#major').val();
+                var selectedStudyYear = $('#studyYear').val();
+                var selectedGroup = $('#group').val();
+                var selectedSubject = $('#subject').val();
+                var selectedSemesterType = $('#semesterType').val();
+                var selectedIsDiploma = $('input[name="isDiploma"]:checked').val();
+                var selectedAcademicYear = $('#academicYear').val();
+
+                window.location.href = window.location.pathname + '?selectedDepartment=' + selectedDepartment +
+                    '&selectedMajor=' + selectedMajor +
+                    '&selectedStudyYear=' + selectedStudyYear +
+                    '&selectedGroup=' + selectedGroup +
+                    '&selectedSubject=' + selectedSubject +
+                    '&selectedSemesterType=' + selectedSemesterType +
+                    '&selectedIsDiploma=' + selectedIsDiploma +
+                    '&selectedAcademicYear=' + selectedAcademicYear;
+            });
+
+            $('#isDiplomaFalse').on('change', function () {
+                var selectedDepartment = $('#department').val();
+                var selectedMajor = $('#major').val();
+                var selectedStudyYear = $('#studyYear').val();
+                var selectedGroup = $('#group').val();
+                var selectedSubject = $('#subject').val();
+                var selectedSemesterType = $('#semesterType').val();
+                var selectedIsDiploma = $('input[name="isDiploma"]:checked').val();
+                var selectedAcademicYear = $('#academicYear').val();
+
+                window.location.href = window.location.pathname + '?selectedDepartment=' + selectedDepartment +
+                    '&selectedMajor=' + selectedMajor +
+                    '&selectedStudyYear=' + selectedStudyYear +
+                    '&selectedGroup=' + selectedGroup +
+                    '&selectedSubject=' + selectedSubject +
+                    '&selectedSemesterType=' + selectedSemesterType +
+                    '&selectedIsDiploma=' + selectedIsDiploma +
+                    '&selectedAcademicYear=' + selectedAcademicYear;
+            });
+
+
+            $('#academicYear').on('change', function () {
+                var selectedDepartment = $('#department').val();
+                var selectedMajor = $('#major').val();
+                var selectedStudyYear = $('#studyYear').val();
+                var selectedGroup = $('#group').val();
+                var selectedSubject = $('#subject').val();
+                var selectedSemesterType = $('#semesterType').val();
+                var selectedIsDiploma = $('input[name="isDiploma"]:checked').val();
+                var selectedAcademicYear = $('#academicYear').val();
+
+                window.location.href = window.location.pathname + '?selectedDepartment=' + selectedDepartment +
+                    '&selectedMajor=' + selectedMajor +
+                    '&selectedStudyYear=' + selectedStudyYear +
+                    '&selectedGroup=' + selectedGroup +
+                    '&selectedSubject=' + selectedSubject +
+                    '&selectedSemesterType=' + selectedSemesterType +
+                    '&selectedIsDiploma=' + selectedIsDiploma +
+                    '&selectedAcademicYear=' + selectedAcademicYear;
             });
 
             $('.selectpicker').selectpicker();
@@ -189,6 +356,9 @@
         <div class="login-form">
             <h2 class="text-center">Dodaj zajęcia niestacjonarne</h2>
             <form th:action="@{/add-part-time-classes}" method="post" action="#" id="add-part-time-classes-form">
+                <div>
+                    <p>Łączna liczba godzin: <span th:text="${SummedHours}"></span></p>
+                </div>
                 <div class="form-group">
                     <label for="classesType">Typ zajęć:</label>
                     <select class="form-control" id="classesType" name="classesType">
@@ -228,38 +398,38 @@
                 <div class="form-group">
                     <label for="studyYear">Rok studiów:</label>
                     <select type="text" class="form-control" id="studyYear" name="studyYear">
-                        <option th:each="studyYear: ${StudyYears}" th:value="${studyYear}" th:text="${studyYear}"></option>
+                        <option th:each="studyYear: ${StudyYears}" th:value="${studyYear}" th:text="${studyYear}" th:selected="${studyYear == selectedStudyYear}"></option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="group">Grupa:</label>
                     <select type="text" class="form-control" id="group" name="group">
-                        <option th:each="group: ${Groups}" th:value="${group}" th:text="${group}"></option>
+                        <option th:each="group: ${Groups}" th:value="${group}" th:text="${group}" th:selected="${group == selectedGroup}"></option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="subject">Przedmiot:</label>
                     <select type="text" class="form-control" id="subject" name="subject">
-                        <option th:each="subject: ${Subjects}" th:value="${subject}" th:text="${subject}"></option>
+                        <option th:each="subject: ${Subjects}" th:value="${subject}" th:text="${subject}" th:selected="${subject == selectedSubject}"></option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="semesterType">Semestr:</label>
                     <select type="text" class="form-control" id="semesterType" name="semesterType">
-                        <option th:each="semesterType: ${SemesterTypes}" th:value="${semesterType}" th:text="${semesterType}"></option>
+                        <option th:each="semesterType: ${SemesterTypes}" th:value="${semesterType}" th:text="${semesterType}" th:selected="${semesterType == selectedSemesterType}"></option>
                     </select>
                 </div>
                 <div class="form-group">
                     <label for="isDiploma">Semestr dyplomowy:</label>
                     <div>
-                        <label><input type="radio" name="isDiploma" value="Nie" checked> Nie</label>
-                        <label><input type="radio" id="isDiploma" name="isDiploma" value="Tak" > Tak</label>
+                        <label><input type="radio" id="isDiplomaFalse" name="isDiploma" value="Nie" th:checked="${selectedIsDiploma == 'Nie'}"> Nie</label>
+                        <label><input type="radio" id="isDiploma" name="isDiploma" value="Tak" th:checked="${selectedIsDiploma == 'Tak'}"> Tak</label>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="academicYear">Rok akademicki:</label>
                     <select type="text" class="form-control" id="academicYear" name="academicYear">
-                        <option th:each="academicYear: ${AcademicYears}" th:value="${academicYear}" th:text="${academicYear}"></option>
+                        <option th:each="academicYear: ${AcademicYears}" th:value="${academicYear}" th:text="${academicYear}" th:selected="${academicYear == selectedAcademicYear}"></option>
                     </select>
                 </div>
                 <div class="form-group">
