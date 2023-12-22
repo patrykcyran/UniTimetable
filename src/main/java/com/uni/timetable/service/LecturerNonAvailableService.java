@@ -26,6 +26,10 @@ public class LecturerNonAvailableService {
         return lecturersNonAvailable;
     }
 
+    public List<LecturerNonAvailable> findAllByLecturerName(String lecturerName) {
+        return lecturerNonAvailableRepository.findByLecturer_Name(lecturerName);
+    }
+
     public LecturerNonAvailable saveLecturerNonAvailable(LocalDate eventDate,
                                                          LocalTime startTime,
                                                          LocalTime endTime,

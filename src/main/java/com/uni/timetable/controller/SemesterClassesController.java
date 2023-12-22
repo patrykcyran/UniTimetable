@@ -2,6 +2,7 @@ package com.uni.timetable.controller;
 
 import com.uni.timetable.exception.TimetableException;
 import com.uni.timetable.model.*;
+import com.uni.timetable.repository.LecturerNonAvailableRepository;
 import com.uni.timetable.service.*;
 import com.uni.timetable.utils.OneTimeEventToCalendarEventMapper;
 import com.uni.timetable.utils.SemesterClassesToCalendarEventMapper;
@@ -39,6 +40,7 @@ public class SemesterClassesController {
     private final DepartmentService departmentService;
     private final MajorService majorService;
     private final GroupService groupService;
+    private final LecturerNonAvailableService lecturerNonAvailableService;
 
     public SemesterClassesController(SemesterClassesService semesterClassesService,
                                      PartTimeSemesterClassesService partTimeSemesterClassesService,
@@ -52,7 +54,8 @@ public class SemesterClassesController {
                                      LecturerService lecturerService,
                                      DepartmentService departmentService,
                                      MajorService majorService,
-                                     GroupService groupService) {
+                                     GroupService groupService,
+                                     LecturerNonAvailableService lecturerNonAvailableService) {
         this.semesterClassesService = semesterClassesService;
         this.partTimeSemesterClassesService = partTimeSemesterClassesService;
         this.classesLecturersService = classesLecturersService;
@@ -66,6 +69,7 @@ public class SemesterClassesController {
         this.departmentService = departmentService;
         this.majorService = majorService;
         this.groupService = groupService;
+        this.lecturerNonAvailableService = lecturerNonAvailableService;
     }
 
     @GetMapping("/all")
@@ -95,6 +99,12 @@ public class SemesterClassesController {
         List<ClassesLecturers> classesLecturersList = classesLecturersService.findAll();
         List<CalendarEvent> calendarEvents = SemesterClassesToCalendarEventMapper.mapPartTimeClassesToCalendarEvent(partTimeSemesterClasses, classesLecturersList);
         calendarEvents.addAll(SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(fullTimeClasses, classesLecturersList));
+
+        //Add lecturer non available
+        String lecturerNameWithoutTitle = separateTitleFromLecturer(List.of(lecturerName)).get(0);
+        List<LecturerNonAvailable> lecturersNonAvailable = lecturerNonAvailableService.findAllByLecturerName(lecturerNameWithoutTitle);
+        calendarEvents.addAll(OneTimeEventToCalendarEventMapper.mapLecturersNonAvailableToCalendarEvents(lecturersNonAvailable));
+
         return calendarEvents;
     }
 
