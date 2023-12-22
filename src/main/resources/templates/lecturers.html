@@ -148,10 +148,30 @@
                 },
                 eventClick: function (event, element) {
                     if ([[${isAdminLogged}]]) {
-                        var confirmation = window.confirm('Chcesz edytować wybrane zajęcia?');
-                        if (confirmation) {
-                            var editPageUrl = "/modify-classes?eventId=" + event.eventId + "&studyType=" + event.studyType
-                            window.location.href = editPageUrl;
+                        if (!event.studyType) {
+                            var confirmation = window.confirm('Chcesz usunac wybraną niedostępność?');
+                            if (confirmation) {
+                                var deleteUrl = "/lecturer-non-available/delete/" + event.eventId; // Replace with your actual endpoint
+                                $.ajax({
+                                    url: deleteUrl,
+                                    type: 'DELETE',
+                                    success: function (result) {
+                                        // Handle success, if needed
+                                        console.log(result);
+                                        location.reload();
+                                    },
+                                    error: function (error) {
+                                        // Handle error, if needed
+                                        console.error(error);
+                                    }
+                                });
+                            }
+                        } else {
+                            var confirmation = window.confirm('Chcesz edytować wybrane zajęcia?');
+                            if (confirmation) {
+                                var editPageUrl = "/modify-classes?eventId=" + event.eventId + "&studyType=" + event.studyType
+                                window.location.href = editPageUrl;
+                            }
                         }
                     }
                 },

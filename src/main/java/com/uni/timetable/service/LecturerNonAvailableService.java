@@ -45,4 +45,8 @@ public class LecturerNonAvailableService {
         lecturerNonAvailableRepository.save(lecturerNonAvailable);
         return lecturerNonAvailable;
     }
+
+    public void deleteLecturerNonAvailableById(Long id) {
+        lecturerNonAvailableRepository.deleteById(id);
+    }
 }

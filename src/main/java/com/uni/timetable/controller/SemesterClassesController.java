@@ -200,6 +200,11 @@ public class SemesterClassesController {
                             .anyMatch(classes -> classes.getClassesId().equals(sc.getClasses().getClassesId()))).toList();
             List<CalendarEvent> calendarEventsByLecturer = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByClassroomAndDepartment, classesLecturersList);
 
+
+            //Check fo collision with lecturers non-available
+            List<LecturerNonAvailable> lecturerNonAvailableList = lecturerNonAvailableService.findAllByLecturerName(lecturer);
+            List<CalendarEvent> calendarEventsByLecturerNonAvailable = OneTimeEventToCalendarEventMapper.mapLecturersNonAvailableToCalendarEvents(lecturerNonAvailableList);
+
             for (CalendarEvent newSemesterEvent : calendarEventsByNewSemesterClasses) {
                 for (CalendarEvent lecturerEvent : calendarEventsByLecturer) {
                     if (newSemesterEvent.getStart().equals(lecturerEvent.getStart()) &&
@@ -207,7 +212,15 @@ public class SemesterClassesController {
                         return true;
                     }
                 }
+                for (CalendarEvent lecturerNonAvailableEvent : calendarEventsByLecturerNonAvailable) {
+                    if (newSemesterEvent.getStart().equals(lecturerNonAvailableEvent.getStart()) &&
+                            newSemesterEvent.getEnd().equals(lecturerNonAvailableEvent.getEnd())) {
+                        return true;
+                    }
+                }
             }
+
+
         }
 
         //Check for collision with group
@@ -324,10 +337,21 @@ public class SemesterClassesController {
                             .anyMatch(classes -> classes.getClassesId().equals(sc.getClasses().getClassesId()))).toList();
             List<CalendarEvent> calendarEventsByLecturer = SemesterClassesToCalendarEventMapper.mapPartTimeClassesToCalendarEvent(classesByClassroomAndDepartment, classesLecturersList);
 
+
+            //Check fo collision with lecturers non-available
+            List<LecturerNonAvailable> lecturerNonAvailableList = lecturerNonAvailableService.findAllByLecturerName(lecturer);
+            List<CalendarEvent> calendarEventsByLecturerNonAvailable = OneTimeEventToCalendarEventMapper.mapLecturersNonAvailableToCalendarEvents(lecturerNonAvailableList);
+
             for (CalendarEvent newSemesterEvent : calendarEventsByNewSemesterClasses) {
                 for (CalendarEvent lecturerEvent : calendarEventsByLecturer) {
                     if (newSemesterEvent.getStart().equals(lecturerEvent.getStart()) &&
                             newSemesterEvent.getEnd().equals(lecturerEvent.getEnd())) {
+                        return true;
+                    }
+                }
+                for (CalendarEvent lecturerNonAvailableEvent : calendarEventsByLecturerNonAvailable) {
+                    if (newSemesterEvent.getStart().equals(lecturerNonAvailableEvent.getStart()) &&
+                            newSemesterEvent.getEnd().equals(lecturerNonAvailableEvent.getEnd())) {
                         return true;
                     }
                 }

@@ -6,6 +6,8 @@ import com.uni.timetable.model.Lecturer;
 import com.uni.timetable.service.LecturerNonAvailableService;
 import com.uni.timetable.service.LecturerService;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.time.LocalDate;
@@ -41,5 +43,11 @@ public class LecturerNonAvailableController {
         Lecturer lecturer = lecturerService.findLecturerByName(lecturerName);
 
         lecturerNonAvailableService.saveLecturerNonAvailable(eventDate, startTime, endTime, lecturer);
+    }
+
+    @DeleteMapping("/delete/{eventId}")
+    public String deleteEvent(@PathVariable Long eventId) {
+        lecturerNonAvailableService.deleteLecturerNonAvailableById(eventId);
+        return "lecturers";
     }
 }
