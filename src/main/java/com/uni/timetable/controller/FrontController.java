@@ -15,9 +15,10 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.DayOfWeek;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static com.uni.timetable.controller.ClassesController.separateTitleFromLecturer;
 
 @Controller
 @Slf4j
@@ -36,6 +37,7 @@ public class FrontController {
     PartTimeSemesterClassesService partTimeSemesterClassesService;
     ClassesLecturersService classesLecturersService;
     OneTimeEventController oneTimeEventController;
+    LecturerNonAvailableController lecturerNonAvailableController;
     AdminService adminService;
 
     @Autowired
@@ -55,6 +57,7 @@ public class FrontController {
                            PartTimeSemesterClassesService partTimeSemesterClassesService,
                            ClassesLecturersService classesLecturersService,
                            OneTimeEventController oneTimeEventController,
+                           LecturerNonAvailableController lecturerNonAvailableController,
                            AdminService adminService) {
         this.lecturerService = lecturerService;
         this.semesterService = semesterService;
@@ -70,6 +73,7 @@ public class FrontController {
         this.partTimeSemesterClassesService = partTimeSemesterClassesService;
         this.classesLecturersService = classesLecturersService;
         this.oneTimeEventController = oneTimeEventController;
+        this.lecturerNonAvailableController = lecturerNonAvailableController;
         this.adminService = adminService;
     }
 
@@ -480,6 +484,25 @@ public class FrontController {
         model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
         oneTimeEventController.saveOneTimeEvent(eventDate, startTime, endTime, department, classroom);
         return "add-one-time-event";
+    }
+
+    @GetMapping("/add-lecturer-non-available")
+    public String addLecturerNonAvailable(Model model) {
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
+        model.addAttribute("LecturersNames", lecturerService.findAllNames());
+        return "add-lecturer-non-available";
+    }
+
+    @PostMapping("/add-lecturer-non-available")
+    public String addLecturerNonAvailable(@RequestParam("classesDate") String eventDate,
+                                  @RequestParam("startTime") String startTime,
+                                  @RequestParam("endTime") String endTime,
+                                  @RequestParam("lecturer") String lecturer,
+                                  Model model) {
+        model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
+        String lecturerName = separateTitleFromLecturer(List.of(lecturer)).get(0);
+        lecturerNonAvailableController.saveLecturerNonAvailable(eventDate, startTime, endTime, lecturerName);
+        return "add-lecturer-non-available";
     }
 
     static String mapWeekdayToPolish(DayOfWeek dayOfWeek) {

@@ -45,6 +45,9 @@
                 <li th:if="${isAdminLogged}" class="nav-item p-3">
                     <a th:href="@{/add-one-time-event}" class="nav-link">Zarezerwuj salę</a>
                 </li>
+                <li th:if="${isAdminLogged}" class="nav-item p-3">
+                    <a th:href="@{/add-lecturer-non-available}" class="nav-link">Niedostępność prowadzącego</a>
+                </li>
             </ul>
         </div>
 
