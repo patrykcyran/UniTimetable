@@ -14,8 +14,6 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static java.util.Objects.isNull;
 
@@ -99,7 +97,7 @@ public class ClassesController {
                                     String frequencyString,
                                     String lecturersList) {
 
-        MajorGroup majorGroup = majorGroupService.findByMajorGroupAndYear(major, studyYear, group);
+        MajorGroup majorGroup = majorGroupService.findByMajorGroupYearAndType(major, studyYear, group, StudyType.FULL_TIME);
         if (isNull(majorGroup)) {
             Major majorToSave = majorService.findFullTimeMajorByName(major);
             SemesterNumber semesterNumber = resolveSemesterNumber(SemesterType.fromDescription(semesterType), Integer.valueOf(studyYear));
@@ -222,7 +220,7 @@ public class ClassesController {
                                     String academicYear,
                                     String lecturersList) {
 
-        MajorGroup majorGroup = majorGroupService.findByMajorGroupAndYear(major, studyYear, group);
+        MajorGroup majorGroup = majorGroupService.findByMajorGroupYearAndType(major, studyYear, group, StudyType.PART_TIME);
         if (isNull(majorGroup)) {
             Major majorToSave = majorService.findFullTimeMajorByName(major);
             SemesterNumber semesterNumber = resolveSemesterNumber(SemesterType.fromDescription(semesterType), Integer.valueOf(studyYear));

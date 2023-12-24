@@ -1,7 +1,6 @@
 package com.uni.timetable.service;
 
 import com.uni.timetable.model.*;
-import com.uni.timetable.repository.DepartmentRepository;
 import com.uni.timetable.repository.MajorGroupRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,8 +30,8 @@ public class MajorGroupService {
         return majorGroup;
     }
 
-    public MajorGroup findByMajorGroupAndYear(String majorName, String studyYear, String groupName) {
-        MajorGroup majorGroup = majorGroupRepository.findByMajor_MajorNameAndStudyYearAndGroup_GroupName(majorName, Integer.valueOf(studyYear), groupName);
+    public MajorGroup findByMajorGroupYearAndType(String majorName, String studyYear, String groupName, StudyType studyType) {
+        MajorGroup majorGroup = majorGroupRepository.findByMajor_MajorNameAndStudyYearAndGroup_GroupNameAndMajor_StudyType(majorName, Integer.valueOf(studyYear), groupName, studyType);
         log.debug("Major group found by major {}, year {} and group {} : {}", majorName, studyYear, groupName, majorGroup);
         return majorGroup;
     }

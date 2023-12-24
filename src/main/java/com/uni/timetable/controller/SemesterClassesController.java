@@ -2,7 +2,6 @@ package com.uni.timetable.controller;
 
 import com.uni.timetable.exception.TimetableException;
 import com.uni.timetable.model.*;
-import com.uni.timetable.repository.LecturerNonAvailableRepository;
 import com.uni.timetable.service.*;
 import com.uni.timetable.utils.OneTimeEventToCalendarEventMapper;
 import com.uni.timetable.utils.SemesterClassesToCalendarEventMapper;
@@ -17,12 +16,9 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
 import java.util.List;
 
 import static com.uni.timetable.controller.ClassesController.*;
-import static java.util.Objects.isNull;
 
 @Controller
 @RequestMapping("/semesterClasses")
@@ -255,7 +251,7 @@ public class SemesterClassesController {
                                                     String frequencyString,
                                                     String lecturersList) {
 
-        MajorGroup majorGroup = majorGroupService.findByMajorGroupAndYear(major, studyYear, group);
+        MajorGroup majorGroup = majorGroupService.findByMajorGroupYearAndType(major, studyYear, group, StudyType.FULL_TIME);
 
         Subject subject = subjectService.findSubjectByName(subjectName);
         DayOfWeek dayOfWeek = resolveDayOfWeek(dayOfWeekString);
@@ -388,7 +384,7 @@ public class SemesterClassesController {
                                                                     String isDiplomaString,
                                                                     String academicYear,
                                                                     String lecturersList) {
-        MajorGroup majorGroup = majorGroupService.findByMajorGroupAndYear(major, studyYear, group);
+        MajorGroup majorGroup = majorGroupService.findByMajorGroupYearAndType(major, studyYear, group, StudyType.PART_TIME);
 
 
         Subject subject = subjectService.findSubjectByName(subjectName);
