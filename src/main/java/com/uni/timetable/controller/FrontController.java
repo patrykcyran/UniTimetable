@@ -250,9 +250,11 @@ public class FrontController {
                              @RequestParam("academicYear") String academicYear,
                              @RequestParam("frequency") String frequency,
                              @RequestParam("lecturers") String lecturersList,
+                             @RequestParam("customStartDate") String customStartDate,
+                             @RequestParam("customEndDate") String customEndDate,
                              Model model) {
         model.addAttribute("isAdminLogged", SecurityUtils.isAdminLogged());
-        classesController.saveFullTimeClasses(classesType, dayOfWeek, startTime, endTime, department, classroom, major, studyYear, group, subject, semesterType, isDiploma, academicYear, frequency, lecturersList);
+        classesController.saveFullTimeClasses(classesType, dayOfWeek, startTime, endTime, department, classroom, major, studyYear, group, subject, semesterType, isDiploma, academicYear, frequency, lecturersList, customStartDate, customEndDate);
         return "add-full-time-classes";
     }
 

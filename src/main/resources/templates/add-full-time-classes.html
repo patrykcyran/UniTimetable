@@ -90,6 +90,8 @@
                var isDiploma = $('#isDiploma').val();
                var academicYear = $('#academicYear').val();
                var frequency = $('#frequency').val();
+               var customStartDate = $('#customStartDate').val();
+               var customEndDate = $('#customEndDate').val();
                var lecturers = $('#lecturers').val().join(',');
 
                // Make an AJAX request to a new endpoint
@@ -138,6 +140,8 @@
                                        isDiploma: isDiploma,
                                        academicYear: academicYear,
                                        frequency: frequency,
+                                       customStartDate: customStartDate,
+                                       customEndDate: customEndDate,
                                        lecturers: lecturers,
                                    },
                                });
@@ -163,6 +167,8 @@
                                    isDiploma: isDiploma,
                                    academicYear: academicYear,
                                    frequency: frequency,
+                                   customStartDate: customStartDate,
+                                   customEndDate: customEndDate,
                                    lecturers: lecturers,
                                },
                            });
@@ -180,6 +186,33 @@
 
             $('#add-full-time-classes-form').on('submit', function (event) {
                 event.preventDefault();
+            });
+        });
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            // Function to show or hide date inputs based on the selected frequency
+            function toggleDateInputs() {
+                var frequency = $('#frequency').val();
+
+                // Check if the selected frequency is equal to "Własne"
+                if (frequency === "Własne") {
+                    // Show the additional date inputs
+                    $('#customDateOptions').show();
+                } else {
+                    // Hide the additional date inputs
+                    $('#customDateOptions').hide();
+                }
+            }
+
+            // Call the function on page load
+            toggleDateInputs();
+
+            // Attach change event handler to the frequency select
+            $('#frequency').on('change', function () {
+                // Call the function when the frequency is changed
+                toggleDateInputs();
             });
         });
     </script>
@@ -273,6 +306,13 @@
                     <select type="text" class="form-control" id="frequency" name="frequency">
                         <option th:each="frequency: ${Frequencies}" th:value="${frequency}" th:text="${frequency}"></option>
                     </select>
+                </div>
+                <div id="customDateOptions" class="form-group" style="display: none;">
+                    <label for="customStartDate">Rozpoczęcie zajęć:</label>
+                    <input type="date" class="form-control" id="customStartDate" name="customStartDate">
+
+                    <label for="customEndDate">Zakończenie zajęć:</label>
+                    <input type="date" class="form-control" id="customEndDate" name="customEndDate">
                 </div>
                 <div class="form-group">
                     <label for="lecturers">Prowadzący:</label>

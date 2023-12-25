@@ -6,6 +6,7 @@ import com.uni.timetable.repository.SemesterRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -33,8 +34,21 @@ public class SemesterService {
     }
 
     public Semester findSemesterByYearTypeAndDiploma(String academicYear, SemesterType semesterType, Boolean isDiploma) {
-        Semester semester = semesterRepository.findByAcademicYearAndSemesterTypeAndIsDiploma(academicYear, semesterType, isDiploma);
+        Semester semester = semesterRepository.findByAcademicYearAndSemesterTypeAndIsDiplomaAndIsCustom(academicYear, semesterType, isDiploma, false);
         log.debug("Semester found by year {} type {} and isDiploma {} : {}", academicYear, semesterType, isDiploma, semester);
+        return semester;
+    }
+
+    public Semester saveCustomSemester(String academicYear, SemesterType semesterType, LocalDate startDate, LocalDate endDate, Boolean isDiploma) {
+        Semester semester = Semester.builder()
+                .academicYear(academicYear)
+                .semesterType(semesterType)
+                .startDate(startDate)
+                .endDate(endDate)
+                .isDiploma(isDiploma)
+                .isCustom(true)
+                .build();
+        semesterRepository.save(semester);
         return semester;
     }
 }

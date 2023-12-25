@@ -95,7 +95,9 @@ public class ClassesController {
                                     String isDiplomaString,
                                     String academicYear,
                                     String frequencyString,
-                                    String lecturersList) {
+                                    String lecturersList,
+                                    String customStartDate,
+                                    String customEndDate) {
 
         MajorGroup majorGroup = majorGroupService.findByMajorGroupYearAndType(major, studyYear, group, StudyType.FULL_TIME);
         if (isNull(majorGroup)) {
@@ -134,7 +136,15 @@ public class ClassesController {
         }
 
         Boolean isDiploma = "Tak".equals(isDiplomaString);
-        Semester semester = semesterService.findSemesterByYearTypeAndDiploma(academicYear, SemesterType.fromDescription(semesterType), isDiploma);
+
+        Semester semester;
+        if (!customStartDate.isEmpty() && !customEndDate.isEmpty()) {
+            LocalDate startDate = LocalDate.parse(customStartDate);
+            LocalDate endDate = LocalDate.parse(customEndDate);
+            semester = semesterService.saveCustomSemester(academicYear, SemesterType.fromDescription(semesterType), startDate, endDate, isDiploma);
+        } else {
+            semester = semesterService.findSemesterByYearTypeAndDiploma(academicYear, SemesterType.fromDescription(semesterType), isDiploma);
+        }
         Frequency frequency = Frequency.fromDescription(frequencyString);
         for (Classes classes : savedClasses) {
             semesterClassesService.saveSemesterClasses(semester, classes, frequency);

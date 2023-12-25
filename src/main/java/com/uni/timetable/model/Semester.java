@@ -1,16 +1,23 @@
 package com.uni.timetable.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @Data
 @Entity
 @Table(name = "Semester")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Semester {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "semester_sequence")
+    @SequenceGenerator(name = "semester_sequence", sequenceName = "semester_sequence", allocationSize = 1, initialValue = 10)
     @Column(name = "semester_id", nullable = false)
     private Long semesterId;
 
@@ -29,4 +36,7 @@ public class Semester {
 
     @Column(name = "is_diploma")
     private Boolean isDiploma;
+
+    @Column(name = "is_custom")
+    private Boolean isCustom;
 }

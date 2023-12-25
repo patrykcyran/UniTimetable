@@ -27,7 +27,7 @@ public class SemesterClassesToCalendarEventMapper {
             int daysToAdd = classes.getDayOfWeek().getValue() - semesterStartDay.getValue();
             LocalDate classesDay = semesterStartDate.plusDays(daysToAdd);
 
-            int daysToIncrement = classesFrequency.equals(Frequency.WEEKLY) ? 7 : 14;
+            int daysToIncrement = classesFrequency.equals(Frequency.FORTNIGHTLY) ? 14 : 7;
             while (classesDay.isBefore(semesterEndDate)) {
                 calendarEvents.add(mapClassToEvent(semesterClasses, classesDay, lecturers));
                 classesDay = classesDay.plusDays(daysToIncrement);

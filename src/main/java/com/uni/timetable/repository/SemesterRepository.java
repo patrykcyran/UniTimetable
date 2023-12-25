@@ -9,4 +9,7 @@ import org.springframework.stereotype.Repository;
 public interface SemesterRepository extends JpaRepository<Semester, Long> {
     Semester findByAcademicYearAndSemesterTypeAndIsDiploma(String academicYear, SemesterType semesterType, Boolean isDiploma);
 
+    Semester findByAcademicYearAndSemesterTypeAndIsDiplomaAndIsCustom(String academicYear, SemesterType semesterType, Boolean isDiploma, Boolean isCustom);
+
+
 }

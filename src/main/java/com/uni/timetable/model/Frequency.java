@@ -2,7 +2,8 @@ package com.uni.timetable.model;
 
 public enum Frequency {
     WEEKLY("Tygodniowo"),
-    FORTNIGHTLY("Dwutygodniowo");
+    FORTNIGHTLY("Dwutygodniowo"),
+    CUSTOM("Własne");
 
     private String description;
 
