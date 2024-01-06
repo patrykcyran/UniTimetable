@@ -146,6 +146,9 @@ public class SemesterClassesController {
         List<ClassesLecturers> classesLecturersList = classesLecturersService.findAll();
         List<CalendarEvent> calendarEvents = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(classesByDepartmentAndClassroom, classesLecturersList);
 
+        List<PartTimeSemesterClasses> partTimeClassesByDepartmentAndClassroom = partTimeSemesterClassesService.findAllPartTimeClassesByClassroomAndDepartment(classroomName, departmentName);
+        calendarEvents.addAll(SemesterClassesToCalendarEventMapper.mapPartTimeClassesToCalendarEvent(partTimeClassesByDepartmentAndClassroom, classesLecturersList));
+
         List<OneTimeEvent> oneTimeEventsByDepartmentAndClassroom = oneTimeEventService.getOneTimeEventsByDepartmentAndClassroom(departmentName, classroomName);
         calendarEvents.addAll(OneTimeEventToCalendarEventMapper.mapOneTimeEventsToCalendarEvents(oneTimeEventsByDepartmentAndClassroom));
         return calendarEvents;

@@ -31,9 +31,9 @@ public class MajorGroupService {
     }
 
     public MajorGroup findByMajorGroupYearAndType(String majorName, String studyYear, String groupName, StudyType studyType) {
-        MajorGroup majorGroup = majorGroupRepository.findByMajor_MajorNameAndStudyYearAndGroup_GroupNameAndMajor_StudyType(majorName, Integer.valueOf(studyYear), groupName, studyType);
+        List<MajorGroup> majorGroup = majorGroupRepository.findByMajor_MajorNameAndStudyYearAndGroup_GroupNameAndMajor_StudyType(majorName, Integer.valueOf(studyYear), groupName, studyType);
         log.debug("Major group found by major {}, year {} and group {} : {}", majorName, studyYear, groupName, majorGroup);
-        return majorGroup;
+        return majorGroup.get(0);
     }
 
     public List<MajorGroup> findMajorGroupsByMajor(String majorName) {

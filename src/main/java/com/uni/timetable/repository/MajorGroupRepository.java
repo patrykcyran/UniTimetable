@@ -17,7 +17,7 @@ public interface MajorGroupRepository extends JpaRepository<MajorGroup, Long> {
 
     MajorGroup findByMajor_MajorNameAndStudyYearAndGroup_GroupName(String majorName, Integer studyYear, String groupName);
 
-    MajorGroup findByMajor_MajorNameAndStudyYearAndGroup_GroupNameAndMajor_StudyType(String majorName, Integer studyYear, String groupName, StudyType studyType);
+    List<MajorGroup> findByMajor_MajorNameAndStudyYearAndGroup_GroupNameAndMajor_StudyType(String majorName, Integer studyYear, String groupName, StudyType studyType);
 
 
 }
