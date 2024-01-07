@@ -9,8 +9,10 @@ import com.uni.timetable.service.DepartmentClassroomService;
 import com.uni.timetable.service.OneTimeEventService;
 import com.uni.timetable.service.PartTimeSemesterClassesService;
 import com.uni.timetable.service.SemesterClassesService;
+import com.uni.timetable.utils.CalendarEventFactory;
 import com.uni.timetable.utils.CollisionChecker;
-import com.uni.timetable.utils.SemesterClassesToCalendarEventMapper;
+import com.uni.timetable.utils.PartTimeSemesterClassesEventFactory;
+import com.uni.timetable.utils.SemesterClassesEventFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -68,8 +70,12 @@ public class OneTimeEventController {
 
         List<SemesterClasses> allSemesterClasses = semesterClassesService.findAll();
         List<PartTimeSemesterClasses> partTimeSemesterClasses = partTimeSemesterClassesService.findAll();
-        List<CalendarEvent> allEvents = SemesterClassesToCalendarEventMapper.mapClassesToCalendarEvent(allSemesterClasses, List.of());
-        allEvents.addAll(SemesterClassesToCalendarEventMapper.mapPartTimeClassesToCalendarEvent(partTimeSemesterClasses, List.of()));
+
+        CalendarEventFactory factory = new SemesterClassesEventFactory(allSemesterClasses, List.of());
+        List<CalendarEvent> allEvents = factory.createEventList();
+
+        factory = new PartTimeSemesterClassesEventFactory(partTimeSemesterClasses, List.of());
+        allEvents.addAll(factory.createEventList());
 
         return CollisionChecker.checkIfEventsCollideByDate(eventDate, startTime, endTime, allEvents);
     }
